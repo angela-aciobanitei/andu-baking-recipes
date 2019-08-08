@@ -12,9 +12,9 @@ import com.ang.acb.bakeit.R;
 /**
  * A placeholder fragment containing a simple view.
  */
-public class DetailsFragment extends Fragment {
+public class RecipeDetailsFragment extends Fragment {
 
-    public DetailsFragment() {
+    public RecipeDetailsFragment() {
     }
 
     @Override

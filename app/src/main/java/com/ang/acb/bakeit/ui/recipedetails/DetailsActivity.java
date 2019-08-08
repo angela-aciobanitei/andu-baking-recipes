@@ -9,6 +9,8 @@ import com.ang.acb.bakeit.R;
 
 public class DetailsActivity extends AppCompatActivity {
 
+    public static final String EXTRA_RECIPE_ID = "EXTRA_RECIPE_ID";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
