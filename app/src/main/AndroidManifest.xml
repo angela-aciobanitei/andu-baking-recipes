@@ -24,8 +24,7 @@
 
         <activity
             android:name=".ui.recipedetails.DetailsActivity"
-            android:parentActivityName=".ui.recipelist.MainActivity"
-            android:theme="@style/AppTheme.NoActionBar">
+            android:parentActivityName=".ui.recipelist.MainActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.ang.acb.bakeit.ui.recipelist.MainActivity" />

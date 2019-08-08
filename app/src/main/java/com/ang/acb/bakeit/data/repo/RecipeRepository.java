@@ -6,6 +6,7 @@ import androidx.lifecycle.LiveData;
 
 import com.ang.acb.bakeit.data.local.LocalRecipeDataSource;
 import com.ang.acb.bakeit.data.model.Recipe;
+import com.ang.acb.bakeit.data.model.RecipeDetails;
 import com.ang.acb.bakeit.data.model.Resource;
 import com.ang.acb.bakeit.data.remote.ApiResponse;
 import com.ang.acb.bakeit.data.remote.RemoteRecipeDataSource;
@@ -56,7 +57,11 @@ public class RecipeRepository {
     public LiveData<Resource<List<Recipe>>> getRecipes(){
         // Note that we are using the NetworkBoundResource<ResultType, RequestType> class
         // that we've created earlier which can provide a resource backed by both the
-        // SQLite database and the network.
+        // SQLite database and the network. It defines two type parameters, ResultType
+        // and RequestType, because the data type used locally might not match the data
+        // type returned from the API.
+        // TODO ResultType ==> the data type used locally.
+        // TODO RequestType => the data type returned from the API.
         return new NetworkBoundResource<List<Recipe>, List<Recipe>>(appExecutors) {
 
 
@@ -64,7 +69,7 @@ public class RecipeRepository {
             @Override
             protected LiveData<ApiResponse<List<Recipe>>> createCall() {
                 // Create the API call to load the all recipes.
-                Timber.d("Loading all recipes from network");
+                Timber.d("Loading all the recipes from network.");
                 return remoteDataSource.loadAllRecipes();
             }
 
@@ -72,7 +77,7 @@ public class RecipeRepository {
             protected void saveCallResult(@NonNull List<Recipe> recipeList) {
                 // Save the result of the API response into the database.
                 localDataSource.saveAllRecipes(recipeList);
-                Timber.d("%s recipes saved to database", recipeList.size());
+                Timber.d("%s recipes saved to database.", recipeList.size());
             }
 
             @Override
@@ -84,14 +89,14 @@ public class RecipeRepository {
             @Override
             protected boolean shouldFetch(@Nullable List<Recipe> data) {
                 // Only fetch fresh data if it doesn't exist in database.
-                return data == null;
+                return data == null || data.size() == 0;
             }
 
             @NonNull
             @Override
             protected LiveData<List<Recipe>> loadFromDb() {
                 // Get the cached data from the database.
-                Timber.d("Loading all detailed recipes from database");
+                Timber.d("Getting all the recipes from database.");
                 return localDataSource.getAllRecipes();
             }
         }.getAsLiveData();

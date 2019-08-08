@@ -7,6 +7,8 @@ import com.ang.acb.bakeit.utils.AppExecutors;
 
 import java.util.List;
 
+import timber.log.Timber;
+
 public class RemoteRecipeDataSource {
 
     // For Singleton instantiation.
@@ -35,6 +37,7 @@ public class RemoteRecipeDataSource {
     }
 
     public LiveData<ApiResponse<List<Recipe>>> loadAllRecipes () {
+        Timber.d("Loading all the recipes from network.");
         return apiService.getAllRecipes();
     }
 }

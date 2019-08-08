@@ -9,15 +9,19 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.ang.acb.bakeit.R;
+import com.ang.acb.bakeit.data.model.RecipeDetails;
 import com.ang.acb.bakeit.data.model.Resource;
 import com.ang.acb.bakeit.databinding.FragmentRecipeListBinding;
 import com.ang.acb.bakeit.utils.InjectorUtils;
 import com.ang.acb.bakeit.utils.ViewModelFactory;
+
+import java.util.List;
 
 import timber.log.Timber;
 
@@ -50,7 +54,7 @@ public class RecipeListFragment extends Fragment {
         RecipeListViewModel viewModel = ViewModelProviders
                 .of(getActivity(), factory)
                 .get(RecipeListViewModel.class);
-        Timber.d("Setup RecipesViewModel");
+        Timber.d("Setup recipe list view model.");
 
         // TODO Setup recycler view
         final RecipeAdapter adapter =  new RecipeAdapter();
@@ -58,17 +62,16 @@ public class RecipeListFragment extends Fragment {
         RecyclerView recyclerView = getActivity().findViewById(R.id.rv_recipe_list);
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(layoutManager);
-        Timber.d("Setup recipe list recycler view");
+        Timber.d("Setup recipe list recycler view.");
 
         // TODO Observe data
-        viewModel.getRecipes().observe(getViewLifecycleOwner(), recipesViews -> {
-            if (recipesViews != null && recipesViews.status == Resource.Status.SUCCESS) {
-                adapter.setRecipeList(recipesViews.data);
-            } else if (recipesViews != null && recipesViews.status == Resource.Status.ERROR) {
-                Toast.makeText(getActivity(),
-                        R.string.no_internet_connection_toast_message,
-                        Toast.LENGTH_LONG).show();
+        viewModel.getRecipes().observe(getViewLifecycleOwner(), listResource -> {
+            if (listResource != null && listResource.status == Resource.Status.SUCCESS) {
+                adapter.setRecipeList(listResource.getData());
+            } else if (listResource != null && listResource.status == Resource.Status.ERROR) {
+                Toast.makeText(getActivity(),R.string.no_internet_connection_toast_message, Toast.LENGTH_LONG).show();
             }
         });
+        Timber.d("Observe recipe list from view model.");
     }
 }

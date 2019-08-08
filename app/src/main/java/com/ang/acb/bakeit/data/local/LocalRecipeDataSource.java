@@ -1,12 +1,15 @@
 package com.ang.acb.bakeit.data.local;
 
 import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MediatorLiveData;
 
 import com.ang.acb.bakeit.data.model.Ingredient;
 import com.ang.acb.bakeit.data.model.Recipe;
+import com.ang.acb.bakeit.data.model.RecipeDetails;
 import com.ang.acb.bakeit.data.model.Step;
 import com.ang.acb.bakeit.utils.AppExecutors;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import timber.log.Timber;
@@ -75,6 +78,29 @@ public class LocalRecipeDataSource {
     public LiveData<List<Recipe>> getAllRecipes(){
         Timber.d("Retrieving all recipes from the database. ");
         return database.recipeDao().getAllRecipes();
+    }
+
+    public LiveData<List<RecipeDetails>> getAllRecipesDetailed(){
+
+        LiveData<List<Recipe>> recipesLiveData = database.recipeDao().getAllRecipes();
+        MediatorLiveData<List<RecipeDetails>> detailedRecipesLiveData = new MediatorLiveData<>();
+        detailedRecipesLiveData.addSource(recipesLiveData, recipeList -> {
+            List<RecipeDetails> detailedRecipeList = new ArrayList<>();
+
+            if (recipeList != null) {
+                for (Recipe recipe : recipeList) {
+                    RecipeDetails recipeDetailsItem = new RecipeDetails(
+                            recipe,
+                            recipe.getIngredients(),
+                            recipe.getSteps());
+                    detailedRecipeList.add(recipeDetailsItem);
+                }
+            }
+
+            detailedRecipesLiveData.setValue(detailedRecipeList);
+        });
+
+        return detailedRecipesLiveData;
     }
 
 }
