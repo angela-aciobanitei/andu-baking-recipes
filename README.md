@@ -8,7 +8,7 @@ An app that displays recipes from a network resource. When user selects a recipe
 *   Display videos with Exoplayer. 
 *   Properly initialize and release video assets.
 *   Add a companion homescreen [widget](https://developer.android.com/guide/topics/appwidgets).
-*   Create a responsive design for both phones and tablets using fragments (Master Detail Flow).
+*   Create a [responsive design](https://developer.android.com/training/multiscreen/adaptui) for both phones and tablets .
 *   Make use of Espresso to test aspects of the UI.
 
 ## Libraries
