@@ -1,5 +1,9 @@
 <resources>
-    <string name="app_name">Bake It</string>
-    <string name="title_activity_details">DetailsActivity</string>
-    <string name="action_settings">Settings</string>
+    <string name="app_name">Smells Like Bakin</string>
+    <string name="action_retry">Retry</string>
+    <string name="recipe_image_content_description">Recipe picture</string>
+    <string name="ingredients">Ingredients</string>
+    <string name="steps">Steps</string>
+    <string name="no_internet_connection_toast_message">No internet connection</string>
+    <string name="unknown_error">Unknown error</string>
 </resources>

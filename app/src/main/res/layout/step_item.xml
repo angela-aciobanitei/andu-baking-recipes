@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="step"
+            type="com.ang.acb.bakeit.data.model.Step"/>
+    </data>
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <!-- FIXME: Set step number-->
+        <TextView
+            android:id="@+id/step_item_count"
+            style="@style/ingredientComponentStyle"
+            android:text="@{String.valueOf(step.id + 1)}"
+            tools:text="1."/>
+
+        <TextView
+            android:id="@+id/step_item_short_description"
+            style="@style/ingredientComponentStyle"
+            android:text="@{step.shortDescription}"
+            tools:text="Starting prep"/>
+
+    </LinearLayout>
+
+</layout>
