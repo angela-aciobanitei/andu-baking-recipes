@@ -2,13 +2,13 @@
 An app that displays recipes from a network resource. When user selects a recipe, its ingredients and video-guided steps are shown.
 
 ## What Will I Learn?
-*   Properly handle network requests with Retrofit and OkHttp.
+*   Properly handle network requests with [Retrofit](https://github.com/square/retrofit) and [OkHttp](https://github.com/square/okhttp).
 *   Use [Room](https://developer.android.com/topic/libraries/architecture/room)'s capabilities for data persistence.
 *   Store and manage UI-related data in a lifecycle conscious way using [LiveData](https://developer.android.com/topic/libraries/architecture/livedata) and [ViewModel](https://developer.android.com/topic/libraries/architecture/viewmodel). 
-*   Display videos with Exoplayer. 
+*   Display videos with [ExoPlayer](https://exoplayer.dev/hello-world.html). 
 *   Properly initialize and release video assets.
 *   Add a companion homescreen [widget](https://developer.android.com/guide/topics/appwidgets).
-*   Create a [responsive design](https://developer.android.com/training/multiscreen/adaptui) for both phones and tablets .
+*   Create [adaptive UI flows](https://developer.android.com/training/multiscreen/adaptui) for both phones and tablets .
 *   Make use of Espresso to test aspects of the UI.
 
 ## Libraries
