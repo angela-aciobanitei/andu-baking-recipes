@@ -56,11 +56,13 @@ public class MainActivity extends AppCompatActivity {
                 new Observer<Resource<List<Recipe>>>() {
                     @Override
                     public void onChanged(Resource<List<Recipe>> resource) {
+                        Timber.d("Observe recipe list from view model.");
                         adapter.submitList(resource);
+                        Timber.d("Observe network status from view model.");
                         adapter.setNetworkState(resource);
                     }
         });
-        Timber.d("Observe recipe list from view model.");
+
     }
 
 }

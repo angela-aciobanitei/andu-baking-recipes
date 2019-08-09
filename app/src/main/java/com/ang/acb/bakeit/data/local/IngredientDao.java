@@ -20,11 +20,11 @@ import java.util.List;
 public interface IngredientDao {
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
-    void insertAllIngredients(List<Ingredient> ingredients);
+    void insertRecipeIngredients(List<Ingredient> ingredients);
 
     @Query("SELECT * FROM ingredient")
-    LiveData<List<Ingredient>> getAllIngredients();
+    LiveData<List<Ingredient>> getRecipeIngredients();
 
     @Query("DELETE FROM ingredient")
-    void deleteAllIngredients();
+    void deleteRecipeIngredients();
 }

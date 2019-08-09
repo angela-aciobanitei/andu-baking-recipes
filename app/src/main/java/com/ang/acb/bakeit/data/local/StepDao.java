@@ -19,11 +19,11 @@ import java.util.List;
 @Dao
 public interface StepDao {
     @Insert(onConflict = OnConflictStrategy.IGNORE)
-    void insertAllSteps(List<Step> steps);
+    void insertRecipeSteps(List<Step> steps);
 
     @Query("SELECT * FROM step")
-    LiveData<List<Step>> getAllSteps();
+    LiveData<List<Step>> getRecipeSteps();
 
     @Query("DELETE FROM step")
-    void deleteAllSteps();
+    void deleteRecipeSteps();
 }

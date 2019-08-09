@@ -24,4 +24,9 @@ public class RecipeListViewModel extends ViewModel {
     public LiveData<Resource<List<Recipe>>> getResourceLiveDataRecipes() {
         return resourceLiveData;
     }
+
+    // Retry any failed requests.
+    public void retry() {
+        // FIXME resourceLiveData.getValue().getRetryCallback().invoke();
+    }
 }

@@ -69,7 +69,6 @@ public class Resource<T> {
 
     @Override
     public int hashCode() {
-
         return Objects.hash(status, data, message);
     }
 

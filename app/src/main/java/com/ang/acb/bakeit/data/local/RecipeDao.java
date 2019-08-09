@@ -21,13 +21,13 @@ import java.util.List;
 public interface RecipeDao {
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
-    void insertRecipe(Recipe recipe);
+    void insertSimpleRecipe(Recipe recipe);
 
     @Transaction
     @Query("SELECT * FROM recipe WHERE recipe.id= :recipeId")
-    LiveData<Recipe> getRecipe(Long recipeId);
+    LiveData<Recipe> getSimpleRecipe(Long recipeId);
 
     @Transaction
     @Query("SELECT * FROM recipe")
-    LiveData<List<Recipe>> getAllRecipes();
+    LiveData<List<Recipe>> getAllSimpleRecipes();
 }

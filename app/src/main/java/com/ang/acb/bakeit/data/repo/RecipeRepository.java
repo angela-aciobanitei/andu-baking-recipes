@@ -64,20 +64,21 @@ public class RecipeRepository {
         // TODO RequestType => the data type returned from the API.
         return new NetworkBoundResource<List<Recipe>, List<Recipe>>(appExecutors) {
 
-
             @NonNull
             @Override
             protected LiveData<ApiResponse<List<Recipe>>> createCall() {
                 // Create the API call to load the all recipes.
+                // The return type is the data type returned from the API.
                 Timber.d("Loading all the recipes from network.");
                 return remoteDataSource.loadAllRecipes();
             }
 
             @Override
-            protected void saveCallResult(@NonNull List<Recipe> recipeList) {
+            protected void saveCallResult(@NonNull List<Recipe> loadedData) {
                 // Save the result of the API response into the database.
-                localDataSource.saveAllRecipes(recipeList);
-                Timber.d("%s recipes saved to database.", recipeList.size());
+                // The param type is the data type returned from the API.
+                localDataSource.saveAllRecipesDetails(loadedData);
+                Timber.d("%s recipes saved to database.", loadedData.size());
             }
 
             @Override
@@ -87,22 +88,24 @@ public class RecipeRepository {
             }
 
             @Override
-            protected boolean shouldFetch(@Nullable List<Recipe> data) {
+            protected boolean shouldFetch(@Nullable List<Recipe> localData) {
                 // Only fetch fresh data if it doesn't exist in database.
-                return data == null || data.size() == 0;
+                // FIXME: The param type is the data type used locally.
+                return localData == null || localData.size() == 0;
             }
 
             @NonNull
             @Override
             protected LiveData<List<Recipe>> loadFromDb() {
                 // Get the cached data from the database.
+                // FIXME: The return type is the data type used locally.
                 Timber.d("Getting all the recipes from database.");
-                return localDataSource.getAllRecipes();
+                return localDataSource.getAllSimpleRecipes();
             }
         }.getAsLiveData();
     }
 
-    public LiveData<Resource<RecipeDetails>> getRecipeDetails(Long recipeId){
+    public LiveData<RecipeDetails> getRecipeDetails(Long recipeId){
         return  localDataSource.getRecipeDetails(recipeId);
     }
 }
