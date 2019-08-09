@@ -5,33 +5,75 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.ang.acb.bakeit.R;
 import com.ang.acb.bakeit.data.model.Recipe;
+import com.ang.acb.bakeit.data.model.Resource;
 
 import java.util.List;
 
 public class RecipeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
-    private List<Recipe> recipeList;
+    private RecipeListViewModel viewModel;
+    private Resource<List<Recipe>> resourceRecipeList;
+    private Resource networkState;
+
+    public RecipeAdapter (RecipeListViewModel viewModel) {
+        this.viewModel = viewModel;
+        resourceRecipeList = viewModel.getResourceLiveDataRecipes().getValue();
+    }
 
     @NonNull
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        return RecipeItemViewHolder.create(parent);
+        switch (viewType) {
+            case R.layout.recipe_item:
+                return RecipeItemViewHolder.create(parent);
+            case R.layout.network_state_item:
+                return NetworkStateItemViewHolder.create(parent, viewModel);
+            default:
+                throw new IllegalArgumentException("Unknown view type " + viewType);
+        }
     }
 
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
-        Recipe recipe = recipeList.get(position);
-        ((RecipeItemViewHolder) holder).bindTo(recipe);
+        switch (getItemViewType(position)) {
+            case R.layout.recipe_item:
+                ((RecipeItemViewHolder) holder).bindTo(resourceRecipeList.getData().get(position));
+                break;
+            case R.layout.network_state_item:
+                ((NetworkStateItemViewHolder) holder).bindTo(resourceRecipeList);
+                break;
+            default:
+                throw new IllegalArgumentException("Unknown view type " + getItemViewType(position));
+        }
+    }
+
+    @Override
+    public int getItemViewType(int position) {
+        if (hasExtraRow() && position == getItemCount() - 1) {
+            return R.layout.network_state_item;
+        } else {
+            return R.layout.recipe_item;
+        }
     }
 
     @Override
     public int getItemCount() {
-        return recipeList == null ? 0 :  recipeList.size();
+        int listSize = resourceRecipeList.getData() == null ? 0 :  resourceRecipeList.getData().size();
+        return listSize + (hasExtraRow() ? 1 : 0);
     }
 
-    public void setRecipeList(List<Recipe> list) {
-        this.recipeList = list;
+    private boolean hasExtraRow() {
+        return resourceRecipeList != null && resourceRecipeList.status != Resource.Status.SUCCESS;
+    }
+
+    public void submitList(Resource<List<Recipe>> recipes) {
+        resourceRecipeList = recipes;
         notifyDataSetChanged();
+    }
+
+    public void setNetworkState(Resource<List<Recipe>> recipes) {
+        networkState = resourceRecipeList;
     }
 }

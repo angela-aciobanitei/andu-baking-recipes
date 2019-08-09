@@ -1,6 +1,7 @@
 package com.ang.acb.bakeit.ui.recipelist;
 
 import androidx.lifecycle.LiveData;
+import androidx.lifecycle.Transformations;
 import androidx.lifecycle.ViewModel;
 
 import com.ang.acb.bakeit.data.model.Recipe;
@@ -13,19 +14,14 @@ import timber.log.Timber;
 
 public class RecipeListViewModel extends ViewModel {
 
-    private LiveData<Resource<List<Recipe>>> recipes;
-    private LiveData<Resource> networkState;
+    private LiveData<Resource<List<Recipe>>> resourceLiveData;
 
     public RecipeListViewModel(RecipeRepository recipeRepository) {
         Timber.d("Use recipe repository to get recipe list");
-        recipes = recipeRepository.getRecipes();
+        resourceLiveData = recipeRepository.getRecipes();
     }
 
-    public LiveData<Resource<List<Recipe>>> getRecipes() {
-        return recipes;
-    }
-
-    public LiveData<Resource> getNetworkState() {
-        return networkState;
+    public LiveData<Resource<List<Recipe>>> getResourceLiveDataRecipes() {
+        return resourceLiveData;
     }
 }
