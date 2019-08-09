@@ -101,4 +101,8 @@ public class RecipeRepository {
             }
         }.getAsLiveData();
     }
+
+    public LiveData<Resource<RecipeDetails>> getRecipeDetails(Long recipeId){
+        return  localDataSource.getRecipeDetails(recipeId);
+    }
 }

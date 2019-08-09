@@ -6,6 +6,7 @@ import androidx.lifecycle.MediatorLiveData;
 import com.ang.acb.bakeit.data.model.Ingredient;
 import com.ang.acb.bakeit.data.model.Recipe;
 import com.ang.acb.bakeit.data.model.RecipeDetails;
+import com.ang.acb.bakeit.data.model.Resource;
 import com.ang.acb.bakeit.data.model.Step;
 import com.ang.acb.bakeit.utils.AppExecutors;
 
@@ -54,7 +55,7 @@ public class LocalRecipeDataSource {
         saveSteps(recipe.getSteps(), recipe.getId());
     }
 
-    private void saveIngredients (List<Ingredient> ingredientList, Integer recipeId)  {
+    private void saveIngredients (List<Ingredient> ingredientList, Long recipeId)  {
         for (Ingredient ingredient : ingredientList) {
             ingredient.setRecipeId(recipeId);
         }
@@ -62,7 +63,7 @@ public class LocalRecipeDataSource {
         Timber.d("%s ingredients inserted into the database.", ingredientList.size());
     }
 
-    private void saveSteps (List<Step> stepList, Integer recipeId) {
+    private void saveSteps (List<Step> stepList, Long recipeId) {
         for (Step step : stepList) {
             step.setRecipeId(recipeId);
         }
@@ -70,7 +71,7 @@ public class LocalRecipeDataSource {
         Timber.d("%s steps inserted into the database.", stepList.size());
     }
 
-    public LiveData<Recipe> getRecipe(Integer recipeId) {
+    public LiveData<Recipe> getRecipe(Long recipeId) {
         Timber.d("Retrieving recipe from the database. ");
         return database.recipeDao().getRecipe(recipeId);
     }
@@ -103,4 +104,10 @@ public class LocalRecipeDataSource {
         return detailedRecipesLiveData;
     }
 
+    public LiveData<Resource<RecipeDetails>> getRecipeDetails(Long recipeId) {
+        // FIXME
+        MediatorLiveData<Resource<RecipeDetails>> detailedRecipeLiveData = new MediatorLiveData<>();
+        LiveData<Recipe> recipeLiveData = database.recipeDao().getRecipe(recipeId);
+        return null;
+    }
 }

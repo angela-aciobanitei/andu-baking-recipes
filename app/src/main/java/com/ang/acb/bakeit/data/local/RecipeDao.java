@@ -25,7 +25,7 @@ public interface RecipeDao {
 
     @Transaction
     @Query("SELECT * FROM recipe WHERE recipe.id= :recipeId")
-    LiveData<Recipe> getRecipe(Integer recipeId);
+    LiveData<Recipe> getRecipe(Long recipeId);
 
     @Transaction
     @Query("SELECT * FROM recipe")

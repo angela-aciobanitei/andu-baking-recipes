@@ -34,11 +34,11 @@ public class Step {
     @NonNull
     @PrimaryKey
     @SerializedName("id")
-    private Integer id;
+    private Long id;
 
     @NonNull
     @ColumnInfo(name = "recipe_id")
-    private Integer recipeId;
+    private Long recipeId;
 
     @SerializedName("shortDescription")
     private String shortDescription;
@@ -53,20 +53,20 @@ public class Step {
     private String thumbnailURL;
 
     @NonNull
-    public Integer getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(@NonNull Integer id) {
+    public void setId(@NonNull Long id) {
         this.id = id;
     }
 
     @NotNull
-    public Integer getRecipeId() {
+    public Long getRecipeId() {
         return recipeId;
     }
 
-    public void setRecipeId(@NotNull Integer recipeId) {
+    public void setRecipeId(@NotNull Long recipeId) {
         this.recipeId = recipeId;
     }
 

@@ -20,7 +20,7 @@ public class Recipe {
     @PrimaryKey
     @ColumnInfo(name = "id")
     @SerializedName("id")
-    private Integer id;
+    private Long id;
 
     @SerializedName("name")
     private String name;
@@ -40,11 +40,11 @@ public class Recipe {
     private List<Step> steps;
 
     @NonNull
-    public Integer getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(@NonNull Integer id) {
+    public void setId(@NonNull Long id) {
         this.id = id;
     }
 
