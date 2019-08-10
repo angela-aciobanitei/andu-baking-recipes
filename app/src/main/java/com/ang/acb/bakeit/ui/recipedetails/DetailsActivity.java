@@ -4,6 +4,7 @@ import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.fragment.app.FragmentTransaction;
 
 import com.ang.acb.bakeit.R;
 
@@ -24,6 +25,14 @@ public class DetailsActivity extends AppCompatActivity {
             Timber.d("Wrong recipe id.");
             return;
         }
+        if (savedInstanceState == null) {
+            FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+            transaction.replace(
+                    R.id.partial_details_fragment_container,
+                    RecipeDetailsFragment.newInstance(recipeId));
+            transaction.commit();
+        }
+
     }
 
 }

@@ -6,7 +6,6 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.ang.acb.bakeit.R;
-import com.ang.acb.bakeit.data.model.Recipe;
 import com.ang.acb.bakeit.data.model.RecipeDetails;
 import com.ang.acb.bakeit.data.model.Resource;
 
@@ -16,7 +15,7 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
 
     private RecipeListViewModel viewModel;
     private Resource<List<RecipeDetails>> resourceRecipeList;
-    private Resource networkState;
+    private Resource networkState = null;
 
     public RecipeAdapter (RecipeListViewModel viewModel) {
         this.viewModel = viewModel;
@@ -40,13 +39,15 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
         switch (getItemViewType(position)) {
             case R.layout.recipe_item:
-                ((RecipeItemViewHolder) holder).bindTo(resourceRecipeList.getData().get(position).getRecipe());
+                ((RecipeItemViewHolder) holder).bindTo(
+                        resourceRecipeList.getData().get(position).getRecipe());
                 break;
             case R.layout.network_state_item:
-                ((NetworkStateItemViewHolder) holder).bindTo(resourceRecipeList);
+                ((NetworkStateItemViewHolder) holder).bindTo(networkState);
                 break;
             default:
-                throw new IllegalArgumentException("Unknown view type " + getItemViewType(position));
+                throw new IllegalArgumentException(
+                        "Unknown view type " + getItemViewType(position));
         }
     }
 
@@ -66,7 +67,7 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
     }
 
     private boolean hasExtraRow() {
-        return resourceRecipeList != null && resourceRecipeList.status != Resource.Status.SUCCESS;
+        return networkState != null && networkState.status != Resource.Status.SUCCESS;
     }
 
     public void submitList(Resource<List<RecipeDetails>> recipes) {
@@ -74,7 +75,20 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         notifyDataSetChanged();
     }
 
-    public void setNetworkState(Resource<List<RecipeDetails>> recipes) {
-        networkState = recipes;
+    public void setNetworkState(Resource currentNetworkState) {
+        Resource previousNetworkState = networkState;
+        boolean hadExtraRow = hasExtraRow();
+        networkState = currentNetworkState;
+        boolean hasExtraRow = hasExtraRow();
+        int listSize = resourceRecipeList.getData() == null ? 0 :  resourceRecipeList.getData().size();
+        if (hadExtraRow != hasExtraRow) {
+            if (hadExtraRow) {
+                notifyItemRemoved(listSize);
+            } else {
+                notifyItemInserted(listSize);
+            }
+        } else if (hasExtraRow && !previousNetworkState.equals(currentNetworkState)) {
+            notifyItemChanged(getItemCount() - 1);
+        }
     }
 }
