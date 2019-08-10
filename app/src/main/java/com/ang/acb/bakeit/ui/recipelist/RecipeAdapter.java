@@ -7,6 +7,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.ang.acb.bakeit.R;
 import com.ang.acb.bakeit.data.model.Recipe;
+import com.ang.acb.bakeit.data.model.RecipeDetails;
 import com.ang.acb.bakeit.data.model.Resource;
 
 import java.util.List;
@@ -14,12 +15,12 @@ import java.util.List;
 public class RecipeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     private RecipeListViewModel viewModel;
-    private Resource<List<Recipe>> resourceRecipeList;
+    private Resource<List<RecipeDetails>> resourceRecipeList;
     private Resource networkState;
 
     public RecipeAdapter (RecipeListViewModel viewModel) {
         this.viewModel = viewModel;
-        resourceRecipeList = viewModel.getResourceLiveDataRecipes().getValue();
+        resourceRecipeList = viewModel.getRecipeListResourceLiveData().getValue();
     }
 
     @NonNull
@@ -39,7 +40,7 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
         switch (getItemViewType(position)) {
             case R.layout.recipe_item:
-                ((RecipeItemViewHolder) holder).bindTo(resourceRecipeList.getData().get(position));
+                ((RecipeItemViewHolder) holder).bindTo(resourceRecipeList.getData().get(position).getRecipe());
                 break;
             case R.layout.network_state_item:
                 ((NetworkStateItemViewHolder) holder).bindTo(resourceRecipeList);
@@ -68,12 +69,12 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         return resourceRecipeList != null && resourceRecipeList.status != Resource.Status.SUCCESS;
     }
 
-    public void submitList(Resource<List<Recipe>> recipes) {
+    public void submitList(Resource<List<RecipeDetails>> recipes) {
         resourceRecipeList = recipes;
         notifyDataSetChanged();
     }
 
-    public void setNetworkState(Resource<List<Recipe>> recipes) {
-        networkState = resourceRecipeList;
+    public void setNetworkState(Resource<List<RecipeDetails>> recipes) {
+        networkState = recipes;
     }
 }

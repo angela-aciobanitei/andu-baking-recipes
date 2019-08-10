@@ -54,21 +54,19 @@ public class RecipeRepository {
         return sInstance;
     }
 
-    public LiveData<Resource<List<Recipe>>> getRecipes(){
+    public LiveData<Resource<List<RecipeDetails>>> loadAllRecipes(){
         // Note that we are using the NetworkBoundResource<ResultType, RequestType> class
         // that we've created earlier which can provide a resource backed by both the
         // SQLite database and the network. It defines two type parameters, ResultType
         // and RequestType, because the data type used locally might not match the data
         // type returned from the API.
-        // TODO ResultType ==> the data type used locally.
-        // TODO RequestType => the data type returned from the API.
-        return new NetworkBoundResource<List<Recipe>, List<Recipe>>(appExecutors) {
+        return new NetworkBoundResource<List<RecipeDetails>, List<Recipe>>(appExecutors) {
 
             @NonNull
             @Override
             protected LiveData<ApiResponse<List<Recipe>>> createCall() {
                 // Create the API call to load the all recipes.
-                // The return type is the data type returned from the API.
+                // FIXME: The return type is the data type returned from the API.
                 Timber.d("Loading all the recipes from network.");
                 return remoteDataSource.loadAllRecipes();
             }
@@ -76,7 +74,7 @@ public class RecipeRepository {
             @Override
             protected void saveCallResult(@NonNull List<Recipe> loadedData) {
                 // Save the result of the API response into the database.
-                // The param type is the data type returned from the API.
+                // FIXME: The param type is the data type returned from the API.
                 localDataSource.saveAllRecipesDetails(loadedData);
                 Timber.d("%s recipes saved to database.", loadedData.size());
             }
@@ -88,7 +86,7 @@ public class RecipeRepository {
             }
 
             @Override
-            protected boolean shouldFetch(@Nullable List<Recipe> localData) {
+            protected boolean shouldFetch(@Nullable List<RecipeDetails> localData) {
                 // Only fetch fresh data if it doesn't exist in database.
                 // FIXME: The param type is the data type used locally.
                 return localData == null || localData.size() == 0;
@@ -96,15 +94,18 @@ public class RecipeRepository {
 
             @NonNull
             @Override
-            protected LiveData<List<Recipe>> loadFromDb() {
+            protected LiveData<List<RecipeDetails>> loadFromDb() {
                 // Get the cached data from the database.
                 // FIXME: The return type is the data type used locally.
                 Timber.d("Getting all the recipes from database.");
-                return localDataSource.getAllSimpleRecipes();
+                return localDataSource.getAllDetailedRecipes();
             }
         }.getAsLiveData();
     }
 
+    public LiveData<List<Recipe>> getAllSimpleRecipes() {
+        return localDataSource.getAllSimpleRecipes();
+    }
     public LiveData<RecipeDetails> getRecipeDetails(Long recipeId){
         return  localDataSource.getRecipeDetails(recipeId);
     }

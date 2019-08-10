@@ -1,10 +1,10 @@
 package com.ang.acb.bakeit.ui.recipelist;
 
 import androidx.lifecycle.LiveData;
-import androidx.lifecycle.Transformations;
 import androidx.lifecycle.ViewModel;
 
 import com.ang.acb.bakeit.data.model.Recipe;
+import com.ang.acb.bakeit.data.model.RecipeDetails;
 import com.ang.acb.bakeit.data.model.Resource;
 import com.ang.acb.bakeit.data.repo.RecipeRepository;
 
@@ -14,19 +14,18 @@ import timber.log.Timber;
 
 public class RecipeListViewModel extends ViewModel {
 
-    private LiveData<Resource<List<Recipe>>> resourceLiveData;
+    private LiveData<Resource<List<RecipeDetails>>> recipeListResourceLiveData;
 
-    public RecipeListViewModel(RecipeRepository recipeRepository) {
+    public RecipeListViewModel(RecipeRepository repository) {
         Timber.d("Use recipe repository to get recipe list");
-        resourceLiveData = recipeRepository.getRecipes();
+        recipeListResourceLiveData = repository.loadAllRecipes();
     }
 
-    public LiveData<Resource<List<Recipe>>> getResourceLiveDataRecipes() {
-        return resourceLiveData;
+    public LiveData<Resource<List<RecipeDetails>>> getRecipeListResourceLiveData() {
+        return recipeListResourceLiveData;
     }
 
-    // Retry any failed requests.
+    // FIXME Retry any failed requests.
     public void retry() {
-        // FIXME resourceLiveData.getValue().getRetryCallback().invoke();
     }
 }

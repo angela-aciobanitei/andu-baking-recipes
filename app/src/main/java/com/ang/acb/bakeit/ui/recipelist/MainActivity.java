@@ -1,7 +1,6 @@
 package com.ang.acb.bakeit.ui.recipelist;
 
 import android.os.Bundle;
-import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
@@ -10,7 +9,7 @@ import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.ang.acb.bakeit.R;
-import com.ang.acb.bakeit.data.model.Recipe;
+import com.ang.acb.bakeit.data.model.RecipeDetails;
 import com.ang.acb.bakeit.data.model.Resource;
 import com.ang.acb.bakeit.databinding.ActivityMainBinding;
 import com.ang.acb.bakeit.utils.InjectorUtils;
@@ -52,16 +51,16 @@ public class MainActivity extends AppCompatActivity {
         Timber.d("Setup recipe list recycler view.");
 
         // FIXME Observe data and network status.
-        viewModel.getResourceLiveDataRecipes().observe(this,
-                new Observer<Resource<List<Recipe>>>() {
+        viewModel.getRecipeListResourceLiveData().observe(this,
+                new Observer<Resource<List<RecipeDetails>>>() {
                     @Override
-                    public void onChanged(Resource<List<Recipe>> resource) {
+                    public void onChanged(Resource<List<RecipeDetails>> resource) {
                         Timber.d("Observe recipe list from view model.");
                         adapter.submitList(resource);
                         Timber.d("Observe network status from view model.");
                         adapter.setNetworkState(resource);
                     }
-        });
+                });
 
     }
 

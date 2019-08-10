@@ -84,6 +84,28 @@ public class LocalRecipeDataSource {
         return database.recipeDao().getAllSimpleRecipes();
     }
 
+    public LiveData<RecipeDetails> getRecipeDetails(Long recipeId) {
+        LiveData<Recipe> simpleRecipeLiveData = database.recipeDao().getSimpleRecipe(recipeId);
+        MediatorLiveData<RecipeDetails> result = new MediatorLiveData<>();
+
+        result.addSource(simpleRecipeLiveData, new Observer<Recipe>() {
+            @Override
+            public void onChanged(Recipe simpleRecipe) {
+                RecipeDetails detailedRecipe = null;
+                if (simpleRecipe != null) {
+                    detailedRecipe = new RecipeDetails(
+                            simpleRecipe,
+                            simpleRecipe.getIngredients(),
+                            simpleRecipe.getSteps());
+                }
+
+                result.setValue(detailedRecipe);
+            }
+        });
+
+        return null;
+    }
+
     public LiveData<List<RecipeDetails>> getAllDetailedRecipes(){
         LiveData<List<Recipe>> simpleRecipesLiveData = database.recipeDao().getAllSimpleRecipes();
         MediatorLiveData<List<RecipeDetails>> result = new MediatorLiveData<>();
@@ -111,27 +133,5 @@ public class LocalRecipeDataSource {
         });
         Timber.d("Retrieving all detailed recipes from the database. ");
         return result;
-    }
-
-    public LiveData<RecipeDetails> getRecipeDetails(Long recipeId) {
-        LiveData<Recipe> simpleRecipeLiveData = database.recipeDao().getSimpleRecipe(recipeId);
-        MediatorLiveData<RecipeDetails> result = new MediatorLiveData<>();
-
-        result.addSource(simpleRecipeLiveData, new Observer<Recipe>() {
-            @Override
-            public void onChanged(Recipe simpleRecipe) {
-                RecipeDetails detailedRecipe = null;
-                if (simpleRecipe != null) {
-                    detailedRecipe = new RecipeDetails(
-                            simpleRecipe,
-                            simpleRecipe.getIngredients(),
-                            simpleRecipe.getSteps());
-                }
-
-                result.setValue(detailedRecipe);
-            }
-        });
-
-        return null;
     }
 }
