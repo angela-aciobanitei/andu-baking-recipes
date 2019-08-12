@@ -2,7 +2,9 @@ package com.ang.acb.bakeit.data.local;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MediatorLiveData;
+import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Observer;
+import androidx.lifecycle.Transformations;
 
 import com.ang.acb.bakeit.data.model.Ingredient;
 import com.ang.acb.bakeit.data.model.Recipe;
@@ -13,6 +15,7 @@ import com.ang.acb.bakeit.utils.AppExecutors;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import timber.log.Timber;
 
@@ -55,7 +58,7 @@ public class LocalRecipeDataSource {
         database.recipeDao().insertSimpleRecipe(recipe);
         saveIngredients(recipe.getIngredients(), recipe.getId());
         saveSteps(recipe.getSteps(), recipe.getId());
-        Timber.d("Saving recipe details into the database. ");
+        Timber.d("Recipe [id=%s]: saving recipe details into the database.", recipe.getId());
     }
 
     private void saveIngredients (List<Ingredient> ingredientList, Long recipeId)  {
@@ -63,7 +66,8 @@ public class LocalRecipeDataSource {
             ingredient.setRecipeId(recipeId);
         }
         database.ingredientDao().insertRecipeIngredients(ingredientList);
-        Timber.d("%s ingredients inserted into the database.", ingredientList.size());
+        Timber.d("Recipe [id=%s]: %s ingredients inserted into the database.",
+                recipeId, ingredientList.size());
     }
 
     private void saveSteps (List<Step> stepList, Long recipeId) {
@@ -71,12 +75,23 @@ public class LocalRecipeDataSource {
             step.setRecipeId(recipeId);
         }
         database.stepDao().insertRecipeSteps(stepList);
-        Timber.d("%s steps inserted into the database.", stepList.size());
+        Timber.d("Recipe [id=%s]: %s steps inserted into the database.",
+                recipeId, stepList.size());
     }
 
     public LiveData<Recipe> getSimpleRecipe(Long recipeId) {
-        Timber.d("Retrieving simple recipe from the database. ");
+        Timber.d("Recipe [id=%s]: retrieving simple recipe from the database.", recipeId);
         return database.recipeDao().getSimpleRecipe(recipeId);
+    }
+
+    public LiveData<List<Ingredient>> getIngredients(Long recipeId) {
+        Timber.d("Recipe [id=%s]: retrieving ingredients from the database.", recipeId);
+        return database.ingredientDao().getRecipeIngredients(recipeId);
+    }
+
+    public LiveData<List<Step>> getSteps(Long recipeId) {
+        Timber.d("Recipe [id=%s]: retrieving steps from the database.", recipeId);
+        return database.stepDao().getRecipeSteps(recipeId);
     }
 
     public LiveData<List<Recipe>> getAllSimpleRecipes(){
@@ -85,34 +100,56 @@ public class LocalRecipeDataSource {
     }
 
     public LiveData<RecipeDetails> getRecipeDetails(Long recipeId) {
-        LiveData<Recipe> simpleRecipeLiveData = database.recipeDao().getSimpleRecipe(recipeId);
+        // FIXME: Combine these 3 to get a LiveData<RecipeDetails> object
+        MutableLiveData<Recipe> simpleRecipeLiveData = new MutableLiveData<>();
+        MutableLiveData<List<Ingredient>> ingredientsLiveData = new MutableLiveData<>();
+        MutableLiveData<List<Step>> stepsLiveData = new MutableLiveData<>();
+        MutableLiveData<Long> recipeIdLiveData = new MutableLiveData<>();
+
+        // Note: MediatorLiveData lets you add one or multiple sources of data
+        // to a single LiveData observable. Note that the data is not combined
+        // for you. MediatorLiveData simply takes care of notifications.
+        // See: https://medium.com/androiddevelopers/livedata-beyond-the-viewmodel-
+        // reactive-patterns-using-transformations-and-mediatorlivedata-fda520ba00b7
         MediatorLiveData<RecipeDetails> result = new MediatorLiveData<>();
 
         result.addSource(simpleRecipeLiveData, new Observer<Recipe>() {
             @Override
             public void onChanged(Recipe simpleRecipe) {
-                RecipeDetails detailedRecipe = null;
                 if (simpleRecipe != null) {
-                    detailedRecipe = new RecipeDetails(
-                            simpleRecipe,
-                            simpleRecipe.getIngredients(),
-                            simpleRecipe.getSteps());
-                }
 
-                result.setValue(detailedRecipe);
+                }
+                simpleRecipeLiveData.setValue(simpleRecipe);
             }
         });
 
-        return null;
+        result.addSource(ingredientsLiveData, new Observer<List<Ingredient>>() {
+            @Override
+            public void onChanged(List<Ingredient> ingredients) {
+                if (ingredients != null) {
+
+                }
+                ingredientsLiveData.setValue(ingredients);
+            }
+        });
+
+        result.addSource(stepsLiveData, new Observer<List<Step>>() {
+            @Override
+            public void onChanged(List<Step> steps) {
+                if (steps != null)  {
+
+                }
+                stepsLiveData.setValue(steps);
+            }
+        });
+        Timber.d("Recipe [id=%s]: retrieving recipe details from the database.", recipeId);
+        return result;
     }
 
     public LiveData<List<RecipeDetails>> getAllDetailedRecipes(){
         LiveData<List<Recipe>> simpleRecipesLiveData = database.recipeDao().getAllSimpleRecipes();
         MediatorLiveData<List<RecipeDetails>> result = new MediatorLiveData<>();
 
-        // Call addSource(LiveData<S> source, Observer<S> onChanged)
-        // to start listening the given source LiveData. The onChanged
-        // observer will be called when source value was changed.
         result.addSource(simpleRecipesLiveData, new Observer<List<Recipe>>() {
             @Override
             public void onChanged(List<Recipe> simpleRecipeList) {
@@ -120,10 +157,10 @@ public class LocalRecipeDataSource {
 
                 if (simpleRecipeList != null) {
                     for (Recipe simpleRecipe : simpleRecipeList) {
-                        RecipeDetails detailedRecipe = new RecipeDetails(
-                                simpleRecipe,
-                                simpleRecipe.getIngredients(),
-                                simpleRecipe.getSteps());
+                        RecipeDetails detailedRecipe = new RecipeDetails();
+                        detailedRecipe.setRecipe(simpleRecipe);
+                        detailedRecipe.setIngredients(getIngredients(simpleRecipe.getId()).getValue());
+                        detailedRecipe.setSteps(getSteps(simpleRecipe.getId()).getValue());
                         detailedRecipeList.add(detailedRecipe);
                     }
                 }

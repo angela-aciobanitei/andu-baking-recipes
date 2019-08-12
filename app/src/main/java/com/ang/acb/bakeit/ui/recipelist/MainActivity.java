@@ -39,7 +39,7 @@ public class MainActivity extends AppCompatActivity {
 
         // Setup view model.
         ViewModelFactory factory = InjectorUtils.provideViewModelFactory(this);
-        RecipeListViewModel viewModel = ViewModelProviders
+        viewModel = ViewModelProviders
                 .of(this, factory)
                 .get(RecipeListViewModel.class);
         Timber.d("Setup recipe list view model.");

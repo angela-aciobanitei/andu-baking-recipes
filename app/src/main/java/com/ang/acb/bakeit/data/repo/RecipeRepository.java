@@ -5,9 +5,11 @@ import androidx.annotation.Nullable;
 import androidx.lifecycle.LiveData;
 
 import com.ang.acb.bakeit.data.local.LocalRecipeDataSource;
+import com.ang.acb.bakeit.data.model.Ingredient;
 import com.ang.acb.bakeit.data.model.Recipe;
 import com.ang.acb.bakeit.data.model.RecipeDetails;
 import com.ang.acb.bakeit.data.model.Resource;
+import com.ang.acb.bakeit.data.model.Step;
 import com.ang.acb.bakeit.data.remote.ApiResponse;
 import com.ang.acb.bakeit.data.remote.RemoteRecipeDataSource;
 import com.ang.acb.bakeit.utils.AppExecutors;
@@ -67,7 +69,7 @@ public class RecipeRepository {
             protected LiveData<ApiResponse<List<Recipe>>> createCall() {
                 // Create the API call to load the all recipes.
                 // FIXME: The return type is the data type returned from the API.
-                Timber.d("Loading all the recipes from network.");
+                Timber.d("NetworkBoundResource createCall(): loading all the recipes from network.");
                 return remoteDataSource.loadAllRecipes();
             }
 
@@ -76,13 +78,13 @@ public class RecipeRepository {
                 // Save the result of the API response into the database.
                 // FIXME: The param type is the data type returned from the API.
                 localDataSource.saveAllRecipesDetails(loadedData);
-                Timber.d("%s recipes saved to database.", loadedData.size());
+                Timber.d("NetworkBoundResource saveCallResult(): %s recipes saved to database.", loadedData.size());
             }
 
             @Override
             protected void onFetchFailed() {
                 // Ignored
-                Timber.d("Fetch failed!");
+                Timber.d("NetworkBoundResource onFetchFailed()");
             }
 
             @Override
@@ -97,10 +99,22 @@ public class RecipeRepository {
             protected LiveData<List<RecipeDetails>> loadFromDb() {
                 // Get the cached data from the database.
                 // FIXME: The return type is the data type used locally.
-                Timber.d("Getting all the recipes from database.");
+                Timber.d("NetworkBoundResource loadFromDb(): Getting all the detailed recipes from the database.");
                 return localDataSource.getAllDetailedRecipes();
             }
         }.getAsLiveData();
+    }
+
+    public LiveData<Recipe> getSimpleRecipe(Long recipeId) {
+        return localDataSource.getSimpleRecipe(recipeId);
+    }
+
+    public LiveData<List<Ingredient>> getIngredients(Long recipeId) {
+        return localDataSource.getIngredients(recipeId);
+    }
+
+    public LiveData<List<Step>> getSteps(Long recipeId) {
+        return localDataSource.getSteps(recipeId);
     }
 
     public LiveData<List<Recipe>> getAllSimpleRecipes() {

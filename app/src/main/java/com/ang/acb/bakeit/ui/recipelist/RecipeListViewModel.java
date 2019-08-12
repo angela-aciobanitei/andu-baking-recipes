@@ -17,7 +17,6 @@ public class RecipeListViewModel extends ViewModel {
     private LiveData<Resource<List<RecipeDetails>>> recipeListResourceLiveData;
 
     public RecipeListViewModel(RecipeRepository repository) {
-        Timber.d("Use recipe repository to get recipe list");
         recipeListResourceLiveData = repository.loadAllRecipes();
     }
 

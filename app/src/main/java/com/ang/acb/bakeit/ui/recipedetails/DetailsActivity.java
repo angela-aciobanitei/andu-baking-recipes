@@ -15,24 +15,26 @@ import static com.ang.acb.bakeit.ui.recipelist.MainActivity.INVALID_RECIPE_ID;
 
 public class DetailsActivity extends AppCompatActivity {
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_details);
 
         Long recipeId = getIntent().getLongExtra(EXTRA_RECIPE_ID, INVALID_RECIPE_ID);
+        Timber.d("Recipe ID: %s.", recipeId);
         if (recipeId.equals(INVALID_RECIPE_ID)) {
-            Timber.d("Wrong recipe id.");
+            Timber.d("Invalid recipe id.");
             return;
         }
-        if (savedInstanceState == null) {
-            FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-            transaction.replace(
-                    R.id.partial_details_fragment_container,
-                    RecipeDetailsFragment.newInstance(recipeId));
-            transaction.commit();
-        }
 
+        if (savedInstanceState == null) {
+            getSupportFragmentManager().beginTransaction()
+                .replace(R.id.partial_details_fragment_container,
+                        RecipeDetailsFragment.newInstance(recipeId))
+                .commit();
+            Timber.d("Replace RecipeDetailsFragment in activity.");
+        }
     }
 
 }

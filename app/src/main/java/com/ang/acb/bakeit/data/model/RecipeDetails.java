@@ -22,6 +22,8 @@ public class RecipeDetails  {
     @Relation(parentColumn = "id", entityColumn = "recipe_id")
     public List<Step> steps;
 
+    public RecipeDetails(){}
+
     public RecipeDetails(Recipe recipe, List<Ingredient> ingredients, List<Step> steps) {
         this.recipe = recipe;
         this.ingredients = ingredients;
@@ -38,5 +40,17 @@ public class RecipeDetails  {
 
     public List<Step> getSteps() {
         return steps;
+    }
+
+    public void setRecipe(Recipe recipe) {
+        this.recipe = recipe;
+    }
+
+    public void setIngredients(List<Ingredient> ingredients) {
+        this.ingredients = ingredients;
+    }
+
+    public void setSteps(List<Step> steps) {
+        this.steps = steps;
     }
 }

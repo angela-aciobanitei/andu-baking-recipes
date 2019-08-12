@@ -22,8 +22,8 @@ public interface IngredientDao {
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     void insertRecipeIngredients(List<Ingredient> ingredients);
 
-    @Query("SELECT * FROM ingredient")
-    LiveData<List<Ingredient>> getRecipeIngredients();
+    @Query("SELECT * FROM ingredient where id= :recipeId")
+    LiveData<List<Ingredient>> getRecipeIngredients(Long recipeId);
 
     @Query("DELETE FROM ingredient")
     void deleteRecipeIngredients();

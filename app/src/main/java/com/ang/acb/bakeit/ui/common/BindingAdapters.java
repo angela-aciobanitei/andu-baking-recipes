@@ -12,6 +12,8 @@ import com.ang.acb.bakeit.ui.recipedetails.StepAdapter;
 
 import java.util.List;
 
+import timber.log.Timber;
+
 /**
  * Binding adapters are responsible for making the appropriate framework calls to set values.
  *
@@ -29,11 +31,13 @@ public class BindingAdapters {
     public static void setIngredientItems(RecyclerView recyclerView, List<Ingredient> items) {
         IngredientAdapter adapter = (IngredientAdapter) recyclerView.getAdapter();
         if (adapter != null) adapter.submitList(items);
+        Timber.d("setIngredientItems");
     }
 
     @BindingAdapter("setStepItems")
     public static void setStepItems(RecyclerView recyclerView, List<Step> items) {
         StepAdapter adapter = (StepAdapter) recyclerView.getAdapter();
         if (adapter != null) adapter.submitList(items);
+        Timber.d("setStepItems");
     }
 }
