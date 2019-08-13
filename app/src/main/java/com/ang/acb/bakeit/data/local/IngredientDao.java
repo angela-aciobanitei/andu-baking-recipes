@@ -22,7 +22,7 @@ public interface IngredientDao {
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     void insertRecipeIngredients(List<Ingredient> ingredients);
 
-    @Query("SELECT * FROM ingredient where id= :recipeId")
+    @Query("SELECT * FROM ingredient where recipe_id= :recipeId")
     LiveData<List<Ingredient>> getRecipeIngredients(Long recipeId);
 
     @Query("DELETE FROM ingredient")

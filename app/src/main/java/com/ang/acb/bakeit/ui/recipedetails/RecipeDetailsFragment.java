@@ -1,6 +1,7 @@
 package com.ang.acb.bakeit.ui.recipedetails;
 
 import androidx.annotation.Nullable;
+import androidx.core.util.Pair;
 import androidx.core.view.ViewCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
@@ -13,10 +14,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.ang.acb.bakeit.R;
+import com.ang.acb.bakeit.data.model.Details;
 import com.ang.acb.bakeit.data.model.Ingredient;
-import com.ang.acb.bakeit.data.model.Recipe;
-import com.ang.acb.bakeit.data.model.RecipeDetails;
 import com.ang.acb.bakeit.data.model.Step;
 import com.ang.acb.bakeit.databinding.FragmentRecipeDetailsBinding;
 import com.ang.acb.bakeit.utils.InjectorUtils;
@@ -108,15 +107,15 @@ public class RecipeDetailsFragment extends Fragment {
 
     private void observeResult() {
         // FIXME: Observe recipe details
-        viewModel.getRecipeDetailsLiveData().observe(
+        viewModel.getDetailsLiveData().observe(
                 getViewLifecycleOwner(),
-                new Observer<RecipeDetails>() {
+                new Observer<Pair<List<Ingredient>, List<Step>>>() {
                     @Override
-                    public void onChanged(RecipeDetails recipeDetails) {
-                        binding.setRecipeDetails(recipeDetails);
-                        Timber.d("Recipe [id=%s]: bind recipe details.", recipeId);
+                    public void onChanged(Pair<List<Ingredient>, List<Step>> listListPair) {
+                        binding.setDetails(new Details(listListPair));
                     }
-        });
+                }
+        );
 
     }
 }

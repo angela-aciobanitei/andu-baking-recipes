@@ -11,7 +11,7 @@ import androidx.room.Relation;
  *
  * See: https://medium.com/@magdamiu/android-room-persistence-library-relations-75bbe02e8522
  */
-public class RecipeDetails  {
+public class DetailedRecipe {
 
     @Embedded(prefix = "recipe_")
     public Recipe recipe;
@@ -22,9 +22,9 @@ public class RecipeDetails  {
     @Relation(parentColumn = "id", entityColumn = "recipe_id")
     public List<Step> steps;
 
-    public RecipeDetails(){}
+    public DetailedRecipe(){}
 
-    public RecipeDetails(Recipe recipe, List<Ingredient> ingredients, List<Step> steps) {
+    public DetailedRecipe(Recipe recipe, List<Ingredient> ingredients, List<Step> steps) {
         this.recipe = recipe;
         this.ingredients = ingredients;
         this.steps = steps;

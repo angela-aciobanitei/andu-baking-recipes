@@ -5,14 +5,15 @@ import androidx.annotation.Nullable;
 import androidx.lifecycle.LiveData;
 
 import com.ang.acb.bakeit.data.local.LocalRecipeDataSource;
+import com.ang.acb.bakeit.data.model.DetailedRecipe;
 import com.ang.acb.bakeit.data.model.Ingredient;
 import com.ang.acb.bakeit.data.model.Recipe;
-import com.ang.acb.bakeit.data.model.RecipeDetails;
 import com.ang.acb.bakeit.data.model.Resource;
 import com.ang.acb.bakeit.data.model.Step;
 import com.ang.acb.bakeit.data.remote.ApiResponse;
 import com.ang.acb.bakeit.data.remote.RemoteRecipeDataSource;
 import com.ang.acb.bakeit.utils.AppExecutors;
+import com.ang.acb.bakeit.utils.DetailsLiveData;
 
 import java.util.List;
 
@@ -56,13 +57,13 @@ public class RecipeRepository {
         return sInstance;
     }
 
-    public LiveData<Resource<List<RecipeDetails>>> loadAllRecipes(){
+    public LiveData<Resource<List<DetailedRecipe>>> loadAllRecipes(){
         // Note that we are using the NetworkBoundResource<ResultType, RequestType> class
         // that we've created earlier which can provide a resource backed by both the
         // SQLite database and the network. It defines two type parameters, ResultType
         // and RequestType, because the data type used locally might not match the data
         // type returned from the API.
-        return new NetworkBoundResource<List<RecipeDetails>, List<Recipe>>(appExecutors) {
+        return new NetworkBoundResource<List<DetailedRecipe>, List<Recipe>>(appExecutors) {
 
             @NonNull
             @Override
@@ -88,7 +89,7 @@ public class RecipeRepository {
             }
 
             @Override
-            protected boolean shouldFetch(@Nullable List<RecipeDetails> localData) {
+            protected boolean shouldFetch(@Nullable List<DetailedRecipe> localData) {
                 // Only fetch fresh data if it doesn't exist in database.
                 // FIXME: The param type is the data type used locally.
                 return localData == null || localData.size() == 0;
@@ -96,7 +97,7 @@ public class RecipeRepository {
 
             @NonNull
             @Override
-            protected LiveData<List<RecipeDetails>> loadFromDb() {
+            protected LiveData<List<DetailedRecipe>> loadFromDb() {
                 // Get the cached data from the database.
                 // FIXME: The return type is the data type used locally.
                 Timber.d("NetworkBoundResource loadFromDb(): Getting all the detailed recipes from the database.");
@@ -120,7 +121,8 @@ public class RecipeRepository {
     public LiveData<List<Recipe>> getAllSimpleRecipes() {
         return localDataSource.getAllSimpleRecipes();
     }
-    public LiveData<RecipeDetails> getRecipeDetails(Long recipeId){
-        return  localDataSource.getRecipeDetails(recipeId);
+
+    public DetailsLiveData getDetailsPairLiveData(Long recipeId) {
+        return localDataSource.getDetailsPairLiveData(recipeId);
     }
 }

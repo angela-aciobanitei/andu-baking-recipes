@@ -6,7 +6,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.ang.acb.bakeit.R;
-import com.ang.acb.bakeit.data.model.RecipeDetails;
+import com.ang.acb.bakeit.data.model.DetailedRecipe;
 import com.ang.acb.bakeit.data.model.Resource;
 
 import java.util.List;
@@ -14,7 +14,7 @@ import java.util.List;
 public class RecipeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     private RecipeListViewModel viewModel;
-    private Resource<List<RecipeDetails>> resourceRecipeList;
+    private Resource<List<DetailedRecipe>> resourceRecipeList;
     private Resource networkState = null;
 
     public RecipeAdapter (RecipeListViewModel viewModel) {
@@ -70,7 +70,7 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         return networkState != null && networkState.status != Resource.Status.SUCCESS;
     }
 
-    public void submitList(Resource<List<RecipeDetails>> recipes) {
+    public void submitList(Resource<List<DetailedRecipe>> recipes) {
         resourceRecipeList = recipes;
         notifyDataSetChanged();
     }

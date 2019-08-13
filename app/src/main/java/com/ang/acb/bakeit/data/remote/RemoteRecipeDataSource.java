@@ -3,7 +3,6 @@ package com.ang.acb.bakeit.data.remote;
 import androidx.lifecycle.LiveData;
 
 import com.ang.acb.bakeit.data.model.Recipe;
-import com.ang.acb.bakeit.data.model.RecipeDetails;
 import com.ang.acb.bakeit.utils.AppExecutors;
 
 import java.util.List;

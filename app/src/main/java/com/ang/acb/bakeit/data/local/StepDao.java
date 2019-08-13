@@ -21,7 +21,7 @@ public interface StepDao {
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     void insertRecipeSteps(List<Step> steps);
 
-    @Query("SELECT * FROM step where id= :recipeId")
+    @Query("SELECT * FROM step where recipe_id= :recipeId")
     LiveData<List<Step>> getRecipeSteps(Long recipeId);
 
     @Query("DELETE FROM step")
