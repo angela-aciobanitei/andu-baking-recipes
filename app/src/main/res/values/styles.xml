@@ -27,12 +27,4 @@
         <item name="android:clipToPadding">false</item>
     </style>
 
-    <style name="ingredientComponentStyle">
-        <item name="android:layout_width">wrap_content</item>
-        <item name="android:layout_height">wrap_content</item>
-        <item name="android:layout_marginStart">8dp</item>
-        <item name="android:paddingBottom">8dp</item>
-        <item name="android:textAppearance">@style/TextAppearance.MaterialComponents.Subtitle1</item>
-    </style>
-
 </resources>

@@ -14,8 +14,6 @@ import com.ang.acb.bakeit.utils.AppExecutors;
 
 import java.util.List;
 
-import timber.log.Timber;
-
 /**
  * Repository module for handling data operations.
  *

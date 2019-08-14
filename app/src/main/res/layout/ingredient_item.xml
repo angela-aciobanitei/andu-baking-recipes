@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
 
@@ -17,21 +17,31 @@
 
         <TextView
             android:id="@+id/ingredient_item_quantity"
-            style="@style/ingredientComponentStyle"
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:layout_marginStart="16dp"
+            android:textAppearance="@style/TextAppearance.MaterialComponents.Subtitle2"
             android:text="@{String.valueOf(ingredient.getQuantity())}"
             tools:text="5" />
 
         <TextView
             android:id="@+id/ingredient_item_measure"
-            style="@style/ingredientComponentStyle"
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:layout_marginStart="4dp"
+            android:textAppearance="@style/TextAppearance.MaterialComponents.Subtitle2"
             android:text="@{ingredient.getMeasure()}"
             tools:text="cups"/>
 
         <TextView
             android:id="@+id/ingredient_item_name"
-            style="@style/ingredientComponentStyle"
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:layout_marginStart="4dp"
+            android:textAppearance="@style/TextAppearance.MaterialComponents.Subtitle2"
             android:text="@{ingredient.getIngredient()}"
             tools:text="sugar"/>
 
     </LinearLayout>
+
 </layout>

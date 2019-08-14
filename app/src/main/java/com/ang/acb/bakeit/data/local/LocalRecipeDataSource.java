@@ -48,12 +48,15 @@ public class LocalRecipeDataSource {
     }
 
     public LiveData<List<Recipe>> loadAllRecipes(){
+        // Initial live data source.
         LiveData<List<WholeRecipe>> wholeRecipesLiveData = database.recipeDao().loadWholeRecipes();
-        MediatorLiveData<List<Recipe>> result = new MediatorLiveData<>();
 
+        // Final live data result. Note: MediatorLiveData<T> is a LiveData
+        // subclass which may observe other LiveData objects and react on
+        // OnChanged events from them.
+        MediatorLiveData<List<Recipe>> result = new MediatorLiveData<>();
         result.addSource(wholeRecipesLiveData, wholeRecipes -> {
             List<Recipe> recipes = new ArrayList<>();
-
             if (wholeRecipes != null) {
                 for (WholeRecipe wholeRecipe : wholeRecipes) {
                     wholeRecipe.recipe.setIngredients(wholeRecipe.ingredients);
