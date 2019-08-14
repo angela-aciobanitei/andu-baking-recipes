@@ -18,6 +18,7 @@ import com.ang.acb.bakeit.data.model.WholeRecipe;
 import com.ang.acb.bakeit.databinding.FragmentRecipeDetailsBinding;
 import com.ang.acb.bakeit.utils.InjectorUtils;
 import com.ang.acb.bakeit.utils.ViewModelFactory;
+import com.google.android.exoplayer2.SimpleExoPlayer;
 
 import org.jetbrains.annotations.NotNull;
 
