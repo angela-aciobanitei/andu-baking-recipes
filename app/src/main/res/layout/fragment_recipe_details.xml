@@ -7,16 +7,8 @@
     <data>
 
         <variable
-            name="recipeIngredientsPair"
-            type="com.ang.acb.bakeit.data.model.RecipeIngredientsPair" />
-
-        <variable
-            name="recipeStepsPair"
-            type="com.ang.acb.bakeit.data.model.RecipeStepsPair" />
-
-        <variable
-            name="details"
-            type="com.ang.acb.bakeit.data.model.Details" />
+            name="wholeRecipe"
+            type="com.ang.acb.bakeit.data.model.WholeRecipe" />
 
     </data>
 
@@ -37,7 +29,7 @@
                 android:text="@string/ingredients"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:toggleVisibility="@{details.getIngredients().size() > 0}" />
+                app:toggleVisibility="@{wholeRecipe.ingredients.size > 0}" />
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rv_ingredients"
@@ -46,8 +38,8 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/label_ingredients"
-                app:setIngredientItems="@{details.getIngredients()}"
-                app:toggleVisibility="@{details.getIngredients().size() > 0}" />
+                app:setIngredientItems="@{wholeRecipe.ingredients}"
+                app:toggleVisibility="@{wholeRecipe.ingredients.size > 0}" />
 
             <TextView
                 android:id="@+id/label_steps"
@@ -55,7 +47,7 @@
                 android:text="@string/steps"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/rv_ingredients"
-                app:toggleVisibility="@{details.getSteps().size() > 0}" />
+                app:toggleVisibility="@{wholeRecipe.steps.size > 0}" />
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rv_steps"
@@ -64,8 +56,8 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/label_steps"
-                app:setStepItems="@{details.getSteps()}"
-                app:toggleVisibility="@{details.getSteps().size() > 0}" />
+                app:setStepItems="@{wholeRecipe.steps}"
+                app:toggleVisibility="@{wholeRecipe.steps.size > 0}" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.core.widget.NestedScrollView>

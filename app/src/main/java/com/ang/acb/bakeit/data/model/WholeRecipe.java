@@ -1,53 +1,43 @@
 package com.ang.acb.bakeit.data.model;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import androidx.room.Embedded;
 import androidx.room.Relation;
 
+import java.util.List;
+
 /**
  * A simple POJO containing the complete recipe's details, including ingredients and steps.
- *
  * See: https://medium.com/@magdamiu/android-room-persistence-library-relations-75bbe02e8522
  */
-public class DetailedRecipe {
+public class WholeRecipe {
 
-    @Embedded(prefix = "recipe_")
+    @Embedded
     public Recipe recipe;
 
-    @Relation(parentColumn = "id", entityColumn = "recipe_id")
+    @Relation(parentColumn = "id", entityColumn = "recipe_id", entity = Ingredient.class)
     public List<Ingredient> ingredients;
 
-    @Relation(parentColumn = "id", entityColumn = "recipe_id")
+    @Relation(parentColumn = "id", entityColumn = "recipe_id", entity = Step.class)
     public List<Step> steps;
-
-    public DetailedRecipe(){}
-
-    public DetailedRecipe(Recipe recipe, List<Ingredient> ingredients, List<Step> steps) {
-        this.recipe = recipe;
-        this.ingredients = ingredients;
-        this.steps = steps;
-    }
 
     public Recipe getRecipe() {
         return recipe;
-    }
-
-    public List<Ingredient> getIngredients() {
-        return ingredients;
-    }
-
-    public List<Step> getSteps() {
-        return steps;
     }
 
     public void setRecipe(Recipe recipe) {
         this.recipe = recipe;
     }
 
+    public List<Ingredient> getIngredients() {
+        return ingredients;
+    }
+
     public void setIngredients(List<Ingredient> ingredients) {
         this.ingredients = ingredients;
+    }
+
+    public List<Step> getSteps() {
+        return steps;
     }
 
     public void setSteps(List<Step> steps) {

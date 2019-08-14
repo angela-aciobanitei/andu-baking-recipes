@@ -19,13 +19,13 @@
         <TextView
             android:id="@+id/step_item_count"
             style="@style/ingredientComponentStyle"
-            android:text="@{String.valueOf(step.id + 1)}"
+            android:text="@{String.valueOf(step.getId())}"
             tools:text="1."/>
 
         <TextView
             android:id="@+id/step_item_short_description"
             style="@style/ingredientComponentStyle"
-            android:text="@{step.shortDescription}"
+            android:text="@{step.getShortDescription()}"
             tools:text="Starting prep"/>
 
     </LinearLayout>

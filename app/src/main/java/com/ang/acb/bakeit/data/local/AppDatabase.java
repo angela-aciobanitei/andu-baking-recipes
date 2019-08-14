@@ -18,7 +18,7 @@ import com.ang.acb.bakeit.data.model.Step;
  */
 @Database(
         entities = {Recipe.class, Step.class, Ingredient.class},
-        version = 1,
+        version = 5,
         exportSchema = false)
 public abstract class AppDatabase extends RoomDatabase {
 
@@ -27,14 +27,14 @@ public abstract class AppDatabase extends RoomDatabase {
     private static AppDatabase sInstance;
 
     public abstract RecipeDao recipeDao();
-    public abstract IngredientDao ingredientDao();
-    public abstract StepDao stepDao();
 
     private static AppDatabase buildDatabase(final Context context) {
         return Room.databaseBuilder(
                 context.getApplicationContext(),
                 AppDatabase.class,
-                DATABASE_NAME).build();
+                DATABASE_NAME)
+                .fallbackToDestructiveMigration()
+                .build();
     }
 
     // Returns the single instance of this class, creating it if necessary.

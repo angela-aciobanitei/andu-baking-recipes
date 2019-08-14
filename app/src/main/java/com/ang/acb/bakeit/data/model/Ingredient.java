@@ -19,26 +19,14 @@ import static androidx.room.ForeignKey.CASCADE;
  * See: https://developer.android.com/training/data-storage/room/relationships#one-to-many
  * See: https://android.jlelse.eu/android-architecture-components-room-relationships-bf473510c14a
  */
-@Entity(tableName = "ingredient",
-        foreignKeys = @ForeignKey(
-                entity = Recipe.class,
-                parentColumns = "id",
-                childColumns = "recipe_id",
-                onDelete = CASCADE,
-                onUpdate = CASCADE
-        ),
-        indices = {@Index(value = {"recipe_id"})}
-)
+@Entity(tableName = "ingredients")
 public class Ingredient {
 
-    @NonNull
-    @PrimaryKey
-    @SerializedName("id")
-    private Long id;
+    @PrimaryKey(autoGenerate = true)
+    private Integer id;
 
-    @NonNull
     @ColumnInfo(name = "recipe_id")
-    private Long recipeId;
+    private Integer recipeId;
 
     @SerializedName("quantity")
     private double quantity;
@@ -50,20 +38,20 @@ public class Ingredient {
     private String ingredient;
 
     @NonNull
-    public Long getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(@NonNull Long id) {
+    public void setId(@NonNull Integer id) {
         this.id = id;
     }
 
     @NotNull
-    public Long getRecipeId() {
+    public Integer getRecipeId() {
         return recipeId;
     }
 
-    public void setRecipeId(@NotNull Long recipeId) {
+    public void setRecipeId(@NotNull Integer recipeId) {
         this.recipeId = recipeId;
     }
 

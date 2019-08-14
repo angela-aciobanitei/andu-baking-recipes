@@ -1,7 +1,6 @@
 package com.ang.acb.bakeit.ui.recipedetails;
 
 import androidx.annotation.Nullable;
-import androidx.core.util.Pair;
 import androidx.core.view.ViewCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
@@ -14,16 +13,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.ang.acb.bakeit.data.model.Details;
-import com.ang.acb.bakeit.data.model.Ingredient;
-import com.ang.acb.bakeit.data.model.Step;
+import com.ang.acb.bakeit.data.model.WholeRecipe;
+
 import com.ang.acb.bakeit.databinding.FragmentRecipeDetailsBinding;
 import com.ang.acb.bakeit.utils.InjectorUtils;
 import com.ang.acb.bakeit.utils.ViewModelFactory;
 
 import org.jetbrains.annotations.NotNull;
-
-import java.util.List;
 
 import timber.log.Timber;
 
@@ -36,15 +32,15 @@ public class RecipeDetailsFragment extends Fragment {
 
     private FragmentRecipeDetailsBinding binding;
     private RecipeDetailsViewModel viewModel;
-    private Long recipeId;
+    private Integer recipeId;
 
     public RecipeDetailsFragment() {}
 
-    public static RecipeDetailsFragment newInstance(Long recipeId) {
+    public static RecipeDetailsFragment newInstance(Integer recipeId) {
         Timber.d("RecipeDetailsFragment created.");
         RecipeDetailsFragment fragment = new RecipeDetailsFragment();
         Bundle args = new Bundle();
-        args.putLong(EXTRA_RECIPE_ID, recipeId);
+        args.putInt(EXTRA_RECIPE_ID, recipeId);
         fragment.setArguments(args);
 
         return fragment;
@@ -77,7 +73,7 @@ public class RecipeDetailsFragment extends Fragment {
 
         // Get bundle args (with thw recipe id) and init recipe details view model.
         Bundle args = getArguments();
-        if (args != null) recipeId = args.getLong(EXTRA_RECIPE_ID);
+        if (args != null) recipeId = args.getInt(EXTRA_RECIPE_ID);
 
         viewModel.init(recipeId);
         Timber.d("Recipe [id=%s]: init view model.", recipeId);
@@ -89,7 +85,7 @@ public class RecipeDetailsFragment extends Fragment {
                 getContext(), RecyclerView.HORIZONTAL, false));
         rvIngredients.setHasFixedSize(true);
         rvIngredients.setAdapter(new IngredientAdapter());
-        // Note: remember to enable nested scrolling for this view.
+        // Disable nested scrolling for this view.
         ViewCompat.setNestedScrollingEnabled(rvIngredients, false);
         Timber.d("Recipe [id=%s]: setup ingredients adapter.", recipeId);
     }
@@ -100,19 +96,19 @@ public class RecipeDetailsFragment extends Fragment {
                 getContext(), RecyclerView.HORIZONTAL, false));
         rvSteps.setHasFixedSize(true);
         rvSteps.setAdapter(new StepAdapter());
-        // Note: remember to enable nested scrolling for this view.
+        // Disable nested scrolling for this view.
         ViewCompat.setNestedScrollingEnabled(rvSteps, false);
         Timber.d("Recipe [id=%s]: setup steps adapter.", recipeId);
     }
 
     private void observeResult() {
         // FIXME: Observe recipe details
-        viewModel.getDetailsLiveData().observe(
+        viewModel.getWholeRecipeLiveData().observe(
                 getViewLifecycleOwner(),
-                new Observer<Pair<List<Ingredient>, List<Step>>>() {
+                new Observer<WholeRecipe>() {
                     @Override
-                    public void onChanged(Pair<List<Ingredient>, List<Step>> listListPair) {
-                        binding.setDetails(new Details(listListPair));
+                    public void onChanged(WholeRecipe wholeRecipe) {
+                        binding.setWholeRecipe(wholeRecipe);
                     }
                 }
         );

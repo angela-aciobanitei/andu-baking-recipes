@@ -7,6 +7,7 @@ import androidx.room.ForeignKey;
 import androidx.room.Index;
 import androidx.room.PrimaryKey;
 
+import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 import org.jetbrains.annotations.NotNull;
@@ -19,54 +20,62 @@ import static androidx.room.ForeignKey.CASCADE;
  * See: https://developer.android.com/training/data-storage/room/relationships#one-to-many
  * See: https://android.jlelse.eu/android-architecture-components-room-relationships-bf473510c14a
  */
-@Entity(tableName = "step",
-        foreignKeys = @ForeignKey(
-                entity = Recipe.class,
-                parentColumns = "id",
-                childColumns = "recipe_id",
-                onDelete = CASCADE,
-                onUpdate = CASCADE
-        ),
-        indices = { @Index(value = {"recipe_id"})}
-)
+@Entity(tableName = "steps")
 public class Step {
 
-    @NonNull
-    @PrimaryKey
+    @PrimaryKey(autoGenerate = true)
+    private Integer roomId;
+
     @SerializedName("id")
-    private Long id;
+    @Expose
+    private Integer id;
 
-    @NonNull
     @ColumnInfo(name = "recipe_id")
-    private Long recipeId;
+    @Expose
+    private Integer recipeId;
 
+    @ColumnInfo(name = "short_description")
     @SerializedName("shortDescription")
+    @Expose
     private String shortDescription;
 
     @SerializedName("description")
+    @Expose
     private String description;
 
+    @ColumnInfo(name = "video_url")
     @SerializedName("videoURL")
+    @Expose
     private String videoURL;
 
+    @ColumnInfo(name = "thumbnail_url")
     @SerializedName("thumbnailURL")
+    @Expose
     private String thumbnailURL;
 
+    public Integer getRoomId() {
+        return roomId;
+    }
+
+    public void setRoomId(Integer roomId) {
+        this.roomId = roomId;
+    }
+
     @NonNull
-    public Long getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(@NonNull Long id) {
+    public void setId(@NonNull Integer id) {
         this.id = id;
     }
 
     @NotNull
-    public Long getRecipeId() {
+    public Integer getRecipeId() {
         return recipeId;
     }
 
-    public void setRecipeId(@NotNull Long recipeId) {
+    public void setRecipeId(@NotNull Integer recipeId) {
         this.recipeId = recipeId;
     }
 

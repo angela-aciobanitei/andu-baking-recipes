@@ -19,7 +19,7 @@ public class DetailsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_details);
 
-        Long recipeId = getIntent().getLongExtra(EXTRA_RECIPE_ID, INVALID_RECIPE_ID);
+        Integer recipeId = getIntent().getIntExtra(EXTRA_RECIPE_ID, INVALID_RECIPE_ID);
         Timber.d("Recipe ID: %s.", recipeId);
         if (recipeId.equals(INVALID_RECIPE_ID)) {
             Timber.d("Invalid recipe id.");

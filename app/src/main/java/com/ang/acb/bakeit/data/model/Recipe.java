@@ -6,6 +6,7 @@ import androidx.room.Entity;
 import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 
+import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 import java.util.List;
@@ -13,38 +14,43 @@ import java.util.List;
 /**
  * Immutable model class for a Recipe.
  */
-@Entity(tableName = "recipe")
+@Entity(tableName = "recipes")
 public class Recipe {
 
-    @NonNull
     @PrimaryKey
     @ColumnInfo(name = "id")
     @SerializedName("id")
-    private Long id;
+    @Expose
+    private Integer id;
 
     @SerializedName("name")
+    @Expose
     private String name;
 
     @SerializedName("servings")
+    @Expose
     private Integer servings;
 
     @SerializedName("image")
+    @Expose
     private String image;
 
     @Ignore
     @SerializedName("ingredients")
+    @Expose
     private List<Ingredient> ingredients;
 
     @Ignore
     @SerializedName("steps")
+    @Expose
     private List<Step> steps;
 
     @NonNull
-    public Long getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(@NonNull Long id) {
+    public void setId(@NonNull Integer id) {
         this.id = id;
     }
 

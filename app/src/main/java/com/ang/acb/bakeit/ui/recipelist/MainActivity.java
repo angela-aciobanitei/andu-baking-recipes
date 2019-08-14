@@ -9,7 +9,7 @@ import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.ang.acb.bakeit.R;
-import com.ang.acb.bakeit.data.model.DetailedRecipe;
+import com.ang.acb.bakeit.data.model.Recipe;
 import com.ang.acb.bakeit.data.model.Resource;
 import com.ang.acb.bakeit.databinding.ActivityMainBinding;
 import com.ang.acb.bakeit.utils.InjectorUtils;
@@ -22,7 +22,7 @@ import timber.log.Timber;
 public class MainActivity extends AppCompatActivity {
 
     public static final String EXTRA_RECIPE_ID = "EXTRA_RECIPE_ID";
-    public static final Long INVALID_RECIPE_ID = (long) -1;
+    public static final Integer INVALID_RECIPE_ID = -1;
 
     private ActivityMainBinding binding;
     private RecipeListViewModel viewModel;
@@ -52,9 +52,9 @@ public class MainActivity extends AppCompatActivity {
 
         // FIXME Observe data and network status.
         viewModel.getRecipeListResourceLiveData().observe(this,
-                new Observer<Resource<List<DetailedRecipe>>>() {
+                new Observer<Resource<List<Recipe>>>() {
                     @Override
-                    public void onChanged(Resource<List<DetailedRecipe>> resource) {
+                    public void onChanged(Resource<List<Recipe>> resource) {
                         Timber.d("Observe recipe list from view model.");
                         adapter.submitList(resource);
                         Timber.d("Observe network status from view model.");
