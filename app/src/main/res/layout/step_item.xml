@@ -13,13 +13,13 @@
     <LinearLayout
         android:orientation="horizontal"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="wrap_content">
 
         <!-- FIXME: Set step number-->
         <TextView
             android:id="@+id/step_item_count"
             style="@style/ingredientComponentStyle"
-            android:text="@{String.valueOf(step.getId())}"
+            android:text="@{String.valueOf(step.getId()+1)}"
             tools:text="1."/>
 
         <TextView

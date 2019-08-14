@@ -21,6 +21,8 @@ import com.ang.acb.bakeit.utils.ViewModelFactory;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Objects;
+
 import timber.log.Timber;
 
 import static com.ang.acb.bakeit.ui.recipelist.MainActivity.EXTRA_RECIPE_ID;
@@ -49,7 +51,6 @@ public class RecipeDetailsFragment extends Fragment {
     @Override
     public View onCreateView(@NotNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        Timber.d("RecipeDetailsFragment binding created.");
         binding = FragmentRecipeDetailsBinding.inflate(inflater, container, false);
         return binding.getRoot();
     }
@@ -69,7 +70,6 @@ public class RecipeDetailsFragment extends Fragment {
         ViewModelFactory factory = InjectorUtils.provideViewModelFactory(getContext());
         viewModel = ViewModelProviders.of(getActivity(),factory)
                 .get(RecipeDetailsViewModel.class);
-        Timber.d("Recipe [id=%s]: create view model.", recipeId);
 
         // Get bundle args (with thw recipe id) and init recipe details view model.
         Bundle args = getArguments();
@@ -82,7 +82,7 @@ public class RecipeDetailsFragment extends Fragment {
     private void setupIngredientsAdapter() {
         RecyclerView rvIngredients = binding.rvIngredients;
         rvIngredients.setLayoutManager(new LinearLayoutManager(
-                getContext(), RecyclerView.HORIZONTAL, false));
+                getContext(), RecyclerView.VERTICAL, false));
         rvIngredients.setHasFixedSize(true);
         rvIngredients.setAdapter(new IngredientAdapter());
         // Disable nested scrolling for this view.
@@ -93,7 +93,7 @@ public class RecipeDetailsFragment extends Fragment {
     private void setupStepsAdapter() {
         RecyclerView rvSteps = binding.rvSteps;
         rvSteps.setLayoutManager(new LinearLayoutManager(
-                getContext(), RecyclerView.HORIZONTAL, false));
+                getContext(), RecyclerView.VERTICAL, false));
         rvSteps.setHasFixedSize(true);
         rvSteps.setAdapter(new StepAdapter());
         // Disable nested scrolling for this view.

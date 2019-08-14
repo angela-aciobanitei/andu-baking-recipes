@@ -27,14 +27,14 @@ public class BindingAdapters {
         view.setVisibility(isVisible ? View.VISIBLE : View.GONE);
     }
 
-    @BindingAdapter("setIngredientItems")
+    @BindingAdapter("ingredientItems")
     public static void setIngredientItems(RecyclerView recyclerView, List<Ingredient> items) {
         IngredientAdapter adapter = (IngredientAdapter) recyclerView.getAdapter();
         if (adapter != null) adapter.submitList(items);
         Timber.d("setIngredientItems");
     }
 
-    @BindingAdapter("setStepItems")
+    @BindingAdapter("stepItems")
     public static void setStepItems(RecyclerView recyclerView, List<Step> items) {
         StepAdapter adapter = (StepAdapter) recyclerView.getAdapter();
         if (adapter != null) adapter.submitList(items);

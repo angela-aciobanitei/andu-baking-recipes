@@ -38,7 +38,7 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/label_ingredients"
-                app:setIngredientItems="@{wholeRecipe.ingredients}"
+                app:ingredientItems="@{wholeRecipe.ingredients}"
                 app:toggleVisibility="@{wholeRecipe.ingredients.size > 0}" />
 
             <TextView
@@ -56,7 +56,7 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/label_steps"
-                app:setStepItems="@{wholeRecipe.steps}"
+                app:stepItems="@{wholeRecipe.steps}"
                 app:toggleVisibility="@{wholeRecipe.steps.size > 0}" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>

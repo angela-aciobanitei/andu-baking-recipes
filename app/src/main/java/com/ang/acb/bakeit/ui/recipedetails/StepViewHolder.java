@@ -28,11 +28,9 @@ public class StepViewHolder extends RecyclerView.ViewHolder {
     }
 
     public void bindTo(Step step) {
-        binding.stepItemCount.setText("*");
-        binding.stepItemShortDescription.setText(step.getShortDescription());
+        binding.setStep(step);
 
-        // Binding must be executed immediately. To force execution, use executePendingBindings().
-        // https://developer.android.com/topic/libraries/data-binding/generated-binding#immediate_binding
+        // Binding must be executed immediately.
         binding.executePendingBindings();
     }
 }
