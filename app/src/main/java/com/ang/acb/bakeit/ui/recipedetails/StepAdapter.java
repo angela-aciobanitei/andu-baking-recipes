@@ -40,10 +40,12 @@ public class StepAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         ((StepItemViewHolder) holder).itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                // FIXME: Find a better way to do this
                 ((AppCompatActivity) context).getSupportFragmentManager()
                         .beginTransaction()
                         .replace(R.id.partial_details_fragment_container,
-                                StepVideoFragment.newInstance(recipeId))
+                                StepVideoFragment.newInstance(recipeId, step.getId()))
+                        .addToBackStack(String.valueOf(R.string.app_name))
                         .commit();
                 Timber.d("Replace StepVideoFragment in activity.");
             }

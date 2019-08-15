@@ -21,7 +21,7 @@ import timber.log.Timber;
 
 public class MainActivity extends AppCompatActivity {
 
-    public static final String EXTRA_RECIPE_ID = "EXTRA_RECIPE_ID";
+    public static final String ARG_RECIPE_ID = "ARG_RECIPE_ID";
     public static final Integer INVALID_RECIPE_ID = -1;
 
     private ActivityMainBinding binding;

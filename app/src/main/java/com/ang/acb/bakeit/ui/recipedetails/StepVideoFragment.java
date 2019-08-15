@@ -38,30 +38,32 @@ import java.util.Objects;
 
 import timber.log.Timber;
 
-import static com.ang.acb.bakeit.ui.recipelist.MainActivity.EXTRA_RECIPE_ID;
+import static com.ang.acb.bakeit.ui.recipelist.MainActivity.ARG_RECIPE_ID;
 
 public class StepVideoFragment extends Fragment  {
 
     public static final String CURRENT_PLAYBACK_POSITION_TAG = "CURRENT_PLAYBACK_POSITION_TAG";
     public static final String SHOULD_PLAY_WHEN_READY_TAG = "SHOULD_PLAY_WHEN_READY_TAG";
     public static final String CURRENT_STEP_INDEX = "CURRENT_STEP_INDEX";
+    public static final String ARG_STEP_ID = "EXTRA_STEP_ID";
 
     private FragmentVideoStepBinding binding;
     private RecipeDetailsViewModel viewModel;
     private Integer recipeId;
+    private Integer stepId;
 
     private SimpleExoPlayer simpleExoPlayer;
     private boolean shouldPlayWhenReady;
     private long currentPlaybackPosition;
-    private int currentStepIndex = -1;
 
     public StepVideoFragment() {}
 
-    public static StepVideoFragment newInstance(Integer recipeId) {
+    public static StepVideoFragment newInstance(Integer recipeId, Integer stepId) {
         Timber.d("StepVideoFragment created.");
         StepVideoFragment fragment = new StepVideoFragment();
         Bundle args = new Bundle();
-        args.putInt(EXTRA_RECIPE_ID, recipeId);
+        args.putInt(ARG_RECIPE_ID, recipeId);
+        args.putInt(ARG_STEP_ID, stepId);
         fragment.setArguments(args);
 
         return fragment;
@@ -84,17 +86,7 @@ public class StepVideoFragment extends Fragment  {
         // Enable fullscreen mode for landscape orientation.
         enableFullscreenMode();
 
-        // Create view model.
-        ViewModelFactory factory = InjectorUtils.provideViewModelFactory(getContext());
-        viewModel = ViewModelProviders.of(getActivity(),factory)
-                .get(RecipeDetailsViewModel.class);
-
-        // Get bundle args (with the recipe id) and init recipe details view model.
-        Bundle args = getArguments();
-        if (args != null) recipeId = args.getInt(EXTRA_RECIPE_ID);
-
-        viewModel.init(recipeId);
-        Timber.d("Recipe [id=%s]: init view model.", recipeId);
+        initializeViewModel();
 
         // TODO Observe step list
         viewModel.getWholeRecipeLiveData().observe(
@@ -103,42 +95,11 @@ public class StepVideoFragment extends Fragment  {
                     @Override
                     public void onChanged(WholeRecipe wholeRecipe) {
                         // Bind step
-                        Step step = wholeRecipe.steps.get(recipeId);
+                        Step step = wholeRecipe.steps.get(stepId);
                         binding.setStep(step);
                         binding.setStepListSize(wholeRecipe.steps.size());
 
-                        // Initialize step index
-                        if (currentStepIndex == -1 || currentStepIndex != step.getId()) {
-                            resetVideo();
-                            currentStepIndex = step.getId();
-                        }
-
-                        // If step has a video, initialize player, else display an image.
-                        String videoUrl = step.getVideoURL();
-                        if (!videoUrl.isEmpty()) {
-                            initializePlayer(Uri.parse(videoUrl));
-                        } else {
-                            String thumbnailUrl = step.getThumbnailURL();
-                            if (!TextUtils.isEmpty(thumbnailUrl)) {
-                                Picasso.get()
-                                    .load(thumbnailUrl)
-                                    .placeholder(R.drawable.bakeit)
-                                    .into(binding.placeholderImage);
-                            } else {
-                                binding.placeholderImage.setImageResource(R.drawable.bakeit);
-                            }
-                        }
-
-                        // Handle previous and next buttons
-                        binding.previousStepButton.setOnClickListener(view -> {
-                            resetVideo();
-                            // TODO Get previous step id
-                        });
-
-                        binding.nextStepButton.setOnClickListener(view -> {
-                            resetVideo();
-                            // TODO Get next step id
-                        });
+                        handleVideoUrl(step);
                     }
                 }
         );
@@ -150,7 +111,6 @@ public class StepVideoFragment extends Fragment  {
         super.onSaveInstanceState(outState);
         outState.putBoolean(SHOULD_PLAY_WHEN_READY_TAG, shouldPlayWhenReady);
         outState.putLong(CURRENT_PLAYBACK_POSITION_TAG, currentPlaybackPosition);
-        outState.putInt(CURRENT_STEP_INDEX, currentStepIndex);
     }
 
     private void onRestoreInstanceState(Bundle savedInstanceState){
@@ -160,10 +120,6 @@ public class StepVideoFragment extends Fragment  {
             }
             if (savedInstanceState.containsKey(CURRENT_PLAYBACK_POSITION_TAG)) {
                 currentPlaybackPosition = savedInstanceState.getLong(CURRENT_PLAYBACK_POSITION_TAG);
-            }
-
-            if (savedInstanceState.containsKey(CURRENT_STEP_INDEX)) {
-                currentStepIndex = savedInstanceState.getInt(CURRENT_STEP_INDEX);
             }
         }
     }
@@ -196,6 +152,57 @@ public class StepVideoFragment extends Fragment  {
                     View.SYSTEM_UI_FLAG_FULLSCREEN);
         }
     }
+
+    private void initializeViewModel() {
+        // Create view model.
+        ViewModelFactory factory = InjectorUtils.provideViewModelFactory(getContext());
+        viewModel = ViewModelProviders.of(
+                Objects.requireNonNull(getActivity()),factory)
+                .get(RecipeDetailsViewModel.class);
+
+        // Get bundle args (with the recipe id) and init recipe details view model.
+        Bundle args = getArguments();
+        if (args != null) {
+            recipeId = args.getInt(ARG_RECIPE_ID);
+            stepId = args.getInt(ARG_STEP_ID);
+        }
+
+        viewModel.init(recipeId);
+        Timber.d("Recipe [id=%s]: init view model for step [id=%s].", recipeId, stepId);
+    }
+
+    private void handleStepButtons(){
+        // Handle previous and next buttons
+        binding.previousStepButton.setOnClickListener(view -> {
+            resetVideo();
+            // TODO Get previous step id
+        });
+
+        binding.nextStepButton.setOnClickListener(view -> {
+            resetVideo();
+            // TODO Get next step id
+        });
+    }
+
+    private void handleVideoUrl(Step step){
+        // If step has a video, initialize player, else display an image.
+        String videoUrl = step.getVideoURL();
+        if (!videoUrl.isEmpty()) {
+            initializePlayer(Uri.parse(videoUrl));
+        } else {
+            String thumbnailUrl = step.getThumbnailURL();
+            if (!TextUtils.isEmpty(thumbnailUrl)) {
+                Picasso.get()
+                        .load(thumbnailUrl)
+                        .placeholder(R.drawable.bakeit)
+                        .into(binding.placeholderImage);
+            } else {
+                binding.placeholderImage.setImageResource(R.drawable.bakeit);
+            }
+        }
+    }
+
+
 
     private void initializePlayer(Uri mediaUri) {
         // See: https://exoplayer.dev/hello-world

@@ -27,7 +27,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:toggleVisibility="@{step.getVideoURL() != null}"/>
+            app:toggleVisibility="@{step.getVideoURL() != null || !step.getVideoURL().isEmpty()}"/>
 
         <ImageView
             android:id="@+id/placeholder_image"
@@ -39,7 +39,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:toggleVisibility="@{step.getVideoURL() == null}"
+            app:toggleVisibility="@{step.getVideoURL() == null || step.getVideoURL().isEmpty()}"
             tools:src ="@drawable/bakeit" />
 
         <androidx.constraintlayout.widget.Barrier

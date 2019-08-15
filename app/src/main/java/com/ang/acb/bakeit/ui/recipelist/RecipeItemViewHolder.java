@@ -11,7 +11,7 @@ import com.ang.acb.bakeit.data.model.Recipe;
 import com.ang.acb.bakeit.databinding.RecipeItemBinding;
 import com.ang.acb.bakeit.ui.recipedetails.DetailsActivity;
 
-import static com.ang.acb.bakeit.ui.recipelist.MainActivity.EXTRA_RECIPE_ID;
+import static com.ang.acb.bakeit.ui.recipelist.MainActivity.ARG_RECIPE_ID;
 
 public class RecipeItemViewHolder extends RecyclerView.ViewHolder {
 
@@ -37,7 +37,7 @@ public class RecipeItemViewHolder extends RecyclerView.ViewHolder {
         // Handle recipe item click events.
         binding.getRoot().setOnClickListener(view -> {
             Intent intent = new Intent(view.getContext(), DetailsActivity.class);
-            intent.putExtra(EXTRA_RECIPE_ID, recipe.getId());
+            intent.putExtra(ARG_RECIPE_ID, recipe.getId());
             view.getContext().startActivity(intent);
         });
 

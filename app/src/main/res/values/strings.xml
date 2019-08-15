@@ -9,4 +9,7 @@
     <string name="exoplayer_place_holder_image">Exoplayer place holder image</string>
     <string name="next_step">NEXT STEP</string>
     <string name="previous_step">PREVIOUS STEP</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>
