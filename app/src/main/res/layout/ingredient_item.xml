@@ -19,9 +19,10 @@
             android:id="@+id/ingredient_item_quantity"
             android:layout_height="wrap_content"
             android:layout_width="wrap_content"
-            android:layout_marginStart="16dp"
             android:textAppearance="@style/TextAppearance.MaterialComponents.Subtitle2"
             android:text="@{String.valueOf(ingredient.getQuantity())}"
+            android:drawableStart="@drawable/ic_check_black_24dp"
+            android:drawablePadding="8dp"
             tools:text="5" />
 
         <TextView

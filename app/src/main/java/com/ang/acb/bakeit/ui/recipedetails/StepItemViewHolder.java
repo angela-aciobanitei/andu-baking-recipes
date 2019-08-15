@@ -1,5 +1,6 @@
 package com.ang.acb.bakeit.ui.recipedetails;
 
+import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
@@ -12,6 +13,7 @@ import com.ang.acb.bakeit.databinding.StepItemBinding;
 public class StepItemViewHolder extends RecyclerView.ViewHolder {
 
     private StepItemBinding binding;
+    private Context context;
 
     public StepItemViewHolder(@NonNull StepItemBinding binding) {
         super(binding.getRoot());

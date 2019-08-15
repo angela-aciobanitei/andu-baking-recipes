@@ -7,13 +7,13 @@
     android:orientation="horizontal">
 
     <FrameLayout
-        android:id="@+id/step_video_fragment_container"
+        android:id="@+id/partial_details_fragment_container"
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:layout_weight="1"/>
 
     <FrameLayout
-        android:id="@+id/partial_details_fragment_container"
+        android:id="@+id/step_video_fragment_container"
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:layout_weight="1"/>

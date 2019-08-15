@@ -96,7 +96,7 @@ public class RecipeDetailsFragment extends Fragment {
         rvSteps.setLayoutManager(new LinearLayoutManager(
                 getContext(), RecyclerView.VERTICAL, false));
         rvSteps.setHasFixedSize(true);
-        rvSteps.setAdapter(new StepAdapter());
+        rvSteps.setAdapter(new StepAdapter(getContext(), recipeId));
         // Disable nested scrolling for this view.
         ViewCompat.setNestedScrollingEnabled(rvSteps, false);
         Timber.d("Recipe [id=%s]: setup steps adapter.", recipeId);

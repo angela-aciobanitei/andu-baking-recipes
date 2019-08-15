@@ -31,22 +31,33 @@
                 app:layout_constraintTop_toTopOf="parent"
                 app:toggleVisibility="@{wholeRecipe.ingredients.size > 0}" />
 
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/rv_ingredients"
-                style="@style/listStyle"
-                android:nestedScrollingEnabled="false"
+            <androidx.cardview.widget.CardView
+                android:id="@+id/ingredients_card_view"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="16dp"
+                app:cardCornerRadius="4dp"
+                app:cardElevation="8dp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/label_ingredients"
-                app:ingredientItems="@{wholeRecipe.ingredients}"
-                app:toggleVisibility="@{wholeRecipe.ingredients.size > 0}" />
+                app:layout_constraintTop_toBottomOf="@+id/label_ingredients">
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rv_ingredients"
+                    style="@style/listStyle"
+                    android:nestedScrollingEnabled="false"
+                    app:ingredientItems="@{wholeRecipe.ingredients}"
+                    app:toggleVisibility="@{wholeRecipe.ingredients.size > 0}" />
+
+            </androidx.cardview.widget.CardView>
+
 
             <TextView
                 android:id="@+id/label_steps"
                 style="@style/labelStyle"
                 android:text="@string/steps"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/rv_ingredients"
+                app:layout_constraintTop_toBottomOf="@+id/ingredients_card_view"
                 app:toggleVisibility="@{wholeRecipe.steps.size > 0}" />
 
             <androidx.recyclerview.widget.RecyclerView
