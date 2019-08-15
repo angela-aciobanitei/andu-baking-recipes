@@ -37,29 +37,31 @@ public abstract class RecipeDao {
 
     public void insertAllRecipes(List<Recipe> recipes) {
         for (Recipe recipe : recipes) {
-
+            // Insert recipe ingredients
             List<Ingredient> ingredients = recipe.getIngredients();
             for (Ingredient ingredient : ingredients) {
                 ingredient.setRecipeId(recipe.getId());
             }
             insertIngredients(ingredients);
 
+            // Insert recipe steps
             List<Step> steps = recipe.getSteps();
             for (Step step : steps) {
                 step.setRecipeId(recipe.getId());
             }
             insertSteps(steps);
         }
+        // Insert recipe
         insertSimpleRecipes(recipes);
     }
 
     @Transaction
     @Query("SELECT * FROM ingredients where recipe_id= :recipeId")
-    public abstract LiveData<List<Ingredient>> loadIngredients(Integer recipeId);
+    public abstract LiveData<List<Ingredient>> loadRecipeIngredients(Integer recipeId);
 
     @Transaction
     @Query("SELECT * FROM steps where recipe_id= :recipeId")
-    public abstract LiveData<List<Step>> loadSteps(Integer recipeId);
+    public abstract LiveData<List<Step>> loadRecipeSteps(Integer recipeId);
 
     @Transaction
     @Query("SELECT * FROM recipes WHERE id= :recipeId")

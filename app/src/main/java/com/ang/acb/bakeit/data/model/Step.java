@@ -16,9 +16,6 @@ import static androidx.room.ForeignKey.CASCADE;
 
 /**
  * Immutable model class for a Step.
- *
- * See: https://developer.android.com/training/data-storage/room/relationships#one-to-many
- * See: https://android.jlelse.eu/android-architecture-components-room-relationships-bf473510c14a
  */
 @Entity(tableName = "steps")
 public class Step {

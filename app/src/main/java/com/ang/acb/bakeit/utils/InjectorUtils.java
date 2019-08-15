@@ -7,7 +7,7 @@ import com.ang.acb.bakeit.data.local.LocalRecipeDataSource;
 import com.ang.acb.bakeit.data.remote.ApiClient;
 import com.ang.acb.bakeit.data.remote.ApiService;
 import com.ang.acb.bakeit.data.remote.RemoteRecipeDataSource;
-import com.ang.acb.bakeit.data.repo.RecipeRepository;
+import com.ang.acb.bakeit.data.repository.RecipeRepository;
 
 /**
  * Enables injection of data sources.

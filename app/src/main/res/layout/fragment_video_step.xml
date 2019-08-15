@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <data>
 
         <variable
-            name="stepSize"
+            name="stepListSize"
             type="Integer"/>
 
         <variable
@@ -19,31 +19,37 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <com.google.android.exoplayer2.ui.PlayerView
+        <com.google.android.exoplayer2.ui.SimpleExoPlayerView
             android:id="@+id/exoplayer_view"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             app:layout_constraintDimensionRatio="16:9"
-            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:toggleVisibility="@{step.getVideoURL() != null ||
+                                  !TextUtils.isEmpty(step.getVideoURL()}"/>
 
         <ImageView
-            android:id="@+id/exoplayer_placeholder_image"
+            android:id="@+id/placeholder_image"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:scaleType="centerCrop"
+            android:contentDescription="@string/exoplayer_place_holder_image"
             app:layout_constraintDimensionRatio="H,16:9"
-            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:toggleVisibility="@{step.getVideoURL() == null ||
+                                    TextUtils.isEmpty(step.getVideoURL()}"
+            tools:src ="@drawable/bakeit" />
 
         <androidx.constraintlayout.widget.Barrier
             android:id="@+id/barrier"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:barrierDirection="bottom"
-            app:constraint_referenced_ids="exoplayer_placeholder_image,exoplayer_view" />
+            app:constraint_referenced_ids="placeholder_image, exoplayer_view" />
 
         <TextView
             android:id="@+id/video_description"
@@ -52,37 +58,36 @@
             android:layout_margin="16dp"
             android:text="@{step.getDescription()}"
             android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-            android:textColor="@color/colorPrimaryDark"
-            app:layout_constraintBottom_toTopOf="@+id/previous_step"
+            app:layout_constraintBottom_toTopOf="@+id/previous_step_button"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/barrier" />
 
         <Button
-            android:id="@+id/next_step"
+            android:id="@+id/next_step_button"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:layout_marginBottom="16dp"
             android:layout_marginEnd="16dp"
-            android:text="NEXT STEP"
+            android:text="@string/next_step"
             android:textAppearance="@style/TextAppearance.AppCompat.Button"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toEndOf="@+id/previous_step"
-            app:toggleVisibility="@{step.getId() + 1 != stepSize}" />
+            app:layout_constraintStart_toEndOf="@+id/previous_step_button"
+            app:toggleVisibility="@{step.getId() + 1 != stepListSize}" />
 
         <Button
-            android:id="@+id/previous_step"
+            android:id="@+id/previous_step_button"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:layout_marginBottom="16dp"
-            android:text="PREVIOUS STEP"
+            android:text="@string/previous_step"
             android:textAppearance="@style/TextAppearance.AppCompat.Button"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/next_step"
+            app:layout_constraintEnd_toStartOf="@+id/next_step_button"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintHorizontal_chainStyle="spread"
             app:layout_constraintStart_toStartOf="parent"

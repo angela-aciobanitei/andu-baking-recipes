@@ -16,13 +16,13 @@ public class StepAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     @NonNull
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        return StepViewHolder.create(parent);
+        return StepItemViewHolder.create(parent);
     }
 
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
         Step step = stepList.get(position);
-        ((StepViewHolder) holder).bindTo(step);
+        ((StepItemViewHolder) holder).bindTo(step);
     }
 
     @Override

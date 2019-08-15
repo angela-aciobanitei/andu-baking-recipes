@@ -4,7 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 
-import com.ang.acb.bakeit.data.repo.RecipeRepository;
+import com.ang.acb.bakeit.data.repository.RecipeRepository;
 import com.ang.acb.bakeit.ui.recipedetails.RecipeDetailsViewModel;
 import com.ang.acb.bakeit.ui.recipelist.RecipeListViewModel;
 

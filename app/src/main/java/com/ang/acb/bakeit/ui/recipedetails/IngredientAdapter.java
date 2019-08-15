@@ -16,13 +16,13 @@ public class IngredientAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
     @NonNull
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        return IngredientViewHolder.create(parent);
+        return IngredientItemViewHolder.create(parent);
     }
 
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
         Ingredient ingredient = ingredientList.get(position);
-        ((IngredientViewHolder) holder).bindTo(ingredient);
+        ((IngredientItemViewHolder) holder).bindTo(ingredient);
     }
 
     @Override

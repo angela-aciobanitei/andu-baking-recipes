@@ -1,4 +1,4 @@
-package com.ang.acb.bakeit.data.repo;
+package com.ang.acb.bakeit.data.repository;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;

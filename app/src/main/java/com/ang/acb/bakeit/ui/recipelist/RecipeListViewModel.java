@@ -5,7 +5,7 @@ import androidx.lifecycle.ViewModel;
 
 import com.ang.acb.bakeit.data.model.Recipe;
 import com.ang.acb.bakeit.data.model.Resource;
-import com.ang.acb.bakeit.data.repo.RecipeRepository;
+import com.ang.acb.bakeit.data.repository.RecipeRepository;
 
 import java.util.List;
 

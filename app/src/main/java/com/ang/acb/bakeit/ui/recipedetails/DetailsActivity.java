@@ -27,11 +27,21 @@ public class DetailsActivity extends AppCompatActivity {
         }
 
         if (savedInstanceState == null) {
+            boolean isTwoPane = findViewById(R.id.step_video_fragment_container) != null;
+
             getSupportFragmentManager().beginTransaction()
                 .replace(R.id.partial_details_fragment_container,
                         RecipeDetailsFragment.newInstance(recipeId))
                 .commit();
             Timber.d("Replace RecipeDetailsFragment in activity.");
+
+            if(isTwoPane) {
+                getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.step_video_fragment_container,
+                                StepVideoFragment.newInstance(recipeId))
+                        .commit();
+                Timber.d("Replace StepVideoFragment in activity.");
+            }
         }
     }
 
