@@ -18,7 +18,7 @@ An app that displays recipes from a network resource. When user selects a recipe
 *   [Retrofit 2](https://github.com/square/retrofit), a type-safe HTTP client for Android and Java.
 *   [OkHttp](https://github.com/square/okhttp), an HTTP client for Android, Kotlin, and Java. 
 *   [Gson](https://github.com/google/gson), a Java serialization/deserialization library to convert Java Objects into JSON and back.
-*   [Glide](https://github.com/bumptech/glide), an image loading and caching library for Android.
+*   [Picasso](https://square.github.io/picasso), an image loading and caching library for Android.
 *   [ExoPlayer](https://github.com/google/ExoPlayer), an extensible media player for Android.
 *   [Timber](https://github.com/JakeWharton/timber), for logging.
 *   [Espresso](https://developer.android.com/training/testing/espresso/),  for UI testing.
