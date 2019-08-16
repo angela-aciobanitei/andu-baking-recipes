@@ -59,24 +59,15 @@ public class RecipeDetailsFragment extends Fragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        setupViewModel();
+        // Get bundle args (with the recipe id)
+        if (getArguments() != null) recipeId = getArguments().getInt(ARG_RECIPE_ID);
+
+        // Create view model
+        viewModel = DetailsActivity.obtainViewModel(getActivity());
+
         setupIngredientsAdapter();
         setupStepsAdapter();
         observeResult();
-    }
-
-    private void setupViewModel() {
-        // Create view model
-        ViewModelFactory factory = InjectorUtils.provideViewModelFactory(getContext());
-        viewModel = ViewModelProviders.of(Objects.requireNonNull(getActivity()),factory)
-                .get(RecipeDetailsViewModel.class);
-
-        // Get bundle args (with the recipe id) and init recipe details view model.
-        Bundle args = getArguments();
-        if (args != null) recipeId = args.getInt(ARG_RECIPE_ID);
-
-        viewModel.init(recipeId);
-        Timber.d("Recipe [id=%s]: init view model.", recipeId);
     }
 
     private void setupIngredientsAdapter() {
@@ -95,7 +86,7 @@ public class RecipeDetailsFragment extends Fragment {
         rvSteps.setLayoutManager(new LinearLayoutManager(
                 getContext(), RecyclerView.VERTICAL, false));
         rvSteps.setHasFixedSize(true);
-        rvSteps.setAdapter(new StepAdapter(getContext(), recipeId));
+        rvSteps.setAdapter(new StepAdapter(viewModel));
         // Disable nested scrolling for this view.
         ViewCompat.setNestedScrollingEnabled(rvSteps, false);
         Timber.d("Recipe [id=%s]: setup steps adapter.", recipeId);

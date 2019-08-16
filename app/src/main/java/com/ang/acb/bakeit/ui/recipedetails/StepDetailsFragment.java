@@ -45,7 +45,7 @@ public class StepDetailsFragment extends Fragment  {
     public static final String CURRENT_STEP_POSITION_KEY = "CURRENT_STEP_POSITION_KEY";
     public static final String CURRENT_PLAYBACK_POSITION_KEY = "CURRENT_PLAYBACK_POSITION_KEY";
     public static final String SHOULD_PLAY_WHEN_READY_KEY = "SHOULD_PLAY_WHEN_READY_KEY";
-    public static final String ARG_STEP_ID = "EXTRA_STEP_ID";
+    public static final String ARG_CURRENT_STEP_POSITION = "ARG_CURRENT_STEP_POSITION";
 
     private FragmentStepDetailsBinding binding;
     private StepDetailsViewModel viewModel;
@@ -58,11 +58,12 @@ public class StepDetailsFragment extends Fragment  {
 
     public StepDetailsFragment() {}
 
-    public static StepDetailsFragment newInstance(Integer recipeId) {
+    public static StepDetailsFragment newInstance(Integer recipeId, int stepPosition) {
         Timber.d("StepDetailsFragment created.");
         StepDetailsFragment fragment = new StepDetailsFragment();
         Bundle args = new Bundle();
         args.putInt(ARG_RECIPE_ID, recipeId);
+        args.putInt(ARG_CURRENT_STEP_POSITION, stepPosition);
         fragment.setArguments(args);
 
         return fragment;
@@ -145,7 +146,10 @@ public class StepDetailsFragment extends Fragment  {
 
         // Get bundle args (with the recipe id) and init recipe details view model.
         Bundle args = getArguments();
-        if (args != null) recipeId = args.getInt(ARG_RECIPE_ID);
+        if (args != null) {
+            recipeId = args.getInt(ARG_RECIPE_ID);
+            currentStepPosition = args.getInt(ARG_CURRENT_STEP_POSITION);
+        }
 
 
         viewModel.init(recipeId, currentStepPosition);

@@ -62,8 +62,8 @@ public class StepDetailsViewModel extends ViewModel {
 
     private void navigateToCurrentStep() {
         // FIXME
-        MediatorLiveData<Step> liveDataStep = new MediatorLiveData<>();
-        liveDataStep.addSource(stepsLiveData, new Observer<List<Step>>() {
+        MediatorLiveData<Step> stepMediatorLiveData = new MediatorLiveData<>();
+        stepMediatorLiveData.addSource(stepsLiveData, new Observer<List<Step>>() {
             @Override
             public void onChanged(List<Step> steps) {
                 navigateToStepDetails.setValue(steps.get(currentPosition));

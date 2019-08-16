@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.FragmentActivity;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
@@ -37,32 +38,41 @@ public class DetailsActivity extends AppCompatActivity {
             return;
         }
 
+        // TODO Handle two pane layouts
+        isTwoPane = findViewById(R.id.step_details_fragment_container) != null;
+
+        // Create view model
+        viewModel = obtainViewModel(this);
+
         if (savedInstanceState == null) {
-            // TODO Handle two pane layouts
-            isTwoPane = findViewById(R.id.step_details_fragment_container) != null;
-
-            // Init view model
-            ViewModelFactory factory = InjectorUtils.provideViewModelFactory(this);
-            viewModel = ViewModelProviders.of(this,factory)
-                    .get(RecipeDetailsViewModel.class);
-
-            // TODO Observe steps list click event
-            // mViewModel.getOpenStepDetailEvent().observe(this, new Observer<Integer>() {});
-
+            viewModel.init(recipeId, isTwoPane);
+            // Add only RecipeDetailsFragment
             getSupportFragmentManager().beginTransaction()
-                .replace(R.id.partial_details_fragment_container,
-                        RecipeDetailsFragment.newInstance(recipeId))
-                .commit();
+                    .replace(R.id.partial_details_fragment_container,
+                            RecipeDetailsFragment.newInstance(recipeId))
+                    .commit();
             Timber.d("Replace RecipeDetailsFragment in activity.");
+        }
 
-            if (isTwoPane) {
+
+        // FIXME Observe steps list click event
+        viewModel.getOpenStepDetailEvent().observe(this, new Observer<Integer>() {
+            @Override
+            public void onChanged(Integer currentPosition) {
+                // Add StepDetailsFragment layout
                 getSupportFragmentManager()
                         .beginTransaction()
-                        .replace(R.id.step_details_fragment_container,
-                                StepDetailsFragment.newInstance(recipeId))
+                        .replace(R.id.partial_details_fragment_container,
+                                StepDetailsFragment.newInstance(recipeId, currentPosition))
                         .commit();
+
             }
-        }
+        });
+    }
+
+    public static RecipeDetailsViewModel obtainViewModel(FragmentActivity activity) {
+        ViewModelFactory factory = InjectorUtils.provideViewModelFactory(activity);
+        return ViewModelProviders.of(activity, factory).get(RecipeDetailsViewModel.class);
     }
 
 }

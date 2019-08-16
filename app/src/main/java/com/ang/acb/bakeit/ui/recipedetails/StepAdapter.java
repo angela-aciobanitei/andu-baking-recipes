@@ -1,29 +1,22 @@
 package com.ang.acb.bakeit.ui.recipedetails;
 
-import android.content.Context;
 import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.ang.acb.bakeit.R;
 import com.ang.acb.bakeit.data.model.Step;
 
 import java.util.List;
 
-import timber.log.Timber;
-
 public class StepAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     private List<Step> stepList;
-    private Context context;
-    private Integer recipeId;
+    private RecipeDetailsViewModel viewModel;
 
-    public StepAdapter(Context context, Integer recipeId) {
-        this.context = context;
-        this.recipeId = recipeId;
+    public StepAdapter(RecipeDetailsViewModel viewModel) {
+        this.viewModel = viewModel;
     }
 
     @NonNull
@@ -36,6 +29,7 @@ public class StepAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
         Step step = stepList.get(position);
         ((StepItemViewHolder) holder).bindTo(step);
+        holder.itemView.setOnClickListener(view -> viewModel.setCurrentStep(position));
     }
 
     @Override
