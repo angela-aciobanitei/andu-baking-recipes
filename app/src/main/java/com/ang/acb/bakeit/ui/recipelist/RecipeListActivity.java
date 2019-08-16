@@ -11,7 +11,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.ang.acb.bakeit.R;
 import com.ang.acb.bakeit.data.model.Recipe;
 import com.ang.acb.bakeit.data.model.Resource;
-import com.ang.acb.bakeit.databinding.ActivityMainBinding;
+import com.ang.acb.bakeit.databinding.ActivityRecipeListBinding;
 import com.ang.acb.bakeit.utils.InjectorUtils;
 import com.ang.acb.bakeit.utils.ViewModelFactory;
 
@@ -19,12 +19,12 @@ import java.util.List;
 
 import timber.log.Timber;
 
-public class MainActivity extends AppCompatActivity {
+public class RecipeListActivity extends AppCompatActivity {
 
     public static final String ARG_RECIPE_ID = "ARG_RECIPE_ID";
     public static final Integer INVALID_RECIPE_ID = -1;
 
-    private ActivityMainBinding binding;
+    private ActivityRecipeListBinding binding;
     private RecipeListViewModel viewModel;
 
     @Override
@@ -32,16 +32,14 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         // Inflate view and obtain an instance of the binding class.
-        binding = DataBindingUtil.setContentView(this, R.layout.activity_main);
+        binding = DataBindingUtil.setContentView(this, R.layout.activity_recipe_list);
 
         // Specify the current activity as the lifecycle owner.
         binding.setLifecycleOwner(this);
 
         // Setup view model.
         ViewModelFactory factory = InjectorUtils.provideViewModelFactory(this);
-        viewModel = ViewModelProviders
-                .of(this, factory)
-                .get(RecipeListViewModel.class);
+        viewModel = ViewModelProviders.of(this, factory).get(RecipeListViewModel.class);
         Timber.d("Setup recipe list view model.");
 
         // Setup recycler view.
@@ -50,14 +48,14 @@ public class MainActivity extends AppCompatActivity {
         recyclerView.setAdapter(adapter);
         Timber.d("Setup recipe list recycler view.");
 
-        // FIXME Observe data and network status.
+        // TODO Observe data and network status.
         viewModel.getRecipeListResourceLiveData().observe(this,
                 new Observer<Resource<List<Recipe>>>() {
                     @Override
                     public void onChanged(Resource<List<Recipe>> resource) {
-                        Timber.d("Observe recipe list from view model.");
+                        Timber.d("Observe recipe list from recipe list view model.");
                         adapter.submitList(resource);
-                        Timber.d("Observe network status from view model.");
+                        Timber.d("Observe network status from recipe list view model.");
                         adapter.setNetworkState(resource);
                     }
                 });

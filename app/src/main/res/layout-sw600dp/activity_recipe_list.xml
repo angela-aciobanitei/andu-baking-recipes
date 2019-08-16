@@ -15,7 +15,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".ui.recipelist.MainActivity">
+        tools:context=".ui.recipelist.RecipeListActivity">
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rv_recipe_list"

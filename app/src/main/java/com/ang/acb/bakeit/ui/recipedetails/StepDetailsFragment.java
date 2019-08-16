@@ -18,11 +18,10 @@ import androidx.lifecycle.ViewModelProviders;
 
 import com.ang.acb.bakeit.R;
 import com.ang.acb.bakeit.data.model.Step;
-import com.ang.acb.bakeit.data.model.WholeRecipe;
-import com.ang.acb.bakeit.databinding.FragmentVideoStepBinding;
+import com.ang.acb.bakeit.databinding.FragmentStepDetailsBinding;
+
 import com.ang.acb.bakeit.utils.InjectorUtils;
 import com.ang.acb.bakeit.utils.ViewModelFactory;
-
 import com.google.android.exoplayer2.ExoPlayerFactory;
 import com.google.android.exoplayer2.SimpleExoPlayer;
 import com.google.android.exoplayer2.source.ExtractorMediaSource;
@@ -34,36 +33,36 @@ import com.squareup.picasso.Picasso;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.util.List;
 import java.util.Objects;
 
 import timber.log.Timber;
 
-import static com.ang.acb.bakeit.ui.recipelist.MainActivity.ARG_RECIPE_ID;
+import static com.ang.acb.bakeit.ui.recipelist.RecipeListActivity.ARG_RECIPE_ID;
 
-public class StepVideoFragment extends Fragment  {
+public class StepDetailsFragment extends Fragment  {
 
-    public static final String CURRENT_PLAYBACK_POSITION_TAG = "CURRENT_PLAYBACK_POSITION_TAG";
-    public static final String SHOULD_PLAY_WHEN_READY_TAG = "SHOULD_PLAY_WHEN_READY_TAG";
-    public static final String CURRENT_STEP_INDEX = "CURRENT_STEP_INDEX";
+    public static final String CURRENT_STEP_POSITION_KEY = "CURRENT_STEP_POSITION_KEY";
+    public static final String CURRENT_PLAYBACK_POSITION_KEY = "CURRENT_PLAYBACK_POSITION_KEY";
+    public static final String SHOULD_PLAY_WHEN_READY_KEY = "SHOULD_PLAY_WHEN_READY_KEY";
     public static final String ARG_STEP_ID = "EXTRA_STEP_ID";
 
-    private FragmentVideoStepBinding binding;
-    private RecipeDetailsViewModel viewModel;
+    private FragmentStepDetailsBinding binding;
+    private StepDetailsViewModel viewModel;
     private Integer recipeId;
-    private Integer stepId;
+    private int currentStepPosition;
 
     private SimpleExoPlayer simpleExoPlayer;
     private boolean shouldPlayWhenReady;
     private long currentPlaybackPosition;
 
-    public StepVideoFragment() {}
+    public StepDetailsFragment() {}
 
-    public static StepVideoFragment newInstance(Integer recipeId, Integer stepId) {
-        Timber.d("StepVideoFragment created.");
-        StepVideoFragment fragment = new StepVideoFragment();
+    public static StepDetailsFragment newInstance(Integer recipeId) {
+        Timber.d("StepDetailsFragment created.");
+        StepDetailsFragment fragment = new StepDetailsFragment();
         Bundle args = new Bundle();
         args.putInt(ARG_RECIPE_ID, recipeId);
-        args.putInt(ARG_STEP_ID, stepId);
         fragment.setArguments(args);
 
         return fragment;
@@ -72,7 +71,7 @@ public class StepVideoFragment extends Fragment  {
     @Override
     public View onCreateView(@NotNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        binding = FragmentVideoStepBinding.inflate(inflater, container, false);
+        binding = FragmentStepDetailsBinding.inflate(inflater, container, false);
         return binding.getRoot();
     }
 
@@ -80,46 +79,31 @@ public class StepVideoFragment extends Fragment  {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        // Recover the instance state.
-        onRestoreInstanceState(savedInstanceState);
-
-        // Enable fullscreen mode for landscape orientation.
+        restoreInstanceState(savedInstanceState);
         enableFullscreenMode();
-
         initializeViewModel();
-
-        // TODO Observe step list
-        viewModel.getWholeRecipeLiveData().observe(
-                getViewLifecycleOwner(),
-                new Observer<WholeRecipe>() {
-                    @Override
-                    public void onChanged(WholeRecipe wholeRecipe) {
-                        // Bind step
-                        Step step = wholeRecipe.steps.get(stepId);
-                        binding.setStep(step);
-                        binding.setStepListSize(wholeRecipe.steps.size());
-
-                        handleVideoUrl(step);
-                    }
-                }
-        );
-
+        observeStepList();
+        handleStepButtons();
     }
 
     @Override
     public void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
-        outState.putBoolean(SHOULD_PLAY_WHEN_READY_TAG, shouldPlayWhenReady);
-        outState.putLong(CURRENT_PLAYBACK_POSITION_TAG, currentPlaybackPosition);
+        outState.putInt(CURRENT_STEP_POSITION_KEY, currentStepPosition);
+        outState.putLong(CURRENT_PLAYBACK_POSITION_KEY, currentPlaybackPosition);
+        outState.putBoolean(SHOULD_PLAY_WHEN_READY_KEY, shouldPlayWhenReady);
     }
 
-    private void onRestoreInstanceState(Bundle savedInstanceState){
+    private void restoreInstanceState(Bundle savedInstanceState){
         if (savedInstanceState != null) {
-            if (savedInstanceState.containsKey(SHOULD_PLAY_WHEN_READY_TAG)) {
-                shouldPlayWhenReady = savedInstanceState.getBoolean(SHOULD_PLAY_WHEN_READY_TAG);
+            if (savedInstanceState.containsKey(CURRENT_STEP_POSITION_KEY)) {
+                currentStepPosition = savedInstanceState.getInt(CURRENT_STEP_POSITION_KEY);
             }
-            if (savedInstanceState.containsKey(CURRENT_PLAYBACK_POSITION_TAG)) {
-                currentPlaybackPosition = savedInstanceState.getLong(CURRENT_PLAYBACK_POSITION_TAG);
+            if (savedInstanceState.containsKey(CURRENT_PLAYBACK_POSITION_KEY)) {
+                currentPlaybackPosition = savedInstanceState.getLong(CURRENT_PLAYBACK_POSITION_KEY);
+            }
+            if (savedInstanceState.containsKey(SHOULD_PLAY_WHEN_READY_KEY)) {
+                shouldPlayWhenReady = savedInstanceState.getBoolean(SHOULD_PLAY_WHEN_READY_KEY);
             }
         }
     }
@@ -156,32 +140,36 @@ public class StepVideoFragment extends Fragment  {
     private void initializeViewModel() {
         // Create view model.
         ViewModelFactory factory = InjectorUtils.provideViewModelFactory(getContext());
-        viewModel = ViewModelProviders.of(
-                Objects.requireNonNull(getActivity()),factory)
-                .get(RecipeDetailsViewModel.class);
+        viewModel = ViewModelProviders.of(Objects.requireNonNull(getActivity()), factory)
+                .get(StepDetailsViewModel.class);
 
         // Get bundle args (with the recipe id) and init recipe details view model.
         Bundle args = getArguments();
-        if (args != null) {
-            recipeId = args.getInt(ARG_RECIPE_ID);
-            stepId = args.getInt(ARG_STEP_ID);
-        }
+        if (args != null) recipeId = args.getInt(ARG_RECIPE_ID);
 
-        viewModel.init(recipeId);
-        Timber.d("Recipe [id=%s]: init view model for step [id=%s].", recipeId, stepId);
+
+        viewModel.init(recipeId, currentStepPosition);
+        Timber.d("Recipe [id=%s]: init view model for step [position=%s].",
+                recipeId, currentStepPosition);
     }
 
-    private void handleStepButtons(){
-        // Handle previous and next buttons
-        binding.previousStepButton.setOnClickListener(view -> {
-            resetVideo();
-            // TODO Get previous step id
-        });
+    private void observeStepList(){
+        // TODO Observe step list
+        viewModel.getStepsLiveData().observe(
+                getViewLifecycleOwner(),
+                new Observer<List<Step>>() {
+                    @Override
+                    public void onChanged(List<Step> steps) {
+                        // Bind step
+                        Step step = steps.get(currentStepPosition);
+                        binding.setStep(step);
+                        binding.setStepListSize(steps.size());
 
-        binding.nextStepButton.setOnClickListener(view -> {
-            resetVideo();
-            // TODO Get next step id
-        });
+                        handleVideoUrl(step);
+                        handleStepButtons();
+                    }
+                }
+        );
     }
 
     private void handleVideoUrl(Step step){
@@ -201,7 +189,6 @@ public class StepVideoFragment extends Fragment  {
             }
         }
     }
-
 
 
     private void initializePlayer(Uri mediaUri) {
@@ -249,13 +236,27 @@ public class StepVideoFragment extends Fragment  {
         releasePlayer();
     }
 
-    private void resetVideo() {
+    private void resetPlayer() {
         shouldPlayWhenReady = true;
         currentPlaybackPosition = 0;
 
         if (simpleExoPlayer != null) {
             simpleExoPlayer.stop();
         }
+    }
+
+    private void handleStepButtons(){
+        binding.previousStepButton.setOnClickListener(view -> {
+            resetPlayer();
+            // TODO Get prev step
+            viewModel.previousStep();
+        });
+
+        binding.nextStepButton.setOnClickListener(view -> {
+            resetPlayer();
+            // TODO Get next step
+            viewModel.nextStep();
+        });
     }
 
     @Override

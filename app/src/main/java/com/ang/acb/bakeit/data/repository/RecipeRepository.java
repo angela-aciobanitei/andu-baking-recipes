@@ -5,6 +5,7 @@ import androidx.annotation.Nullable;
 import androidx.lifecycle.LiveData;
 
 import com.ang.acb.bakeit.data.local.LocalRecipeDataSource;
+import com.ang.acb.bakeit.data.model.Step;
 import com.ang.acb.bakeit.data.model.WholeRecipe;
 import com.ang.acb.bakeit.data.model.Recipe;
 import com.ang.acb.bakeit.data.model.Resource;
@@ -96,5 +97,9 @@ public class RecipeRepository {
 
     public LiveData<WholeRecipe> getFullRecipe (Integer recipeId) {
         return localDataSource.getWholeRecipe(recipeId);
+    }
+
+    public LiveData<List<Step>> getRecipeSteps(Integer recipeId) {
+        return localDataSource.getRecipeSteps(recipeId);
     }
 }

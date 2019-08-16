@@ -11,7 +11,7 @@ import com.ang.acb.bakeit.data.model.Recipe;
 import com.ang.acb.bakeit.databinding.RecipeItemBinding;
 import com.ang.acb.bakeit.ui.recipedetails.DetailsActivity;
 
-import static com.ang.acb.bakeit.ui.recipelist.MainActivity.ARG_RECIPE_ID;
+import static com.ang.acb.bakeit.ui.recipelist.RecipeListActivity.ARG_RECIPE_ID;
 
 public class RecipeItemViewHolder extends RecyclerView.ViewHolder {
 

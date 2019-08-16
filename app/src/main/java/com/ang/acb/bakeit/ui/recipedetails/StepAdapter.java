@@ -6,7 +6,6 @@ import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.ang.acb.bakeit.R;
@@ -37,19 +36,6 @@ public class StepAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
         Step step = stepList.get(position);
         ((StepItemViewHolder) holder).bindTo(step);
-        ((StepItemViewHolder) holder).itemView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                // FIXME: Find a better way to do this
-                ((AppCompatActivity) context).getSupportFragmentManager()
-                        .beginTransaction()
-                        .replace(R.id.partial_details_fragment_container,
-                                StepVideoFragment.newInstance(recipeId, step.getId()))
-                        .addToBackStack(String.valueOf(R.string.app_name))
-                        .commit();
-                Timber.d("Replace StepVideoFragment in activity.");
-            }
-        });
     }
 
     @Override

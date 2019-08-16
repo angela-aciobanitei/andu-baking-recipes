@@ -15,7 +15,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="AllowBackup,GoogleAppIndexingWarning">
-        <activity android:name=".ui.recipelist.MainActivity">
+        <activity android:name=".ui.recipelist.RecipeListActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -24,10 +24,10 @@
 
         <activity
             android:name=".ui.recipedetails.DetailsActivity"
-            android:parentActivityName=".ui.recipelist.MainActivity">
+            android:parentActivityName=".ui.recipelist.RecipeListActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.ang.acb.bakeit.ui.recipelist.MainActivity" />
+                android:value="com.ang.acb.bakeit.ui.recipelist.RecipeListActivity" />
         </activity>
 
     </application>

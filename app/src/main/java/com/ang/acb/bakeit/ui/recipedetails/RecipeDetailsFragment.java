@@ -25,7 +25,7 @@ import java.util.Objects;
 
 import timber.log.Timber;
 
-import static com.ang.acb.bakeit.ui.recipelist.MainActivity.ARG_RECIPE_ID;
+import static com.ang.acb.bakeit.ui.recipelist.RecipeListActivity.ARG_RECIPE_ID;
 
 /**
  * A placeholder fragment containing a simple view.
@@ -71,7 +71,7 @@ public class RecipeDetailsFragment extends Fragment {
         viewModel = ViewModelProviders.of(Objects.requireNonNull(getActivity()),factory)
                 .get(RecipeDetailsViewModel.class);
 
-        // Get bundle args (with thw recipe id) and init recipe details view model.
+        // Get bundle args (with the recipe id) and init recipe details view model.
         Bundle args = getArguments();
         if (args != null) recipeId = args.getInt(ARG_RECIPE_ID);
 
@@ -108,7 +108,11 @@ public class RecipeDetailsFragment extends Fragment {
                 new Observer<WholeRecipe>() {
                     @Override
                     public void onChanged(WholeRecipe wholeRecipe) {
+                        // Bind recipe data
                         binding.setWholeRecipe(wholeRecipe);
+                        // Set recipe title for the action bar
+                        Objects.requireNonNull(getActivity())
+                                .setTitle(wholeRecipe.getRecipe().getName());
                     }
                 }
         );
