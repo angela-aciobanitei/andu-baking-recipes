@@ -6,10 +6,6 @@
     <data>
 
         <variable
-            name="stepListSize"
-            type="Integer"/>
-
-        <variable
             name="step"
             type="com.ang.acb.bakeit.data.model.Step"/>
 
@@ -61,8 +57,9 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/barrier" />
 
-        <Button
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/next_step_button"
+            style="@style/Widget.MaterialComponents.Button.TextButton"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
@@ -73,11 +70,11 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toEndOf="@+id/previous_step_button"
-            app:toggleVisibility="@{step.getId() + 1 != stepListSize}" />
+            app:layout_constraintStart_toEndOf="@+id/previous_step_button" />
 
-        <Button
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/previous_step_button"
+            style="@style/Widget.MaterialComponents.Button.TextButton"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
@@ -88,8 +85,7 @@
             app:layout_constraintEnd_toStartOf="@+id/next_step_button"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintHorizontal_chainStyle="spread"
-            app:layout_constraintStart_toStartOf="parent"
-            app:toggleVisibility="@{step.getId() != 0}" />
+            app:layout_constraintStart_toStartOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

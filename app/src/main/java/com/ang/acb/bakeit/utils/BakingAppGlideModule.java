@@ -11,5 +11,5 @@ import com.bumptech.glide.module.AppGlideModule;
  * https://bumptech.github.io/glide/doc/configuration.html#applications
  */
 @GlideModule
-public class MovieAppGlideModule extends AppGlideModule {
+public class BakingAppGlideModule extends AppGlideModule {
 }

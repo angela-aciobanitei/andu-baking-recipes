@@ -2,6 +2,7 @@ package com.ang.acb.bakeit.ui.recipedetails;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MediatorLiveData;
+import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModel;
 
@@ -18,8 +19,8 @@ public class StepDetailsViewModel extends ViewModel {
 
     private RecipeRepository repository;
     private LiveData<List<Step>> stepsLiveData;
+    private final SingleLiveEvent<Step> currentStepLiveEvent = new SingleLiveEvent<>();
     private int currentPosition;
-    private final SingleLiveEvent<Step> navigateToStepDetails = new SingleLiveEvent<>();
 
     public StepDetailsViewModel(RecipeRepository repository) {
         this.repository = repository;
@@ -66,14 +67,14 @@ public class StepDetailsViewModel extends ViewModel {
         stepMediatorLiveData.addSource(stepsLiveData, new Observer<List<Step>>() {
             @Override
             public void onChanged(List<Step> steps) {
-                navigateToStepDetails.setValue(steps.get(currentPosition));
+                currentStepLiveEvent.setValue(steps.get(currentPosition));
             }
         });
 
     }
 
-    public SingleLiveEvent<Step> getNavigateToStepDetails() {
-        return navigateToStepDetails;
+    public SingleLiveEvent<Step> getCurrentStepLiveEvent() {
+        return currentStepLiveEvent;
     }
 
 }

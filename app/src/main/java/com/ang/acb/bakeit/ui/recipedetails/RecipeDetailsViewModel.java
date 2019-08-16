@@ -42,15 +42,9 @@ public class RecipeDetailsViewModel extends ViewModel {
     }
 
     public void setCurrentStep(int position) {
-        //FIXME
         MediatorLiveData<Step> stepMediatorLiveData = new MediatorLiveData<>();
-        stepMediatorLiveData.addSource(stepsLiveData, new Observer<List<Step>>() {
-            @Override
-            public void onChanged(List<Step> steps) {
-                currentStep.setValue(steps.get(position));
-
-            }
-        });
+        stepMediatorLiveData.addSource(stepsLiveData, steps ->
+                currentStep.setValue(steps.get(position)));
         openStepDetailEvent.setValue(position);
     }
 

@@ -54,16 +54,16 @@ public class DetailsActivity extends AppCompatActivity {
             Timber.d("Replace RecipeDetailsFragment in activity.");
         }
 
-
         // FIXME Observe steps list click event
+        // FIXME Handle two pane layout
         viewModel.getOpenStepDetailEvent().observe(this, new Observer<Integer>() {
             @Override
-            public void onChanged(Integer currentPosition) {
-                // Add StepDetailsFragment layout
+            public void onChanged(Integer stepPosition) {
+                // If (!isTwoPane): Replace RecipeDetailsFragment with StepDetailsFragment
                 getSupportFragmentManager()
                         .beginTransaction()
                         .replace(R.id.partial_details_fragment_container,
-                                StepDetailsFragment.newInstance(recipeId, currentPosition))
+                                StepDetailsFragment.newInstance(recipeId, stepPosition))
                         .commit();
 
             }

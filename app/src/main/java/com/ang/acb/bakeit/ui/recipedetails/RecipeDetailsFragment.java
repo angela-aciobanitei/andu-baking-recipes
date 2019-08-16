@@ -36,6 +36,7 @@ public class RecipeDetailsFragment extends Fragment {
     private RecipeDetailsViewModel viewModel;
     private Integer recipeId;
 
+    // Required empty public constructor
     public RecipeDetailsFragment() {}
 
     public static RecipeDetailsFragment newInstance(Integer recipeId) {
@@ -62,7 +63,7 @@ public class RecipeDetailsFragment extends Fragment {
         // Get bundle args (with the recipe id)
         if (getArguments() != null) recipeId = getArguments().getInt(ARG_RECIPE_ID);
 
-        // Create view model
+        // Obtain view model
         viewModel = DetailsActivity.obtainViewModel(getActivity());
 
         setupIngredientsAdapter();
@@ -93,7 +94,7 @@ public class RecipeDetailsFragment extends Fragment {
     }
 
     private void observeResult() {
-        // FIXME: Observe recipe details
+        // Observe recipe details.
         viewModel.getWholeRecipeLiveData().observe(
                 getViewLifecycleOwner(),
                 new Observer<WholeRecipe>() {
