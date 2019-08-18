@@ -4,7 +4,6 @@ import androidx.annotation.Nullable;
 import androidx.core.view.ViewCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -16,8 +15,6 @@ import android.view.ViewGroup;
 import com.ang.acb.bakeit.data.model.WholeRecipe;
 
 import com.ang.acb.bakeit.databinding.FragmentRecipeDetailsBinding;
-import com.ang.acb.bakeit.utils.InjectorUtils;
-import com.ang.acb.bakeit.utils.ViewModelFactory;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -25,7 +22,7 @@ import java.util.Objects;
 
 import timber.log.Timber;
 
-import static com.ang.acb.bakeit.ui.recipelist.RecipeListActivity.ARG_RECIPE_ID;
+import static com.ang.acb.bakeit.ui.recipelist.RecipeListActivity.EXTRA_RECIPE_ID;
 
 /**
  * A placeholder fragment containing a simple view.
@@ -43,7 +40,7 @@ public class RecipeDetailsFragment extends Fragment {
         Timber.d("RecipeDetailsFragment created.");
         RecipeDetailsFragment fragment = new RecipeDetailsFragment();
         Bundle args = new Bundle();
-        args.putInt(ARG_RECIPE_ID, recipeId);
+        args.putInt(EXTRA_RECIPE_ID, recipeId);
         fragment.setArguments(args);
 
         return fragment;
@@ -60,10 +57,10 @@ public class RecipeDetailsFragment extends Fragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        // Get bundle args (with the recipe id)
-        if (getArguments() != null) recipeId = getArguments().getInt(ARG_RECIPE_ID);
+        // Get bundle args (with the recipe id) sent from the host activity.
+        if (getArguments() != null) recipeId = getArguments().getInt(EXTRA_RECIPE_ID);
 
-        // Obtain view model
+        // Obtain view model from the activity that hosts this fragment.
         viewModel = DetailsActivity.obtainViewModel(getActivity());
 
         setupIngredientsAdapter();

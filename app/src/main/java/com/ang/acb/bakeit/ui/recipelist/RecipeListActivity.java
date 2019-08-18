@@ -21,7 +21,7 @@ import timber.log.Timber;
 
 public class RecipeListActivity extends AppCompatActivity {
 
-    public static final String ARG_RECIPE_ID = "ARG_RECIPE_ID";
+    public static final String EXTRA_RECIPE_ID = "EXTRA_RECIPE_ID";
     public static final Integer INVALID_RECIPE_ID = -1;
 
     private ActivityRecipeListBinding binding;
@@ -44,22 +44,21 @@ public class RecipeListActivity extends AppCompatActivity {
 
         // Setup recycler view.
         final RecipeAdapter adapter =  new RecipeAdapter(viewModel);
-        RecyclerView recyclerView = this.findViewById(R.id.rv_recipe_list);
+        RecyclerView recyclerView = findViewById(R.id.rv_recipe_list);
         recyclerView.setAdapter(adapter);
         Timber.d("Setup recipe list recycler view.");
 
-        // TODO Observe data and network status.
+        // Observe data and network status.
         viewModel.getRecipeListResourceLiveData().observe(this,
-                new Observer<Resource<List<Recipe>>>() {
-                    @Override
-                    public void onChanged(Resource<List<Recipe>> resource) {
-                        Timber.d("Observe recipe list from recipe list view model.");
-                        adapter.submitList(resource);
-                        Timber.d("Observe network status from recipe list view model.");
-                        adapter.setNetworkState(resource);
-                    }
-                });
-
+            new Observer<Resource<List<Recipe>>>() {
+                @Override
+                public void onChanged(Resource<List<Recipe>> resource) {
+                    Timber.d("Observe recipe list from recipe list view model.");
+                    adapter.submitList(resource);
+                    Timber.d("Observe network status from recipe list view model.");
+                    adapter.setNetworkState(resource);
+                }
+            });
     }
 
 }

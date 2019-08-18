@@ -1,31 +1,39 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <data>
 
         <import type="com.ang.acb.bakeit.data.model.Resource.Status" />
+        <import type="com.ang.acb.bakeit.data.model.Resource" />
 
         <variable
             name="resource"
             type="com.ang.acb.bakeit.data.model.Resource" />
+
+        <variable
+            name="callback"
+            type="com.ang.acb.bakeit.ui.common.RetryCallback" />
     </data>
 
     <LinearLayout
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:gravity="center"
-        android:padding="16dp">
+        android:padding="16dp"
+        app:toggleVisibility="@{resource.data == null}">
 
         <TextView
             android:id="@+id/error_msg"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_margin="16dp"
             android:layout_gravity="center_horizontal"
             android:text="@{resource.message.isEmpty() ? @string/unknown_error : resource.message}"
-            app:toggleVisibility="@{resource.status == Status.ERROR}" />
+            app:toggleVisibility="@{resource.status == Status.ERROR}"
+            tools:text="Unable to connect to host..."/>
 
         <ProgressBar
             android:id="@+id/progress_bar"
@@ -42,6 +50,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:text="@string/action_retry"
+            android:onClick="@{() -> callback.retry()}"
             app:toggleVisibility="@{resource.status == Status.ERROR}" />
     </LinearLayout>
 </layout>

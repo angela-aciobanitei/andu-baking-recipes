@@ -82,5 +82,4 @@ public class LocalRecipeDataSource {
     public LiveData<List<Step>> getRecipeSteps(Integer recipeId) {
         return database.recipeDao().loadRecipeSteps(recipeId);
     }
-
 }

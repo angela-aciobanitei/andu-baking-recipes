@@ -6,7 +6,6 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.ang.acb.bakeit.data.repository.RecipeRepository;
 import com.ang.acb.bakeit.ui.recipedetails.RecipeDetailsViewModel;
-import com.ang.acb.bakeit.ui.recipedetails.StepDetailsViewModel;
 import com.ang.acb.bakeit.ui.recipelist.RecipeListViewModel;
 
 /**
@@ -36,9 +35,6 @@ public class ViewModelFactory implements ViewModelProvider.Factory {
         } else if (modelClass.isAssignableFrom(RecipeDetailsViewModel.class)) {
             // noinspection unchecked
             return (T) new RecipeDetailsViewModel(repository);
-        } else if (modelClass.isAssignableFrom(StepDetailsViewModel.class)) {
-            // noinspection unchecked
-            return (T) new StepDetailsViewModel(repository);
         }
         throw new IllegalArgumentException("Unknown ViewModel class: " + modelClass.getName());
     }

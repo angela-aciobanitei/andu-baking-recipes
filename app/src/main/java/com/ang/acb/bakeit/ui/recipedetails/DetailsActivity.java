@@ -1,6 +1,5 @@
 package com.ang.acb.bakeit.ui.recipedetails;
 
-import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -12,12 +11,9 @@ import com.ang.acb.bakeit.R;
 import com.ang.acb.bakeit.utils.InjectorUtils;
 import com.ang.acb.bakeit.utils.ViewModelFactory;
 
-import java.util.ArrayList;
-import java.util.Objects;
-
 import timber.log.Timber;
 
-import static com.ang.acb.bakeit.ui.recipelist.RecipeListActivity.ARG_RECIPE_ID;
+import static com.ang.acb.bakeit.ui.recipelist.RecipeListActivity.EXTRA_RECIPE_ID;
 import static com.ang.acb.bakeit.ui.recipelist.RecipeListActivity.INVALID_RECIPE_ID;
 
 public class DetailsActivity extends AppCompatActivity {
@@ -31,7 +27,7 @@ public class DetailsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_details);
 
-        recipeId = getIntent().getIntExtra(ARG_RECIPE_ID, INVALID_RECIPE_ID);
+        recipeId = getIntent().getIntExtra(EXTRA_RECIPE_ID, INVALID_RECIPE_ID);
         Timber.d("Recipe ID: %s.", recipeId);
         if (recipeId.equals(INVALID_RECIPE_ID)) {
             Timber.d("Invalid recipe id.");
@@ -46,7 +42,7 @@ public class DetailsActivity extends AppCompatActivity {
 
         if (savedInstanceState == null) {
             viewModel.init(recipeId, isTwoPane);
-            // Add only RecipeDetailsFragment
+            // Add only RecipeDetailsFragment to its fragment
             getSupportFragmentManager().beginTransaction()
                     .replace(R.id.partial_details_fragment_container,
                             RecipeDetailsFragment.newInstance(recipeId))
@@ -55,17 +51,25 @@ public class DetailsActivity extends AppCompatActivity {
         }
 
         // FIXME Observe steps list click event
-        // FIXME Handle two pane layout
-        viewModel.getOpenStepDetailEvent().observe(this, new Observer<Integer>() {
+        viewModel.getCurrentPositionLiveEvent().observe(this, new Observer<Integer>() {
             @Override
             public void onChanged(Integer stepPosition) {
-                // If (!isTwoPane): Replace RecipeDetailsFragment with StepDetailsFragment
-                getSupportFragmentManager()
-                        .beginTransaction()
-                        .replace(R.id.partial_details_fragment_container,
-                                StepDetailsFragment.newInstance(recipeId, stepPosition))
-                        .commit();
-
+                if (!isTwoPane) {
+                    // Replace RecipeDetailsFragment with StepDetailsFragment
+                    // using the same fragment container
+                    getSupportFragmentManager()
+                            .beginTransaction()
+                            .replace(R.id.partial_details_fragment_container,
+                                    StepDetailsFragment.newInstance(recipeId, stepPosition))
+                            .commit();
+                } else {
+                    // Add StepDetailsFragment to its own separate fragment container
+                    getSupportFragmentManager()
+                            .beginTransaction()
+                            .replace(R.id.step_details_fragment_container,
+                                    StepDetailsFragment.newInstance(recipeId, stepPosition))
+                            .commit();
+                }
             }
         });
     }

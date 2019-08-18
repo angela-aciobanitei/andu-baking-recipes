@@ -1,6 +1,5 @@
 package com.ang.acb.bakeit.ui.recipedetails;
 
-import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
@@ -27,9 +26,15 @@ public class StepAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
+        // Bind step data
         Step step = stepList.get(position);
         ((StepItemViewHolder) holder).bindTo(step);
-        holder.itemView.setOnClickListener(view -> viewModel.setCurrentStep(position));
+        // Handle step click events
+        holder.itemView.setOnClickListener(view -> {
+            // Update the current position and the current step data.
+            viewModel.setCurrentPositionLiveEvent(position);
+            viewModel.setCurrentStepLiveData(step);
+        });
     }
 
     @Override

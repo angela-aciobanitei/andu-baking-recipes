@@ -14,15 +14,12 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModelProviders;
 
 import com.ang.acb.bakeit.R;
 import com.ang.acb.bakeit.data.model.Step;
 import com.ang.acb.bakeit.databinding.FragmentStepDetailsBinding;
 
 import com.ang.acb.bakeit.utils.GlideApp;
-import com.ang.acb.bakeit.utils.InjectorUtils;
-import com.ang.acb.bakeit.utils.ViewModelFactory;
 import com.google.android.exoplayer2.ExoPlayerFactory;
 import com.google.android.exoplayer2.SimpleExoPlayer;
 import com.google.android.exoplayer2.source.ExtractorMediaSource;
@@ -33,12 +30,11 @@ import com.google.android.exoplayer2.util.Util;
 
 import org.jetbrains.annotations.NotNull;
 
-import java.util.List;
 import java.util.Objects;
 
 import timber.log.Timber;
 
-import static com.ang.acb.bakeit.ui.recipelist.RecipeListActivity.ARG_RECIPE_ID;
+import static com.ang.acb.bakeit.ui.recipelist.RecipeListActivity.EXTRA_RECIPE_ID;
 
 public class StepDetailsFragment extends Fragment  {
 
@@ -48,7 +44,7 @@ public class StepDetailsFragment extends Fragment  {
     public static final String ARG_CURRENT_STEP_POSITION = "ARG_CURRENT_STEP_POSITION";
 
     private FragmentStepDetailsBinding binding;
-    private StepDetailsViewModel viewModel;
+    private RecipeDetailsViewModel viewModel;
     private Integer recipeId;
     private int currentStepPosition;
 
@@ -58,6 +54,7 @@ public class StepDetailsFragment extends Fragment  {
 
     private boolean isLandscape;
     private boolean isTablet;
+    private boolean isTwoPane;
 
     // Required empty public constructor
     public StepDetailsFragment() {}
@@ -66,7 +63,7 @@ public class StepDetailsFragment extends Fragment  {
         Timber.d("StepDetailsFragment created.");
         StepDetailsFragment fragment = new StepDetailsFragment();
         Bundle args = new Bundle();
-        args.putInt(ARG_RECIPE_ID, recipeId);
+        args.putInt(EXTRA_RECIPE_ID, recipeId);
         args.putInt(ARG_CURRENT_STEP_POSITION, stepPosition);
         fragment.setArguments(args);
 
@@ -87,7 +84,7 @@ public class StepDetailsFragment extends Fragment  {
         restoreInstanceState(savedInstanceState);
         enableFullscreenMode();
         initializeViewModel();
-        observeStep();
+        observeSteps();
     }
 
     @Override
@@ -118,6 +115,7 @@ public class StepDetailsFragment extends Fragment  {
 
         isLandscape = configuration.orientation == Configuration.ORIENTATION_LANDSCAPE;
         isTablet = getResources().getBoolean(R.bool.is_tablet);
+        isTwoPane = isLandscape || isTablet;
 
         if (isLandscape && !isTablet) {
             // Hide action bar
@@ -141,34 +139,31 @@ public class StepDetailsFragment extends Fragment  {
     }
 
     private void initializeViewModel() {
-        // Create view model.
-        ViewModelFactory factory = InjectorUtils.provideViewModelFactory(getContext());
-        viewModel = ViewModelProviders.of(Objects.requireNonNull(getActivity()), factory)
-                .get(StepDetailsViewModel.class);
+        // Obtain view model from the activity that hosts this fragment.
+        viewModel = DetailsActivity.obtainViewModel(getActivity());
 
-        // Get bundle args (with the recipe id) and init recipe details view model.
+        // Get bundle args sent from the host activity.
         Bundle args = getArguments();
         if (args != null) {
-            recipeId = args.getInt(ARG_RECIPE_ID);
+            recipeId = args.getInt(EXTRA_RECIPE_ID);
             currentStepPosition = args.getInt(ARG_CURRENT_STEP_POSITION);
         }
-
-        viewModel.init(recipeId, currentStepPosition);
-        Timber.d("Recipe [id=%s]: init view model for step [position=%s].",
-                recipeId, currentStepPosition);
     }
 
-    private void observeStep(){
-        viewModel.getStepsLiveData().observe(this, new Observer<List<Step>>() {
-            @Override
-            public void onChanged(List<Step> steps) {
-                // Bind step
-                binding.setStep(steps.get(currentStepPosition));
-                handleVideoUrl(steps.get(currentStepPosition));
-                handleStepButtons();
-            }
-        });
-
+    private void observeSteps(){
+        // FIXME The application may be doing too much work on its main thread.
+        viewModel.getCurrentStepLiveData(currentStepPosition).observe(
+                getViewLifecycleOwner(),
+                new Observer<Step>() {
+                    @Override
+                    public void onChanged(Step step) {
+                        // Bind step
+                        binding.setStep(step);
+                        handleVideoUrl(step);
+                        handleStepButtons();
+                    }
+                }
+        );
     }
 
     private void handleVideoUrl(Step step){
@@ -240,19 +235,18 @@ public class StepDetailsFragment extends Fragment  {
         shouldPlayWhenReady = true;
         currentPlaybackPosition = 0;
         if (simpleExoPlayer != null) simpleExoPlayer.stop();
-
     }
 
     private void handleStepButtons(){
         // Hide previous/next step buttons on tablets and landscape mode.
-        if (!isTablet || !isLandscape) {
-            if (viewModel.hasNext()) {
+        //if (!isTablet || !isLandscape) {
+            if (viewModel.hasNext(currentStepPosition)) {
                 binding.nextStepButton.setVisibility(View.VISIBLE);
             } else {
                 binding.nextStepButton.setVisibility(View.GONE);
             }
 
-            if (viewModel.hasPrevious()) {
+            if (viewModel.hasPrevious(currentStepPosition)) {
                 binding.previousStepButton.setVisibility(View.VISIBLE);
             } else {
                 binding.previousStepButton.setVisibility(View.GONE);
@@ -261,13 +255,13 @@ public class StepDetailsFragment extends Fragment  {
             // Handle click events
             binding.nextStepButton.setOnClickListener(view -> {
                 resetPlayer();
-                viewModel.nextStep();
+                viewModel.nextStep(currentStepPosition);
             });
             binding.previousStepButton.setOnClickListener(view -> {
                 resetPlayer();
-                viewModel.previousStep();
+                viewModel.previousStep(currentStepPosition);
             });
-        }
+        //}
     }
 
     @Override

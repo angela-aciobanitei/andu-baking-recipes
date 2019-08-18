@@ -25,7 +25,7 @@ public class NetworkStateItemViewHolder extends RecyclerView.ViewHolder {
         this.binding = binding;
 
         // TODO Trigger retry event on click.
-        // binding.retryButton.setOnClickListener(view -> viewModel.retry());
+        this.binding.retryButton.setOnClickListener(view -> viewModel.retry());
     }
 
     public static NetworkStateItemViewHolder create(ViewGroup parent, RecipeListViewModel viewModel) {
