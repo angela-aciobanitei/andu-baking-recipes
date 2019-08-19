@@ -15,6 +15,8 @@ import com.ang.acb.bakeit.utils.AppExecutors;
 
 import java.util.List;
 
+import timber.log.Timber;
+
 /**
  * Repository module for handling data operations.
  *
@@ -101,5 +103,9 @@ public class RecipeRepository {
 
     public LiveData<List<Step>> getRecipeSteps(Integer recipeId) {
         return localDataSource.getRecipeSteps(recipeId);
+    }
+
+    public LiveData<Integer> getStepsCount(Integer recipeId) {
+        return localDataSource.getStepsCount(recipeId);
     }
 }

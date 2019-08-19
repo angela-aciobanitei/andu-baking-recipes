@@ -31,9 +31,9 @@ public class StepAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         ((StepItemViewHolder) holder).bindTo(step);
         // Handle step click events
         holder.itemView.setOnClickListener(view -> {
-            // Update the current position and the current step data.
-            viewModel.setCurrentPositionLiveEvent(position);
-            viewModel.setCurrentStepLiveData(step);
+            // Update the current step position.
+            viewModel.setStepIndex(position);
+            viewModel.setOpenStepDetailsEvent(position);
         });
     }
 

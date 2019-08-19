@@ -51,7 +51,7 @@ public class DetailsActivity extends AppCompatActivity {
         }
 
         // FIXME Observe steps list click event
-        viewModel.getCurrentPositionLiveEvent().observe(this, new Observer<Integer>() {
+        viewModel.getOpenStepDetailsEvent().observe(this, new Observer<Integer>() {
             @Override
             public void onChanged(Integer stepPosition) {
                 if (!isTwoPane) {
@@ -60,14 +60,14 @@ public class DetailsActivity extends AppCompatActivity {
                     getSupportFragmentManager()
                             .beginTransaction()
                             .replace(R.id.partial_details_fragment_container,
-                                    StepDetailsFragment.newInstance(recipeId, stepPosition))
+                                    StepDetailsFragment.newInstance(recipeId))
                             .commit();
                 } else {
                     // Add StepDetailsFragment to its own separate fragment container
                     getSupportFragmentManager()
                             .beginTransaction()
                             .replace(R.id.step_details_fragment_container,
-                                    StepDetailsFragment.newInstance(recipeId, stepPosition))
+                                    StepDetailsFragment.newInstance(recipeId))
                             .commit();
                 }
             }

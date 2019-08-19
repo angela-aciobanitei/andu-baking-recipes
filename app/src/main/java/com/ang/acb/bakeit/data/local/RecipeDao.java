@@ -64,6 +64,10 @@ public abstract class RecipeDao {
     public abstract LiveData<List<Step>> loadRecipeSteps(Integer recipeId);
 
     @Transaction
+    @Query("SELECT COUNT(*) FROM steps where recipe_id= :recipeId")
+     public abstract LiveData<Integer> getStepsCount(Integer recipeId);
+
+    @Transaction
     @Query("SELECT * FROM recipes WHERE id= :recipeId")
     public abstract LiveData<WholeRecipe> loadWholeRecipe(Integer recipeId);
 

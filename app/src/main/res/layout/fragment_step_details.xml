@@ -40,14 +40,26 @@
 
         <androidx.constraintlayout.widget.Barrier
             android:id="@+id/barrier"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:barrierDirection="bottom"
             app:constraint_referenced_ids="placeholder_image, exoplayer_view" />
 
         <TextView
+            android:id="@+id/video_short_description"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_margin="16dp"
+            android:text="@{step.getShortDescription()}"
+            android:textAppearance="@style/TextAppearance.AppCompat.Body2"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/barrier"
+            tools:text="Melt butter and bittersweet chocolate."/>
+
+        <TextView
             android:id="@+id/video_description"
-            android:layout_width="0dp"
+            android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_margin="16dp"
             android:text="@{step.getDescription()}"
@@ -55,7 +67,8 @@
             app:layout_constraintBottom_toTopOf="@+id/previous_step_button"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/barrier" />
+            app:layout_constraintTop_toBottomOf="@+id/video_short_description"
+            tools:text="2. Melt the butter and bittersweet chocolate together in a microwave or a double boiler. If microwaving, heat for 30 seconds at a time, removing bowl and stirring ingredients in between."/>
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/next_step_button"

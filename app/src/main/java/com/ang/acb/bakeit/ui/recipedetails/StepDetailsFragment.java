@@ -59,12 +59,11 @@ public class StepDetailsFragment extends Fragment  {
     // Required empty public constructor
     public StepDetailsFragment() {}
 
-    public static StepDetailsFragment newInstance(Integer recipeId, int stepPosition) {
+    public static StepDetailsFragment newInstance(Integer recipeId) {
         Timber.d("StepDetailsFragment created.");
         StepDetailsFragment fragment = new StepDetailsFragment();
         Bundle args = new Bundle();
         args.putInt(EXTRA_RECIPE_ID, recipeId);
-        args.putInt(ARG_CURRENT_STEP_POSITION, stepPosition);
         fragment.setArguments(args);
 
         return fragment;
@@ -143,16 +142,12 @@ public class StepDetailsFragment extends Fragment  {
         viewModel = DetailsActivity.obtainViewModel(getActivity());
 
         // Get bundle args sent from the host activity.
-        Bundle args = getArguments();
-        if (args != null) {
-            recipeId = args.getInt(EXTRA_RECIPE_ID);
-            currentStepPosition = args.getInt(ARG_CURRENT_STEP_POSITION);
-        }
+        if (getArguments() != null) recipeId = getArguments().getInt(EXTRA_RECIPE_ID);
     }
 
     private void observeSteps(){
-        // FIXME The application may be doing too much work on its main thread.
-        viewModel.getCurrentStepLiveData(currentStepPosition).observe(
+        // FIXME
+        viewModel.getCurrentStep().observe(
                 getViewLifecycleOwner(),
                 new Observer<Step>() {
                     @Override
@@ -240,26 +235,26 @@ public class StepDetailsFragment extends Fragment  {
     private void handleStepButtons(){
         // Hide previous/next step buttons on tablets and landscape mode.
         //if (!isTablet || !isLandscape) {
-            if (viewModel.hasNext(currentStepPosition)) {
-                binding.nextStepButton.setVisibility(View.VISIBLE);
-            } else {
-                binding.nextStepButton.setVisibility(View.GONE);
-            }
-
-            if (viewModel.hasPrevious(currentStepPosition)) {
-                binding.previousStepButton.setVisibility(View.VISIBLE);
-            } else {
-                binding.previousStepButton.setVisibility(View.GONE);
-            }
+//            if (viewModel.hasNext()) {
+//                binding.nextStepButton.setVisibility(View.VISIBLE);
+//            } else {
+//                binding.nextStepButton.setVisibility(View.GONE);
+//            }
+//
+//            if (viewModel.hasPrevious()) {
+//                binding.previousStepButton.setVisibility(View.VISIBLE);
+//            } else {
+//                binding.previousStepButton.setVisibility(View.GONE);
+//            }
 
             // Handle click events
             binding.nextStepButton.setOnClickListener(view -> {
                 resetPlayer();
-                viewModel.nextStep(currentStepPosition);
+                viewModel.nextStepIndex();
             });
             binding.previousStepButton.setOnClickListener(view -> {
                 resetPlayer();
-                viewModel.previousStep(currentStepPosition);
+                viewModel.previousStepIndex();
             });
         //}
     }

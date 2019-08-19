@@ -1,13 +1,13 @@
 package com.ang.acb.bakeit.ui.recipedetails;
 
-import androidx.arch.core.util.Function;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MediatorLiveData;
 import androidx.lifecycle.MutableLiveData;
-import androidx.lifecycle.Observer;
-import androidx.lifecycle.Transformations;
 import androidx.lifecycle.ViewModel;
 
+import com.ang.acb.bakeit.data.model.Ingredient;
+import com.ang.acb.bakeit.data.model.Recipe;
+import com.ang.acb.bakeit.data.model.Resource;
 import com.ang.acb.bakeit.data.model.Step;
 import com.ang.acb.bakeit.data.model.WholeRecipe;
 import com.ang.acb.bakeit.data.repository.RecipeRepository;
@@ -22,13 +22,11 @@ public class RecipeDetailsViewModel extends ViewModel {
     private RecipeRepository repository;
 
     private LiveData<WholeRecipe> wholeRecipeLiveData;
-    private SingleLiveEvent<Integer> currentPositionLiveEvent = new SingleLiveEvent<>() ;
+    private SingleLiveEvent<Integer> openStepDetailsEvent = new SingleLiveEvent<>() ;
 
     private LiveData<List<Step>> stepsLiveData;
-    private MutableLiveData<Step> currentStepLiveData = new MutableLiveData<>();
-
-    boolean isTwoPane;
-
+    private MediatorLiveData<Step> currentStepLiveData;
+    private MutableLiveData<Integer> stepIndexLiveData;
 
     public RecipeDetailsViewModel(final RecipeRepository repository) {
         this.repository = repository;
@@ -37,8 +35,6 @@ public class RecipeDetailsViewModel extends ViewModel {
     public void init(Integer recipeId, boolean isTwoPane) {
         wholeRecipeLiveData = repository.getFullRecipe(recipeId);
         stepsLiveData = repository.getRecipeSteps(recipeId);
-
-        if (isTwoPane) setCurrentPositionLiveEvent(0);
     }
 
 
@@ -46,47 +42,64 @@ public class RecipeDetailsViewModel extends ViewModel {
         return wholeRecipeLiveData;
     }
 
-    public LiveData<Step> getCurrentStepLiveData(int position) {
-        return currentStepLiveData;
+    public SingleLiveEvent<Integer> getOpenStepDetailsEvent() {
+        return openStepDetailsEvent;
     }
 
-    public void setCurrentStepLiveData(int position) {
-        if (stepsLiveData != null & stepsLiveData.getValue() != null) {
-            currentStepLiveData.setValue(stepsLiveData.getValue().get(position));
-        }
-    }
-
-    public void setCurrentStepLiveData (Step step) {
-        currentStepLiveData.setValue(step);
+    public void setOpenStepDetailsEvent(int position){
+        openStepDetailsEvent.setValue(position);
     }
 
     public LiveData<List<Step>> getStepsLiveData() {
         return stepsLiveData;
     }
 
-    public SingleLiveEvent<Integer> getCurrentPositionLiveEvent() {
-        return currentPositionLiveEvent;
+    public LiveData<Integer> getStepIndex() {
+        if (stepIndexLiveData == null) {
+            setStepIndex(0);
+        }
+        return stepIndexLiveData;
     }
 
-    public void setCurrentPositionLiveEvent(int position){
-        currentPositionLiveEvent.setValue(position);
+    public void setStepIndex(int index){
+        if (stepIndexLiveData == null) {
+            stepIndexLiveData = new MutableLiveData<>();
+            stepIndexLiveData.setValue(0);
+        }
+        stepIndexLiveData.setValue(index);
     }
 
-    public boolean hasPrevious(int currentPosition) {
-        return currentPosition > 0;
+
+    public void nextStepIndex() {
+        stepIndexLiveData.setValue(Objects.requireNonNull(getStepIndex().getValue()) + 1);
     }
 
-    public boolean hasNext(int currentPosition) {
-        // FIXME: NullPointerException
-        // return currentPosition < Objects.requireNonNull(stepsLiveData.getValue()).size() - 1;
-        return false;
+    public void previousStepIndex() {
+        stepIndexLiveData.setValue(Objects.requireNonNull(getStepIndex().getValue()) - 1);
     }
 
-    public void nextStep(int position) {
-        if (hasNext(position))setCurrentStepLiveData(position+1);
+    public LiveData<Step> getCurrentStep() {
+        if (currentStepLiveData == null) {
+            setCurrentStep();
+        }
+        return currentStepLiveData;
     }
 
-    public void previousStep(int position) {
-        if (hasPrevious(position)) setCurrentStepLiveData(position-1);
+    private void setCurrentStep() {
+        if (currentStepLiveData == null) {
+            currentStepLiveData = new MediatorLiveData<>();
+        }
+        
+        currentStepLiveData.addSource(stepsLiveData, steps -> {
+            if (steps != null && stepIndexLiveData.getValue() != null) {
+                currentStepLiveData.setValue(steps.get(stepIndexLiveData.getValue()));
+            }
+        });
+
+        currentStepLiveData.addSource(stepIndexLiveData, stepIndex -> {
+            if (stepIndex != null && stepsLiveData.getValue()!= null) {
+                currentStepLiveData.setValue(stepsLiveData.getValue().get(stepIndex));
+            }
+        });
     }
 }
