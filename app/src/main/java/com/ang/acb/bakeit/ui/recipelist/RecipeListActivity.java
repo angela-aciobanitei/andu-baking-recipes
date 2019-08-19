@@ -22,6 +22,7 @@ import timber.log.Timber;
 public class RecipeListActivity extends AppCompatActivity {
 
     public static final String EXTRA_RECIPE_ID = "EXTRA_RECIPE_ID";
+    public static final String EXTRA_RECIPE_NAME ="EXTRA_RECIPE_NAME";
     public static final Integer INVALID_RECIPE_ID = -1;
 
     private ActivityRecipeListBinding binding;

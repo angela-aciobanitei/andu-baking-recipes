@@ -75,15 +75,15 @@ public class LocalRecipeDataSource {
         return database.recipeDao().loadWholeRecipe(recipeId);
     }
 
+    public WholeRecipe getRecipe(Integer recipeId) {
+        return database.recipeDao().loadRecipe(recipeId);
+    }
+
     public LiveData<List<WholeRecipe>> getWholeRecipes() {
         return database.recipeDao().loadWholeRecipes();
     }
 
     public LiveData<List<Step>> getRecipeSteps(Integer recipeId) {
         return database.recipeDao().loadRecipeSteps(recipeId);
-    }
-
-    public LiveData<Integer> getStepsCount(Integer recipeId){
-        return database.recipeDao().getStepsCount(recipeId);
     }
 }

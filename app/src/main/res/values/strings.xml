@@ -4,12 +4,14 @@
     <string name="recipe_image_content_description">Recipe picture</string>
     <string name="ingredients">Ingredients</string>
     <string name="steps">Steps</string>
-    <string name="no_internet_connection_toast_message">No internet connection</string>
     <string name="unknown_error">Unknown error</string>
-    <string name="exoplayer_place_holder_image">Exoplayer place holder image</string>
+    <string name="exoplayer_placeholder_image">Exoplayer placeholder image</string>
     <string name="next_step">NEXT STEP</string>
     <string name="previous_step">PREVIOUS STEP</string>
+    <string name="add_to_back_stack_key">Recipe</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="widget_text">Create widget and add it to the Home Screen</string>
+    <string name="pref_widget_key">pref_widget_key</string>
+    <string name="pref_title_key">pref_title_key</string>
+    <string name="create_widget">Create widget</string>
 </resources>

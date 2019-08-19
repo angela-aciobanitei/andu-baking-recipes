@@ -16,23 +16,24 @@ import com.ang.acb.bakeit.data.repository.RecipeRepository;
  */
 public class InjectorUtils {
 
-    private static LocalRecipeDataSource provideLocalRecipeDataSource(Context context){
+    public static LocalRecipeDataSource provideLocalRecipeDataSource(Context context){
         AppDatabase database = AppDatabase.getInstance(context);
         return LocalRecipeDataSource.getInstance(database);
     }
 
-    private static RemoteRecipeDataSource provideRemoteRecipeDataSource(){
+    public static RemoteRecipeDataSource provideRemoteRecipeDataSource(){
         ApiService apiService = ApiClient.getInstance();
         AppExecutors executors = AppExecutors.getInstance();
         return RemoteRecipeDataSource.getInstance(apiService, executors);
     }
 
-    private static RecipeRepository provideRecipeRepository(Context context) {
+    public static RecipeRepository provideRecipeRepository(Context context) {
         return RecipeRepository.getInstance(
                 provideLocalRecipeDataSource(context),
                 provideRemoteRecipeDataSource(),
                 AppExecutors.getInstance());
     }
+
     public static ViewModelFactory provideViewModelFactory (Context context) {
         return ViewModelFactory.getInstance(provideRecipeRepository(context));
     }

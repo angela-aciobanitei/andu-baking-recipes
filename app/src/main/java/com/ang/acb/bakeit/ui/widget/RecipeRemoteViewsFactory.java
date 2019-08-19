@@ -1,0 +1,116 @@
+package com.ang.acb.bakeit.ui.widget;
+
+import android.content.Context;
+import android.content.Intent;
+import android.widget.AdapterView;
+import android.widget.RemoteViews;
+import android.widget.RemoteViewsService;
+
+import com.ang.acb.bakeit.R;
+import com.ang.acb.bakeit.data.local.LocalRecipeDataSource;
+import com.ang.acb.bakeit.data.model.Ingredient;
+import com.ang.acb.bakeit.data.model.WholeRecipe;
+import com.ang.acb.bakeit.utils.InjectorUtils;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Locale;
+
+/**
+ * A custom class that implements the RemoteViewsFactory interface and provides
+ * the app widget with the data for the items in its collection.
+ *
+ * See: https://developer.android.com/guide/topics/appwidgets#remoteviewsfactory-interface
+ */
+public class RecipeRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactory {
+
+    private final Context context;
+    private final LocalRecipeDataSource localRecipeDataSource;
+    private List<String> ingredients;
+
+    RecipeRemoteViewsFactory(Context context) {
+        this.context = context;
+        localRecipeDataSource = InjectorUtils.provideLocalRecipeDataSource(context);
+    }
+
+    @Override
+    public void onCreate() {}
+
+    @Override
+    public void onDataSetChanged() {
+        int recipeId = PreferencesUtils.getWidgetRecipeId(context);
+
+        if (recipeId != -1) {
+            ingredients = new ArrayList<>();
+            WholeRecipe wholeRecipe = localRecipeDataSource.getRecipe(recipeId);
+            if (wholeRecipe != null) {
+                for (Ingredient ingredient : wholeRecipe.ingredients) {
+                    ingredients.add(String.format(
+                            Locale.getDefault(),
+                            "%.1f %s %s",
+                            ingredient.getQuantity(),
+                            ingredient.getMeasure(),
+                            ingredient.getIngredient()));
+                }
+            }
+        }
+    }
+
+    @Override
+    public void onDestroy() {}
+
+    @Override
+    public int getCount() {
+        return ingredients == null ? 0 : ingredients.size();
+    }
+
+    @Override
+    public RemoteViews getViewAt(int position) {
+        if (position == AdapterView.INVALID_POSITION || ingredients == null) {
+            return null;
+        }
+
+        // Construct a remote views item based on the app widget item XML file,
+        // and set the text based on the position.
+        RemoteViews remoteViews =  new RemoteViews(
+                context.getPackageName(),
+                R.layout.widget_ingredient_item);
+        remoteViews.setTextViewText(
+                R.id.widget_ingredients_items,
+                ingredients.get(position));
+
+        // When using collections (eg. ListView, StackView etc.) in widgets,
+        // it is very costly to set PendingIntents on the individual items,
+        // and is hence not permitted. Instead this method should be used
+        // to set a single PendingIntent template on the collection, and
+        // individual items can differentiate their on-click behavior using
+        // RemoteViews#setOnClickFillInIntent(int, Intent).
+        // See: https://developer.android.com/guide/topics/appwidgets#setting-the-fill-in-intent
+        remoteViews.setOnClickFillInIntent(
+                R.id.widget_ingredients_items,
+                new Intent());
+
+        return remoteViews;
+    }
+
+    @Override
+    public RemoteViews getLoadingView() {
+        return null;
+    }
+
+    @Override
+    public int getViewTypeCount() {
+        return 1;
+    }
+
+    @Override
+    public long getItemId(int position) {
+        return position;
+    }
+
+    @Override
+    public boolean hasStableIds() {
+        return true;
+    }
+}
+

@@ -104,8 +104,4 @@ public class RecipeRepository {
     public LiveData<List<Step>> getRecipeSteps(Integer recipeId) {
         return localDataSource.getRecipeSteps(recipeId);
     }
-
-    public LiveData<Integer> getStepsCount(Integer recipeId) {
-        return localDataSource.getStepsCount(recipeId);
-    }
 }

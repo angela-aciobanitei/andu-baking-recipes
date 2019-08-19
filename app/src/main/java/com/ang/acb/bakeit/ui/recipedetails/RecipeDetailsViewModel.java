@@ -5,9 +5,6 @@ import androidx.lifecycle.MediatorLiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-import com.ang.acb.bakeit.data.model.Ingredient;
-import com.ang.acb.bakeit.data.model.Recipe;
-import com.ang.acb.bakeit.data.model.Resource;
 import com.ang.acb.bakeit.data.model.Step;
 import com.ang.acb.bakeit.data.model.WholeRecipe;
 import com.ang.acb.bakeit.data.repository.RecipeRepository;
@@ -32,7 +29,7 @@ public class RecipeDetailsViewModel extends ViewModel {
         this.repository = repository;
     }
 
-    public void init(Integer recipeId, boolean isTwoPane) {
+    public void init(Integer recipeId) {
         wholeRecipeLiveData = repository.getFullRecipe(recipeId);
         stepsLiveData = repository.getRecipeSteps(recipeId);
     }

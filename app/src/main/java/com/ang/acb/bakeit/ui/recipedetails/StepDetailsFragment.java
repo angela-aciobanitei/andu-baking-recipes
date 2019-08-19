@@ -52,10 +52,6 @@ public class StepDetailsFragment extends Fragment  {
     private boolean shouldPlayWhenReady;
     private long currentPlaybackPosition;
 
-    private boolean isLandscape;
-    private boolean isTablet;
-    private boolean isTwoPane;
-
     // Required empty public constructor
     public StepDetailsFragment() {}
 
@@ -112,11 +108,10 @@ public class StepDetailsFragment extends Fragment  {
         Configuration configuration = Objects.requireNonNull(
                 getContext()).getResources().getConfiguration();
 
-        isLandscape = configuration.orientation == Configuration.ORIENTATION_LANDSCAPE;
-        isTablet = getResources().getBoolean(R.bool.is_tablet);
-        isTwoPane = isLandscape || isTablet;
+        boolean isFullscreenMode = configuration.smallestScreenWidthDp < 600 &&
+                configuration.orientation == Configuration.ORIENTATION_LANDSCAPE;
 
-        if (isLandscape && !isTablet) {
+        if (isFullscreenMode) {
             // Hide action bar
             Objects.requireNonNull(((AppCompatActivity) Objects.requireNonNull(getActivity()))
                     .getSupportActionBar()).hide();

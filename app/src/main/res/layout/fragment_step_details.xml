@@ -34,7 +34,7 @@
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:scaleType="centerCrop"
-            android:contentDescription="@string/exoplayer_place_holder_image"
+            android:contentDescription="@string/exoplayer_placeholder_image"
             app:layout_constraintDimensionRatio="H,16:9"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"

@@ -30,6 +30,13 @@
                 android:value="com.ang.acb.bakeit.ui.recipelist.RecipeListActivity" />
         </activity>
 
+        <!--  To create app widgets with collections you must declare the service
+        in your manifest file with the permission BIND_REMOTEVIEWS. This prevents
+        other applications from freely accessing your app widget's data. -->
+        <service
+            android:name=".ui.widget.RecipeRemoteViewsService"
+            android:permission="android.permission.BIND_REMOTEVIEWS"/>
+
     </application>
 
 </manifest>
