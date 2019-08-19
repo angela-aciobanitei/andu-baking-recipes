@@ -235,17 +235,17 @@ public class StepDetailsFragment extends Fragment  {
     private void handleStepButtons(){
         // Hide previous/next step buttons on tablets and landscape mode.
         //if (!isTablet || !isLandscape) {
-//            if (viewModel.hasNext()) {
-//                binding.nextStepButton.setVisibility(View.VISIBLE);
-//            } else {
-//                binding.nextStepButton.setVisibility(View.GONE);
-//            }
-//
-//            if (viewModel.hasPrevious()) {
-//                binding.previousStepButton.setVisibility(View.VISIBLE);
-//            } else {
-//                binding.previousStepButton.setVisibility(View.GONE);
-//            }
+            if (viewModel.hasNext()) {
+                binding.nextStepButton.setVisibility(View.VISIBLE);
+            } else {
+                binding.nextStepButton.setVisibility(View.GONE);
+            }
+
+            if (viewModel.hasPrevious()) {
+                binding.previousStepButton.setVisibility(View.VISIBLE);
+            } else {
+                binding.previousStepButton.setVisibility(View.GONE);
+            }
 
             // Handle click events
             binding.nextStepButton.setOnClickListener(view -> {

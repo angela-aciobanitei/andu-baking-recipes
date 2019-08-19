@@ -54,6 +54,10 @@ public class RecipeDetailsViewModel extends ViewModel {
         return stepsLiveData;
     }
 
+    public int getStepCount(){
+        return Objects.requireNonNull(stepsLiveData.getValue()).size();
+    }
+
     public LiveData<Integer> getStepIndex() {
         if (stepIndexLiveData == null) {
             setStepIndex(0);
@@ -78,6 +82,14 @@ public class RecipeDetailsViewModel extends ViewModel {
         stepIndexLiveData.setValue(Objects.requireNonNull(getStepIndex().getValue()) - 1);
     }
 
+    public boolean hasNext() {
+        return Objects.requireNonNull(getStepIndex().getValue()) + 1 < getStepCount();
+    }
+
+    public boolean hasPrevious() {
+        return Objects.requireNonNull(getStepIndex().getValue()) > 0;
+    }
+
     public LiveData<Step> getCurrentStep() {
         if (currentStepLiveData == null) {
             setCurrentStep();
@@ -89,7 +101,7 @@ public class RecipeDetailsViewModel extends ViewModel {
         if (currentStepLiveData == null) {
             currentStepLiveData = new MediatorLiveData<>();
         }
-        
+
         currentStepLiveData.addSource(stepsLiveData, steps -> {
             if (steps != null && stepIndexLiveData.getValue() != null) {
                 currentStepLiveData.setValue(steps.get(stepIndexLiveData.getValue()));
