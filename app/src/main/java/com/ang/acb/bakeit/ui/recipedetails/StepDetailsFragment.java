@@ -146,7 +146,6 @@ public class StepDetailsFragment extends Fragment  {
     }
 
     private void observeSteps(){
-        // FIXME
         viewModel.getCurrentStep().observe(
                 getViewLifecycleOwner(),
                 new Observer<Step>() {
@@ -154,6 +153,7 @@ public class StepDetailsFragment extends Fragment  {
                     public void onChanged(Step step) {
                         // Bind step
                         binding.setStep(step);
+                        binding.setStepCount(viewModel.getStepCount());
                         handleVideoUrl(step);
                         handleStepButtons();
                     }
@@ -234,7 +234,7 @@ public class StepDetailsFragment extends Fragment  {
 
     private void handleStepButtons(){
         // Hide previous/next step buttons on tablets and landscape mode.
-        //if (!isTablet || !isLandscape) {
+        // if (!isTablet || !isLandscape) {
             if (viewModel.hasNext()) {
                 binding.nextStepButton.setVisibility(View.VISIBLE);
             } else {

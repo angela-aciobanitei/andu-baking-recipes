@@ -9,6 +9,10 @@
             name="step"
             type="com.ang.acb.bakeit.data.model.Step"/>
 
+        <variable
+            name="stepCount"
+            type="Integer"/>
+
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -83,7 +87,8 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toEndOf="@+id/previous_step_button" />
+            app:layout_constraintStart_toEndOf="@+id/previous_step_button"
+            app:toggleVisibility="@{step.getId() + 1 != stepCount}"/>
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/previous_step_button"
@@ -98,7 +103,8 @@
             app:layout_constraintEnd_toStartOf="@+id/next_step_button"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintHorizontal_chainStyle="spread"
-            app:layout_constraintStart_toStartOf="parent" />
+            app:layout_constraintStart_toStartOf="parent"
+            app:toggleVisibility="@{step.getId() > 0}"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
