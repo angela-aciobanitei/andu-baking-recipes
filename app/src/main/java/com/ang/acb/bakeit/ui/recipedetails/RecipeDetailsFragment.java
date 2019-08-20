@@ -7,20 +7,14 @@ import androidx.lifecycle.Observer;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.appwidget.AppWidgetManager;
-import android.content.ComponentName;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.ang.acb.bakeit.R;
-import com.ang.acb.bakeit.data.model.Recipe;
 import com.ang.acb.bakeit.data.model.WholeRecipe;
 
 import com.ang.acb.bakeit.databinding.FragmentRecipeDetailsBinding;
-import com.ang.acb.bakeit.ui.widget.PreferencesUtils;
-import com.ang.acb.bakeit.ui.widget.RecipeWidget;
 
 import org.jetbrains.annotations.NotNull;
 

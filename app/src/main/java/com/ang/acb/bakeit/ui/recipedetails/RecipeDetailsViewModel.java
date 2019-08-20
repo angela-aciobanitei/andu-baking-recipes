@@ -30,7 +30,7 @@ public class RecipeDetailsViewModel extends ViewModel {
     }
 
     public void init(Integer recipeId) {
-        wholeRecipeLiveData = repository.getFullRecipe(recipeId);
+        wholeRecipeLiveData = repository.getWholeRecipe(recipeId);
         stepsLiveData = repository.getRecipeSteps(recipeId);
     }
 

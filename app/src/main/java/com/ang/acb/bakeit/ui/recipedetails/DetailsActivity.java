@@ -5,6 +5,7 @@ import android.content.ComponentName;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.RemoteViews;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentActivity;
@@ -14,11 +15,10 @@ import androidx.lifecycle.ViewModelProviders;
 import com.ang.acb.bakeit.R;
 import com.ang.acb.bakeit.data.model.Recipe;
 import com.ang.acb.bakeit.ui.widget.PreferencesUtils;
-import com.ang.acb.bakeit.ui.widget.RecipeWidget;
+import com.ang.acb.bakeit.ui.widget.RecipeWidgetProvider;
 import com.ang.acb.bakeit.utils.InjectorUtils;
 import com.ang.acb.bakeit.utils.ViewModelFactory;
 
-import java.util.Objects;
 
 import timber.log.Timber;
 
@@ -53,6 +53,7 @@ public class DetailsActivity extends AppCompatActivity {
 
         if (savedInstanceState == null) {
             viewModel.init(recipeId);
+            addWidgetToHomeScreen(recipeId, recipeName);
             // Add RecipeDetailsFragment to its fragment container
             getSupportFragmentManager().beginTransaction()
                     .replace(R.id.partial_details_fragment_container,
@@ -74,7 +75,7 @@ public class DetailsActivity extends AppCompatActivity {
                             .replace(R.id.partial_details_fragment_container,
                                     StepDetailsFragment.newInstance(recipeId))
                             .commit();
-                    Timber.d("Replace RecipeDetailsFragment with StepDetailsFragment in the same fragment container.");
+                    Timber.d("Add StepDetailsFragment in the same fragment container.");
                 } else {
                     // Add StepDetailsFragment to its own separate fragment container
                     getSupportFragmentManager()
@@ -93,16 +94,16 @@ public class DetailsActivity extends AppCompatActivity {
         return ViewModelProviders.of(activity, factory).get(RecipeDetailsViewModel.class);
     }
 
-    public void addWidgetToHomeScreen() {
+    public void addWidgetToHomeScreen(Integer recipeId, String recipeName) {
         PreferencesUtils.setWidgetTitle(this, recipeName);
         PreferencesUtils.setWidgetRecipeId(this, recipeId);
 
         AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(this);
         int[] appWidgetIds = appWidgetManager.getAppWidgetIds(
-                new ComponentName(this, RecipeWidget.class));
+                new ComponentName(this, RecipeWidgetProvider.class));
 
         appWidgetManager.notifyAppWidgetViewDataChanged(appWidgetIds, R.id.widget_ingredients_list_items);
-        RecipeWidget.updateRecipeWidget(this, appWidgetManager, appWidgetIds);
+        RecipeWidgetProvider.updateRecipeWidget(this, appWidgetManager, appWidgetIds);
     }
 
     @Override
@@ -114,7 +115,7 @@ public class DetailsActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == R.id.action_create_widget) {
-            addWidgetToHomeScreen();
+            addWidgetToHomeScreen(recipeId, recipeName);
             return true;
         }
         return super.onOptionsItemSelected(item);

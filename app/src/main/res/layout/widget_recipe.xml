@@ -3,10 +3,13 @@
      https://developer.android.com/guide/topics/appwidgets#CreatingLayout -->
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/widget_cake_layout"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/widget_recipe_container"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:backgroundTint="@color/colorAccent"
+    android:padding="@dimen/widget_margin">
 
     <TextView
         android:id="@+id/widget_ingredients_list_title"
@@ -14,13 +17,24 @@
         android:layout_height="wrap_content"
         android:background="@color/colorPrimary"
         android:padding="8dp"
-        android:textAppearance="@style/TextAppearance.AppCompat.Headline"
-        android:textColor="@color/colorSecondary"/>
+        android:textAppearance="@style/TextAppearance.MaterialComponents.Headline4"
+        android:textColor="@android:color/white"
+        android:textStyle="bold|italic"
+        tools:text="Nutella"/>
 
     <ListView
         android:id="@+id/widget_ingredients_list_items"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:dividerHeight="1dp"/>
+        tools:listitem="@layout/widget_ingredient_item" />
+
+    <TextView
+        android:id="@+id/empty_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="@string/empty_widget"
+        android:textSize="14sp"
+        android:textStyle="bold" />
 
 </LinearLayout>

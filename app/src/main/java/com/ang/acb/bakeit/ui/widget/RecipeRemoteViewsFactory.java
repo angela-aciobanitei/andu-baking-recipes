@@ -10,6 +10,7 @@ import com.ang.acb.bakeit.R;
 import com.ang.acb.bakeit.data.local.LocalRecipeDataSource;
 import com.ang.acb.bakeit.data.model.Ingredient;
 import com.ang.acb.bakeit.data.model.WholeRecipe;
+import com.ang.acb.bakeit.data.repository.RecipeRepository;
 import com.ang.acb.bakeit.utils.InjectorUtils;
 
 import java.util.ArrayList;
@@ -25,12 +26,12 @@ import java.util.Locale;
 public class RecipeRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactory {
 
     private final Context context;
-    private final LocalRecipeDataSource localRecipeDataSource;
+    private final RecipeRepository repository;
     private List<String> ingredients;
 
     RecipeRemoteViewsFactory(Context context) {
         this.context = context;
-        localRecipeDataSource = InjectorUtils.provideLocalRecipeDataSource(context);
+        repository = InjectorUtils.provideRecipeRepository(context);
     }
 
     @Override
@@ -42,7 +43,7 @@ public class RecipeRemoteViewsFactory implements RemoteViewsService.RemoteViewsF
 
         if (recipeId != -1) {
             ingredients = new ArrayList<>();
-            WholeRecipe wholeRecipe = localRecipeDataSource.getRecipe(recipeId);
+            WholeRecipe wholeRecipe = repository.getRecipe(recipeId);
             if (wholeRecipe != null) {
                 for (Ingredient ingredient : wholeRecipe.ingredients) {
                     ingredients.add(String.format(
@@ -70,13 +71,14 @@ public class RecipeRemoteViewsFactory implements RemoteViewsService.RemoteViewsF
             return null;
         }
 
-        // Construct a remote views item based on the app widget item XML file,
-        // and set the text based on the position.
+        // Construct a remote views item based on the app widget item XML file.
         RemoteViews remoteViews =  new RemoteViews(
                 context.getPackageName(),
                 R.layout.widget_ingredient_item);
+
+        // Set the remote views item text based on the position.
         remoteViews.setTextViewText(
-                R.id.widget_ingredients_items,
+                R.id.widget_ingredient_item,
                 ingredients.get(position));
 
         // When using collections (eg. ListView, StackView etc.) in widgets,
@@ -87,7 +89,7 @@ public class RecipeRemoteViewsFactory implements RemoteViewsService.RemoteViewsF
         // RemoteViews#setOnClickFillInIntent(int, Intent).
         // See: https://developer.android.com/guide/topics/appwidgets#setting-the-fill-in-intent
         remoteViews.setOnClickFillInIntent(
-                R.id.widget_ingredients_items,
+                R.id.widget_ingredient_item,
                 new Intent());
 
         return remoteViews;
