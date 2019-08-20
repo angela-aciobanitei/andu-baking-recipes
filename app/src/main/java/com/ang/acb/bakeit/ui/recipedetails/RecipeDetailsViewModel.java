@@ -13,6 +13,8 @@ import com.ang.acb.bakeit.utils.SingleLiveEvent;
 import java.util.List;
 import java.util.Objects;
 
+import javax.inject.Inject;
+
 
 public class RecipeDetailsViewModel extends ViewModel {
 
@@ -25,6 +27,7 @@ public class RecipeDetailsViewModel extends ViewModel {
     private MediatorLiveData<Step> currentStepLiveData;
     private MutableLiveData<Integer> stepIndexLiveData;
 
+    @Inject
     public RecipeDetailsViewModel(final RecipeRepository repository) {
         this.repository = repository;
     }
@@ -33,7 +36,6 @@ public class RecipeDetailsViewModel extends ViewModel {
         wholeRecipeLiveData = repository.getWholeRecipe(recipeId);
         stepsLiveData = repository.getRecipeSteps(recipeId);
     }
-
 
     public LiveData<WholeRecipe> getWholeRecipeLiveData() {
         return wholeRecipeLiveData;

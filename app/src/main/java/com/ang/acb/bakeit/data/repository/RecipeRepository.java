@@ -16,7 +16,9 @@ import com.ang.acb.bakeit.utils.AppExecutors;
 
 import java.util.List;
 
-import timber.log.Timber;
+import javax.inject.Inject;
+import javax.inject.Singleton;
+
 
 /**
  * Repository module for handling data operations.
@@ -24,39 +26,20 @@ import timber.log.Timber;
  * See: https://developer.android.com/jetpack/docs/guide#truth
  * See: https://github.com/googlesamples/android-architecture-components/tree/master/GithubBrowserSample
  */
+@Singleton
 public class RecipeRepository {
-
-    // For Singleton instantiation.
-    private static volatile RecipeRepository sInstance;
 
     private final LocalRecipeDataSource localDataSource;
     private final RemoteRecipeDataSource remoteDataSource;
     private final AppExecutors appExecutors;
 
-    // Prevents direct instantiation.
-    private RecipeRepository(LocalRecipeDataSource localDataSource,
+    @Inject
+    public RecipeRepository(LocalRecipeDataSource localDataSource,
                              RemoteRecipeDataSource remoteDataSource,
                              AppExecutors appExecutors) {
         this.localDataSource = localDataSource;
         this.remoteDataSource = remoteDataSource;
         this.appExecutors = appExecutors;
-    }
-
-    // Returns the single instance of this class, creating it if necessary.
-    public static RecipeRepository getInstance(LocalRecipeDataSource localDataSource,
-                                               RemoteRecipeDataSource remoteDataSource,
-                                               AppExecutors appExecutors){
-        if(sInstance == null){
-            synchronized (RecipeRepository.class) {
-                if(sInstance == null) {
-                    sInstance = new RecipeRepository(
-                            localDataSource,
-                            remoteDataSource,
-                            appExecutors);
-                }
-            }
-        }
-        return sInstance;
     }
 
     public LiveData<Resource<List<Recipe>>> loadAllRecipes(){

@@ -9,10 +9,13 @@ import com.ang.acb.bakeit.data.repository.RecipeRepository;
 
 import java.util.List;
 
+import javax.inject.Inject;
+
 public class RecipeListViewModel extends ViewModel {
 
     private LiveData<Resource<List<Recipe>>> recipeListResourceLiveData;
 
+    @Inject
     public RecipeListViewModel(RecipeRepository repository) {
         recipeListResourceLiveData = repository.loadAllRecipes();
     }

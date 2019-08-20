@@ -4,9 +4,12 @@ import androidx.annotation.Nullable;
 import androidx.core.view.ViewCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,18 +23,21 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.Objects;
 
+import javax.inject.Inject;
+
+import dagger.android.support.AndroidSupportInjection;
 import timber.log.Timber;
 
 import static com.ang.acb.bakeit.ui.recipelist.MainActivity.EXTRA_RECIPE_ID;
 
-/**
- * A placeholder fragment containing a simple view.
- */
 public class RecipeDetailsFragment extends Fragment {
 
     private FragmentRecipeDetailsBinding binding;
     private RecipeDetailsViewModel viewModel;
     private Integer recipeId;
+
+    @Inject
+    ViewModelProvider.Factory viewModelFactory;
 
     // Required empty public constructor
     public RecipeDetailsFragment() {}
@@ -47,6 +53,12 @@ public class RecipeDetailsFragment extends Fragment {
     }
 
     @Override
+    public void onAttach(Context context) {
+        AndroidSupportInjection.inject(this);
+        super.onAttach(context);
+    }
+
+    @Override
     public View onCreateView(@NotNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         binding = FragmentRecipeDetailsBinding.inflate(inflater, container, false);
@@ -57,15 +69,18 @@ public class RecipeDetailsFragment extends Fragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        // Get bundle args (with the recipe id) sent from the host activity.
-        if (getArguments() != null) recipeId = getArguments().getInt(EXTRA_RECIPE_ID);
-
-        // Obtain view model from the activity that hosts this fragment.
-        viewModel = DetailsActivity.obtainViewModel(getActivity());
-
+        initializeViewModel();
         setupIngredientsAdapter();
         setupStepsAdapter();
-        observeResult();
+        observeRecipeDetails();
+    }
+
+    private void initializeViewModel() {
+        viewModel = ViewModelProviders.of(this, viewModelFactory)
+                .get(RecipeDetailsViewModel.class);
+
+        if (getArguments() != null) recipeId = getArguments().getInt(EXTRA_RECIPE_ID);
+        viewModel.init(recipeId);
     }
 
     private void setupIngredientsAdapter() {
@@ -90,8 +105,8 @@ public class RecipeDetailsFragment extends Fragment {
         Timber.d("Recipe [id=%s]: setup steps adapter.", recipeId);
     }
 
-    private void observeResult() {
-        // Observe recipe details.
+    private void observeRecipeDetails() {
+        Timber.d("Recipe [id=%s]: observe recipe details.", recipeId);
         viewModel.getWholeRecipeLiveData().observe(
                 getViewLifecycleOwner(),
                 new Observer<WholeRecipe>() {

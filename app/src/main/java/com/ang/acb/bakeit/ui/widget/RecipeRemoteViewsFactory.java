@@ -7,11 +7,9 @@ import android.widget.RemoteViews;
 import android.widget.RemoteViewsService;
 
 import com.ang.acb.bakeit.R;
-import com.ang.acb.bakeit.data.local.LocalRecipeDataSource;
 import com.ang.acb.bakeit.data.model.Ingredient;
 import com.ang.acb.bakeit.data.model.WholeRecipe;
 import com.ang.acb.bakeit.data.repository.RecipeRepository;
-import com.ang.acb.bakeit.utils.InjectorUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,13 +23,13 @@ import java.util.Locale;
  */
 public class RecipeRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactory {
 
-    private final Context context;
-    private final RecipeRepository repository;
+    private Context context;
+    private RecipeRepository repository;
     private List<String> ingredients;
 
-    RecipeRemoteViewsFactory(Context context) {
+    RecipeRemoteViewsFactory(Context context, RecipeRepository repository) {
         this.context = context;
-        repository = InjectorUtils.provideRecipeRepository(context);
+        this.repository = repository;
     }
 
     @Override

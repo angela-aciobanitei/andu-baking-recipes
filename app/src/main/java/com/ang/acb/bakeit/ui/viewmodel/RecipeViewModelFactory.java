@@ -21,7 +21,6 @@ import javax.inject.Singleton;
  *
  * See: https://github.com/googlesamples/android-architecture-components/tree/GithubBrowserSample
  * See: https://blog.kotlin-academy.com/understanding-dagger-2-multibindings-viewmodel-8418eb372848
- * See: https://medium.com/@marco_cattaneo/android-viewmodel-and-factoryprovider-good-way-to-manage-it-with-dagger-2-d9e20a07084c
  */
 
 @Singleton

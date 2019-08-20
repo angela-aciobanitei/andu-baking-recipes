@@ -1,5 +1,6 @@
 package com.ang.acb.bakeit.ui.recipedetails;
 
+import android.content.Context;
 import android.content.res.Configuration;
 import android.net.Uri;
 import android.os.Bundle;
@@ -14,6 +15,8 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.lifecycle.ViewModelProviders;
 
 import com.ang.acb.bakeit.R;
 import com.ang.acb.bakeit.data.model.Step;
@@ -32,16 +35,18 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.Objects;
 
+import javax.inject.Inject;
+
+import dagger.android.support.AndroidSupportInjection;
 import timber.log.Timber;
 
 import static com.ang.acb.bakeit.ui.recipelist.MainActivity.EXTRA_RECIPE_ID;
 
 public class StepDetailsFragment extends Fragment  {
 
-    public static final String CURRENT_STEP_POSITION_KEY = "CURRENT_STEP_POSITION_KEY";
-    public static final String CURRENT_PLAYBACK_POSITION_KEY = "CURRENT_PLAYBACK_POSITION_KEY";
-    public static final String SHOULD_PLAY_WHEN_READY_KEY = "SHOULD_PLAY_WHEN_READY_KEY";
-    public static final String ARG_CURRENT_STEP_POSITION = "ARG_CURRENT_STEP_POSITION";
+    private static final String CURRENT_STEP_POSITION_KEY = "CURRENT_STEP_POSITION_KEY";
+    private static final String CURRENT_PLAYBACK_POSITION_KEY = "CURRENT_PLAYBACK_POSITION_KEY";
+    private static final String SHOULD_PLAY_WHEN_READY_KEY = "SHOULD_PLAY_WHEN_READY_KEY";
 
     private FragmentStepDetailsBinding binding;
     private RecipeDetailsViewModel viewModel;
@@ -51,6 +56,9 @@ public class StepDetailsFragment extends Fragment  {
     private SimpleExoPlayer simpleExoPlayer;
     private boolean shouldPlayWhenReady;
     private long currentPlaybackPosition;
+
+    @Inject
+    ViewModelProvider.Factory viewModelFactory;
 
     // Required empty public constructor
     public StepDetailsFragment() {}
@@ -63,6 +71,18 @@ public class StepDetailsFragment extends Fragment  {
         fragment.setArguments(args);
 
         return fragment;
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        AndroidSupportInjection.inject(this);
+        super.onAttach(context);
+    }
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
     }
 
     @Override
@@ -133,11 +153,11 @@ public class StepDetailsFragment extends Fragment  {
     }
 
     private void initializeViewModel() {
-        // Obtain view model from the activity that hosts this fragment.
-        viewModel = DetailsActivity.obtainViewModel(getActivity());
+        viewModel = ViewModelProviders.of(this, viewModelFactory)
+                .get(RecipeDetailsViewModel.class);
 
-        // Get bundle args sent from the host activity.
         if (getArguments() != null) recipeId = getArguments().getInt(EXTRA_RECIPE_ID);
+        viewModel.init(recipeId);
     }
 
     private void observeSteps(){
@@ -228,20 +248,6 @@ public class StepDetailsFragment extends Fragment  {
     }
 
     private void handleStepButtons(){
-        // Hide previous/next step buttons on tablets and landscape mode.
-        // if (!isTablet || !isLandscape) {
-            if (viewModel.hasNext()) {
-                binding.nextStepButton.setVisibility(View.VISIBLE);
-            } else {
-                binding.nextStepButton.setVisibility(View.GONE);
-            }
-
-            if (viewModel.hasPrevious()) {
-                binding.previousStepButton.setVisibility(View.VISIBLE);
-            } else {
-                binding.previousStepButton.setVisibility(View.GONE);
-            }
-
             // Handle click events
             binding.nextStepButton.setOnClickListener(view -> {
                 resetPlayer();
@@ -251,7 +257,6 @@ public class StepDetailsFragment extends Fragment  {
                 resetPlayer();
                 viewModel.previousStepIndex();
             });
-        //}
     }
 
     @Override

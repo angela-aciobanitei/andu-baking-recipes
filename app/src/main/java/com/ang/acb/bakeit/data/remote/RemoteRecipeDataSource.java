@@ -7,33 +7,19 @@ import com.ang.acb.bakeit.utils.AppExecutors;
 
 import java.util.List;
 
+import javax.inject.Inject;
+import javax.inject.Singleton;
+
 import timber.log.Timber;
 
+@Singleton
 public class RemoteRecipeDataSource {
 
-    // For Singleton instantiation.
-    private static volatile RemoteRecipeDataSource sInstance;
-
     private final ApiService apiService;
-    private final AppExecutors appExecutors;
 
-    // Prevent direct instantiation.
-    private RemoteRecipeDataSource(ApiService apiService, AppExecutors appExecutors) {
+    @Inject
+    public RemoteRecipeDataSource(ApiService apiService) {
         this.apiService = apiService;
-        this.appExecutors = appExecutors;
-    }
-
-    // Returns the single instance of this class, creating it if necessary.
-    public static RemoteRecipeDataSource getInstance(ApiService apiService,
-                                                     AppExecutors appExecutors){
-        if (sInstance == null) {
-            synchronized (AppExecutors.class) {
-                if (sInstance == null) {
-                    sInstance = new RemoteRecipeDataSource(apiService, appExecutors);
-                }
-            }
-        }
-        return sInstance;
     }
 
     public LiveData<ApiResponse<List<Recipe>>> loadAllRecipes () {

@@ -12,6 +12,9 @@ import com.ang.acb.bakeit.utils.AppExecutors;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.inject.Inject;
+import javax.inject.Singleton;
+
 import timber.log.Timber;
 
 /**
@@ -19,27 +22,14 @@ import timber.log.Timber;
  *
  * See: https://github.com/googlesamples/android-architecture/tree/todo-mvp/todoapp
  */
+@Singleton
 public class LocalRecipeDataSource {
 
-    // For Singleton instantiation.
-    private static volatile LocalRecipeDataSource sInstance;
     private final AppDatabase database;
 
-    // Prevent direct instantiation.
-    private LocalRecipeDataSource (AppDatabase database) {
+    @Inject
+    public LocalRecipeDataSource (AppDatabase database) {
         this.database = database;
-    }
-
-    // Returns the single instance of this class, creating it if necessary.
-    public static LocalRecipeDataSource getInstance(AppDatabase database) {
-        if (sInstance == null) {
-            synchronized (AppExecutors.class) {
-                if (sInstance == null) {
-                    sInstance = new LocalRecipeDataSource(database);
-                }
-            }
-        }
-        return sInstance;
     }
 
     public void saveAllRecipes(List<Recipe> recipes) {
