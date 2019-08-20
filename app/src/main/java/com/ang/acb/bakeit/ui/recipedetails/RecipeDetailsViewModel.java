@@ -28,7 +28,7 @@ public class RecipeDetailsViewModel extends ViewModel {
     private MutableLiveData<Integer> stepIndexLiveData;
 
     @Inject
-    public RecipeDetailsViewModel(final RecipeRepository repository) {
+    public RecipeDetailsViewModel(RecipeRepository repository) {
         this.repository = repository;
     }
 

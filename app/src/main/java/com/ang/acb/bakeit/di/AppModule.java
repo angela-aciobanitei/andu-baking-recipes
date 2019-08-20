@@ -31,12 +31,12 @@ public class AppModule {
 
     @Provides
     @Singleton
-    RecipeDao provideRecipeDao(AppDatabase appDatabase) {
-        return appDatabase.recipeDao();
+    RecipeDao provideRecipeDao(AppDatabase database) {
+        return database.recipeDao();
     }
 
-    @Singleton
     @Provides
+    @Singleton
     ApiService provideApiService() {
         return new Retrofit.Builder()
                 .baseUrl("https://d17h27t6h515a5.cloudfront.net/topher/2017/May/59121517_baking/")

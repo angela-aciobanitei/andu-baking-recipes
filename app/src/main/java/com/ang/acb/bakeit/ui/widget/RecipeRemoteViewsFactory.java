@@ -6,7 +6,10 @@ import android.widget.AdapterView;
 import android.widget.RemoteViews;
 import android.widget.RemoteViewsService;
 
+import androidx.room.Room;
+
 import com.ang.acb.bakeit.R;
+import com.ang.acb.bakeit.data.local.AppDatabase;
 import com.ang.acb.bakeit.data.model.Ingredient;
 import com.ang.acb.bakeit.data.model.WholeRecipe;
 import com.ang.acb.bakeit.data.repository.RecipeRepository;
@@ -14,6 +17,8 @@ import com.ang.acb.bakeit.data.repository.RecipeRepository;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
+
+import javax.inject.Inject;
 
 /**
  * A custom class that implements the RemoteViewsFactory interface and provides
@@ -24,12 +29,16 @@ import java.util.Locale;
 public class RecipeRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactory {
 
     private Context context;
-    private RecipeRepository repository;
+    private AppDatabase database;
     private List<String> ingredients;
 
-    RecipeRemoteViewsFactory(Context context, RecipeRepository repository) {
+    @Inject
+    RecipeRemoteViewsFactory(Context context) {
         this.context = context;
-        this.repository = repository;
+        // FIXME
+        database = Room.databaseBuilder(context, AppDatabase.class, "recipes.db")
+                .fallbackToDestructiveMigration()
+                .build();;
     }
 
     @Override
@@ -41,7 +50,7 @@ public class RecipeRemoteViewsFactory implements RemoteViewsService.RemoteViewsF
 
         if (recipeId != -1) {
             ingredients = new ArrayList<>();
-            WholeRecipe wholeRecipe = repository.getRecipe(recipeId);
+            WholeRecipe wholeRecipe = database.recipeDao().loadRecipe(recipeId);
             if (wholeRecipe != null) {
                 for (Ingredient ingredient : wholeRecipe.ingredients) {
                     ingredients.add(String.format(

@@ -25,5 +25,5 @@ public abstract class ViewModelModule {
     abstract ViewModel bindRecipeDetailsViewModel(RecipeDetailsViewModel recipeDetailsViewModel);
 
     @Binds
-    abstract ViewModelProvider.Factory bindViewModelFactory(RecipeViewModelFactory cakeViewModelFactory);
+    abstract ViewModelProvider.Factory bindViewModelFactory(RecipeViewModelFactory factory);
 }
