@@ -9,7 +9,7 @@ import android.net.Uri;
 import android.widget.RemoteViews;
 
 import com.ang.acb.bakeit.R;
-import com.ang.acb.bakeit.ui.recipelist.RecipeListActivity;
+import com.ang.acb.bakeit.ui.recipelist.MainActivity;
 
 /**
  * The AppWidgetProvider class implementation. Defines the basic methods that allow
@@ -56,9 +56,9 @@ public class RecipeWidgetProvider extends AppWidgetProvider {
             // It should be a sibling of the collection view.
             remoteViews.setEmptyView(R.id.widget_ingredients_list_items, R.id.empty_view);
 
-            // Create an pending intent to launch RecipeListActivity.
+            // Create an pending intent to launch MainActivity.
             PendingIntent pendingIntent = PendingIntent.getActivity(context, appWidgetId,
-                    new Intent(context, RecipeListActivity.class), 0);
+                    new Intent(context, MainActivity.class), 0);
 
             // When using collections (ListView, StackView etc.) in widgets,
             // it is very costly to set PendingIntents on the individual items,

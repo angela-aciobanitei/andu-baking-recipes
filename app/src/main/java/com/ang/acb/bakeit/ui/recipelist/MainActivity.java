@@ -19,7 +19,7 @@ import java.util.List;
 
 import timber.log.Timber;
 
-public class RecipeListActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity {
 
     public static final String EXTRA_RECIPE_ID = "EXTRA_RECIPE_ID";
     public static final String EXTRA_RECIPE_NAME ="EXTRA_RECIPE_NAME";

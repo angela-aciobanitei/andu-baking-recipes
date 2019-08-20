@@ -5,7 +5,6 @@ import android.content.ComponentName;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.RemoteViews;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentActivity;
@@ -13,7 +12,6 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
 import com.ang.acb.bakeit.R;
-import com.ang.acb.bakeit.data.model.Recipe;
 import com.ang.acb.bakeit.ui.widget.PreferencesUtils;
 import com.ang.acb.bakeit.ui.widget.RecipeWidgetProvider;
 import com.ang.acb.bakeit.utils.InjectorUtils;
@@ -22,9 +20,9 @@ import com.ang.acb.bakeit.utils.ViewModelFactory;
 
 import timber.log.Timber;
 
-import static com.ang.acb.bakeit.ui.recipelist.RecipeListActivity.EXTRA_RECIPE_ID;
-import static com.ang.acb.bakeit.ui.recipelist.RecipeListActivity.EXTRA_RECIPE_NAME;
-import static com.ang.acb.bakeit.ui.recipelist.RecipeListActivity.INVALID_RECIPE_ID;
+import static com.ang.acb.bakeit.ui.recipelist.MainActivity.EXTRA_RECIPE_ID;
+import static com.ang.acb.bakeit.ui.recipelist.MainActivity.EXTRA_RECIPE_NAME;
+import static com.ang.acb.bakeit.ui.recipelist.MainActivity.INVALID_RECIPE_ID;
 
 public class DetailsActivity extends AppCompatActivity {
 

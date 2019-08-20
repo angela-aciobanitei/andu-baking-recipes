@@ -16,7 +16,7 @@
         android:theme="@style/AppTheme"
         tools:ignore="AllowBackup,GoogleAppIndexingWarning">
 
-        <activity android:name=".ui.recipelist.RecipeListActivity">
+        <activity android:name=".ui.recipelist.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -25,10 +25,10 @@
 
         <activity
             android:name=".ui.recipedetails.DetailsActivity"
-            android:parentActivityName=".ui.recipelist.RecipeListActivity">
+            android:parentActivityName=".ui.recipelist.MainActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.ang.acb.bakeit.ui.recipelist.RecipeListActivity" />
+                android:value="com.ang.acb.bakeit.ui.recipelist.MainActivity" />
         </activity>
 
         <!-- Declaring an AppWidgetProvider in the Manifest.

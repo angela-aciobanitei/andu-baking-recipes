@@ -34,7 +34,7 @@ import java.util.Objects;
 
 import timber.log.Timber;
 
-import static com.ang.acb.bakeit.ui.recipelist.RecipeListActivity.EXTRA_RECIPE_ID;
+import static com.ang.acb.bakeit.ui.recipelist.MainActivity.EXTRA_RECIPE_ID;
 
 public class StepDetailsFragment extends Fragment  {
 
