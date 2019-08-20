@@ -6,10 +6,8 @@ import dagger.Module;
 import dagger.android.ContributesAndroidInjector;
 
 @Module
-public abstract class DetailsActivityModule {
+abstract class DetailsActivityModule {
 
-    @ContributesAndroidInjector(modules = {
-            RecipeDetailsFragmentModule.class,
-            StepDetailsFragmentModule.class})
+    @ContributesAndroidInjector(modules = FragmentBuildersModule.class)
     abstract DetailsActivity contributeDetailsActivity();
 }

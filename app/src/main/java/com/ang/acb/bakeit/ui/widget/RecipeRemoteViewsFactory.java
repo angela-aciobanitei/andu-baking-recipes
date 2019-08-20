@@ -32,10 +32,9 @@ public class RecipeRemoteViewsFactory implements RemoteViewsService.RemoteViewsF
     private AppDatabase database;
     private List<String> ingredients;
 
-    @Inject
     RecipeRemoteViewsFactory(Context context) {
         this.context = context;
-        // FIXME
+        // FIXME: Use repo
         database = Room.databaseBuilder(context, AppDatabase.class, "recipes.db")
                 .fallbackToDestructiveMigration()
                 .build();;

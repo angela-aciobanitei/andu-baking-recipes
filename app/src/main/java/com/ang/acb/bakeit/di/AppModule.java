@@ -13,13 +13,11 @@ import javax.inject.Singleton;
 
 import dagger.Module;
 import dagger.Provides;
-import okhttp3.OkHttpClient;
-import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 @Module(includes = ViewModelModule.class)
-public class AppModule {
+class AppModule {
 
     @Provides
     @Singleton
@@ -40,9 +38,6 @@ public class AppModule {
     ApiService provideApiService() {
         return new Retrofit.Builder()
                 .baseUrl("https://d17h27t6h515a5.cloudfront.net/topher/2017/May/59121517_baking/")
-                // Add a logging interceptor to our OkHttp client.
-                .client(new OkHttpClient.Builder()
-                        .addInterceptor(new HttpLoggingInterceptor()).build())
                 // Configure which converter is used for the data serialization.
                 // Gson is a Java serialization/deserialization library to convert
                 // Java Objects into JSON and back.
