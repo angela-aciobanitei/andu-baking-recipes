@@ -12,7 +12,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.ang.acb.bakeit.R;
 import com.ang.acb.bakeit.data.model.Recipe;
 import com.ang.acb.bakeit.data.model.Resource;
-import com.ang.acb.bakeit.databinding.ActivityRecipeListBinding;
+import com.ang.acb.bakeit.databinding.ActivityMainBinding;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -47,8 +47,8 @@ public class MainActivity extends AppCompatActivity {
 
     private void setupBinding() {
         // Inflate view and obtain an instance of the binding class.
-        ActivityRecipeListBinding binding = DataBindingUtil
-                .setContentView(this, R.layout.activity_recipe_list);
+        ActivityMainBinding binding = DataBindingUtil
+                .setContentView(this, R.layout.activity_main);
 
         // Specify the current activity as the lifecycle owner.
         binding.setLifecycleOwner(this);

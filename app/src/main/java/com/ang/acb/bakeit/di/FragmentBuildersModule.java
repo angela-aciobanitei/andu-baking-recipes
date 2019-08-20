@@ -8,10 +8,10 @@ import dagger.android.ContributesAndroidInjector;
 
 /**
  *
- * See:
+ * See: https://github.com/googlesamples/android-architecture-components/tree/GithubBrowserSample
  */
 @Module
-public abstract class FragmentBuildersModule {
+abstract class FragmentBuildersModule {
 
     @ContributesAndroidInjector()
     abstract RecipeDetailsFragment contributeRecipeDetailsFragment();

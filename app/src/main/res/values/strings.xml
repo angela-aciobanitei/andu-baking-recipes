@@ -13,6 +13,6 @@
     <string name="widget_text">Create widget and add it to the Home Screen</string>
     <string name="pref_widget_key">pref_widget_key</string>
     <string name="pref_title_key">pref_title_key</string>
-    <string name="create_widget">Create widget</string>
+    <string name="create_widget">Create recipe widget</string>
     <string name="empty_widget">Empty widget.</string>
 </resources>

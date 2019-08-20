@@ -29,7 +29,8 @@ import static com.ang.acb.bakeit.ui.recipelist.MainActivity.EXTRA_RECIPE_ID;
 import static com.ang.acb.bakeit.ui.recipelist.MainActivity.EXTRA_RECIPE_NAME;
 import static com.ang.acb.bakeit.ui.recipelist.MainActivity.INVALID_RECIPE_ID;
 
-public class DetailsActivity extends AppCompatActivity implements HasSupportFragmentInjector {
+public class DetailsActivity extends AppCompatActivity
+                             implements HasSupportFragmentInjector {
 
     private RecipeDetailsViewModel viewModel;
     private Integer recipeId;
@@ -72,9 +73,8 @@ public class DetailsActivity extends AppCompatActivity implements HasSupportFrag
         recipeId = getIntent().getIntExtra(EXTRA_RECIPE_ID, INVALID_RECIPE_ID);
         recipeName = getIntent().getStringExtra(EXTRA_RECIPE_NAME);
         Timber.d("Recipe ID: %s.", recipeId);
-        if (recipeId.equals(INVALID_RECIPE_ID)) {
-            Timber.d("Invalid recipe id.");
-        }
+        if (recipeId.equals(INVALID_RECIPE_ID)) Timber.d("Invalid recipe id.");
+
     }
 
     private void createViewModel(){

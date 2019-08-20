@@ -15,9 +15,6 @@ public class RecipeListViewModel extends ViewModel {
 
     private LiveData<Resource<List<Recipe>>> recipeListResourceLiveData;
 
-    // FIXME: InstantiationException: RecipeListViewModel has no zero argument constructor
-    //  See: https://stackoverflow.com/questions/53978885/java-lang-class-viewmodel-has-no-zero-argument-constructor
-
     @Inject
     public RecipeListViewModel(RecipeRepository repository) {
         recipeListResourceLiveData = repository.loadAllRecipes();
