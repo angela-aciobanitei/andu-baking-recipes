@@ -36,8 +36,10 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        // Note: when using Dagger for injecting Activity objects, inject as early as possible.
+        // For this reason, call AndroidInjection.inject() immediately in onCreate(), before
+        // calling super.onCreate()
         AndroidInjection.inject(this);
-
         super.onCreate(savedInstanceState);
 
         setupBinding();

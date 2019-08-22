@@ -11,12 +11,15 @@ import com.ang.acb.bakeit.data.model.Resource;
 
 import java.util.List;
 
+import javax.inject.Inject;
+
 public class RecipeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     private RecipeListViewModel viewModel;
     private Resource<List<Recipe>> resourceRecipeList;
     private Resource networkState = null;
 
+    @Inject
     public RecipeAdapter (RecipeListViewModel viewModel) {
         this.viewModel = viewModel;
         resourceRecipeList = viewModel.getRecipeListResourceLiveData().getValue();

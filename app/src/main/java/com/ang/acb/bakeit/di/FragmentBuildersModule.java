@@ -11,7 +11,7 @@ import dagger.android.ContributesAndroidInjector;
  * See: https://github.com/googlesamples/android-architecture-components/tree/GithubBrowserSample
  */
 @Module
-abstract class FragmentBuildersModule {
+public abstract class FragmentBuildersModule {
 
     @ContributesAndroidInjector()
     abstract RecipeDetailsFragment contributeRecipeDetailsFragment();

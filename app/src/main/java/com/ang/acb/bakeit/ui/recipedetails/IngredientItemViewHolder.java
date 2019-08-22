@@ -9,10 +9,13 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.ang.acb.bakeit.data.model.Ingredient;
 import com.ang.acb.bakeit.databinding.IngredientItemBinding;
 
+import javax.inject.Inject;
+
 public class IngredientItemViewHolder extends RecyclerView.ViewHolder {
 
     private IngredientItemBinding binding;
 
+    @Inject
     // Required constructor matching super
     public IngredientItemViewHolder(@NonNull IngredientItemBinding binding) {
         super(binding.getRoot());

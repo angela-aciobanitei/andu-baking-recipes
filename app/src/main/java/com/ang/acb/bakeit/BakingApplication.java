@@ -11,6 +11,12 @@ import dagger.android.DispatchingAndroidInjector;
 import dagger.android.HasActivityInjector;
 import timber.log.Timber;
 
+
+/**
+ * When using Dagger for injecting Activity objects, you ned to make your Application
+ * implement HasAndroidInjector and @Inject a DispatchingAndroidInjector<Object> to
+ * return from the androidInjector() method. See: https://dagger.dev/android.html.
+ */
 public class BakingApplication  extends Application implements HasActivityInjector {
 
     @Inject

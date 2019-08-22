@@ -13,12 +13,12 @@ import javax.inject.Singleton;
 import timber.log.Timber;
 
 @Singleton
-public class RemoteRecipeDataSource {
+public class RecipeRemoteDataSource {
 
     private final ApiService apiService;
 
     @Inject
-    public RemoteRecipeDataSource(ApiService apiService) {
+    public RecipeRemoteDataSource(ApiService apiService) {
         this.apiService = apiService;
     }
 

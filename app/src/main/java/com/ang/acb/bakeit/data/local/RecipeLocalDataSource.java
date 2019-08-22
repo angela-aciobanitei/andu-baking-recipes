@@ -23,12 +23,12 @@ import timber.log.Timber;
  * See: https://github.com/googlesamples/android-architecture/tree/todo-mvp/todoapp
  */
 @Singleton
-public class LocalRecipeDataSource {
+public class RecipeLocalDataSource {
 
     private final AppDatabase database;
 
     @Inject
-    public LocalRecipeDataSource (AppDatabase database) {
+    public RecipeLocalDataSource(AppDatabase database) {
         this.database = database;
     }
 

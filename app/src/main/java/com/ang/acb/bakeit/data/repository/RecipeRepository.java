@@ -4,14 +4,14 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.lifecycle.LiveData;
 
-import com.ang.acb.bakeit.data.local.LocalRecipeDataSource;
+import com.ang.acb.bakeit.data.local.RecipeLocalDataSource;
 import com.ang.acb.bakeit.data.model.Ingredient;
 import com.ang.acb.bakeit.data.model.Step;
 import com.ang.acb.bakeit.data.model.WholeRecipe;
 import com.ang.acb.bakeit.data.model.Recipe;
 import com.ang.acb.bakeit.data.model.Resource;
 import com.ang.acb.bakeit.data.remote.ApiResponse;
-import com.ang.acb.bakeit.data.remote.RemoteRecipeDataSource;
+import com.ang.acb.bakeit.data.remote.RecipeRemoteDataSource;
 import com.ang.acb.bakeit.utils.AppExecutors;
 
 import java.util.List;
@@ -29,14 +29,14 @@ import javax.inject.Singleton;
 @Singleton
 public class RecipeRepository {
 
-    private final LocalRecipeDataSource localDataSource;
-    private final RemoteRecipeDataSource remoteDataSource;
+    private final RecipeLocalDataSource localDataSource;
+    private final RecipeRemoteDataSource remoteDataSource;
     private final AppExecutors appExecutors;
 
     @Inject
-    public RecipeRepository(LocalRecipeDataSource localDataSource,
-                             RemoteRecipeDataSource remoteDataSource,
-                             AppExecutors appExecutors) {
+    public RecipeRepository(RecipeLocalDataSource localDataSource,
+                            RecipeRemoteDataSource remoteDataSource,
+                            AppExecutors appExecutors) {
         this.localDataSource = localDataSource;
         this.remoteDataSource = remoteDataSource;
         this.appExecutors = appExecutors;

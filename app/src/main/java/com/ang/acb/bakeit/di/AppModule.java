@@ -13,8 +13,20 @@ import javax.inject.Singleton;
 
 import dagger.Module;
 import dagger.Provides;
+import okhttp3.OkHttpClient;
+import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
+
+/**
+ * We annotate this class with @Module to signal to Dagger to search within the available
+ * methods for possible instance providers. The methods that will actually expose available
+ * return types should also be annotated with the @Provides annotation. The @Singleton
+ * annotation also signals to the Dagger compiler that the instance should be created
+ * only once in the application.
+ *
+ * See: https://github.com/codepath/android_guides/wiki/Dependency-Injection-with-Dagger-2
+ */
 
 @Module(includes = ViewModelModule.class)
 class AppModule {
@@ -35,7 +47,26 @@ class AppModule {
 
     @Provides
     @Singleton
-    ApiService provideApiService() {
+    OkHttpClient provideOkHttpClient() {
+        // Retrofit 2 completely relies on OkHttp for any network operation.
+        // Since logging isn’t integrated by default anymore in Retrofit 2,
+        // we need to add a logging interceptor for OkHttp.
+        HttpLoggingInterceptor logging = new HttpLoggingInterceptor();
+
+        // Set the desired log level. Warning: using the HEADERS or BODY levels
+        // have the potential to leak sensitive information such as "Authorization"
+        // or "Cookie" headers and the contents of request and response bodies.
+        logging.setLevel(HttpLoggingInterceptor.Level.BASIC);
+
+        // Add the logging interceptor to our OkHttp client.
+        return new OkHttpClient.Builder()
+                .addInterceptor(logging)
+                .build();
+    }
+
+    @Provides
+    @Singleton
+    ApiService provideRetrofit(OkHttpClient client) {
         return new Retrofit.Builder()
                 .baseUrl("https://d17h27t6h515a5.cloudfront.net/topher/2017/May/59121517_baking/")
                 // Configure which converter is used for the data serialization.
@@ -47,6 +78,7 @@ class AppModule {
                 // Retrofit adapter that converts the Retrofit2.Call into a
                 // LiveData of ApiResponse.
                 .addCallAdapterFactory(new LiveDataCallAdapterFactory())
+                .client(client)
                 .build()
                 .create(ApiService.class);
     }
