@@ -22,6 +22,7 @@ import com.ang.acb.bakeit.R;
 import com.ang.acb.bakeit.data.model.Step;
 import com.ang.acb.bakeit.databinding.FragmentStepDetailsBinding;
 
+import com.ang.acb.bakeit.ui.common.NavigationController;
 import com.ang.acb.bakeit.utils.GlideApp;
 import com.google.android.exoplayer2.ExoPlayerFactory;
 import com.google.android.exoplayer2.SimpleExoPlayer;
@@ -59,6 +60,9 @@ public class StepDetailsFragment extends Fragment  {
 
     @Inject
     ViewModelProvider.Factory viewModelFactory;
+
+    @Inject
+    NavigationController navigationController;
 
     // Required empty public constructor
     public StepDetailsFragment() {}
@@ -101,7 +105,7 @@ public class StepDetailsFragment extends Fragment  {
 
         restoreInstanceState(savedInstanceState);
         enableFullscreenMode();
-        initializeViewModel();
+        initViewModel();
         observeSteps();
     }
 
@@ -155,7 +159,7 @@ public class StepDetailsFragment extends Fragment  {
         }
     }
 
-    private void initializeViewModel() {
+    private void initViewModel() {
         viewModel = ViewModelProviders.of(this, viewModelFactory)
                 .get(RecipeDetailsViewModel.class);
 

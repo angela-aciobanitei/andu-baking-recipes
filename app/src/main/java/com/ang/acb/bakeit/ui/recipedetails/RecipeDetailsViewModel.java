@@ -21,8 +21,6 @@ public class RecipeDetailsViewModel extends ViewModel {
     private RecipeRepository repository;
 
     private LiveData<WholeRecipe> wholeRecipeLiveData;
-    private SingleLiveEvent<Integer> openStepDetailsEvent = new SingleLiveEvent<>() ;
-
     private LiveData<List<Step>> stepsLiveData;
     private MediatorLiveData<Step> currentStepLiveData;
     private MutableLiveData<Integer> stepIndexLiveData;
@@ -37,19 +35,17 @@ public class RecipeDetailsViewModel extends ViewModel {
         stepsLiveData = repository.getRecipeSteps(recipeId);
     }
 
-    public LiveData<WholeRecipe> getWholeRecipeLiveData() {
+    public LiveData<WholeRecipe> getWholeRecipeLiveData(Integer recipeId) {
+        if (wholeRecipeLiveData == null) {
+            wholeRecipeLiveData = repository.getWholeRecipe(recipeId);
+        }
         return wholeRecipeLiveData;
     }
 
-    public SingleLiveEvent<Integer> getOpenStepDetailsEvent() {
-        return openStepDetailsEvent;
-    }
-
-    public void setOpenStepDetailsEvent(int position){
-        openStepDetailsEvent.setValue(position);
-    }
-
-    public LiveData<List<Step>> getStepsLiveData() {
+    public LiveData<List<Step>> getStepsLiveData(Integer recipeId) {
+        if(stepsLiveData == null) {
+            stepsLiveData = repository.getRecipeSteps(recipeId);
+        }
         return stepsLiveData;
     }
 
@@ -59,19 +55,11 @@ public class RecipeDetailsViewModel extends ViewModel {
 
     public LiveData<Integer> getStepIndex() {
         if (stepIndexLiveData == null) {
-            setStepIndex(0);
-        }
-        return stepIndexLiveData;
-    }
-
-    public void setStepIndex(int index){
-        if (stepIndexLiveData == null) {
             stepIndexLiveData = new MutableLiveData<>();
             stepIndexLiveData.setValue(0);
         }
-        stepIndexLiveData.setValue(index);
+        return stepIndexLiveData;
     }
-
 
     public void nextStepIndex() {
         stepIndexLiveData.setValue(Objects.requireNonNull(getStepIndex().getValue()) + 1);
@@ -107,6 +95,7 @@ public class RecipeDetailsViewModel extends ViewModel {
             }
         });
 
+        LiveData<Integer> stepIndexLiveData = getStepIndex();
         currentStepLiveData.addSource(stepIndexLiveData, stepIndex -> {
             if (stepIndex != null && stepsLiveData.getValue()!= null) {
                 currentStepLiveData.setValue(stepsLiveData.getValue().get(stepIndex));

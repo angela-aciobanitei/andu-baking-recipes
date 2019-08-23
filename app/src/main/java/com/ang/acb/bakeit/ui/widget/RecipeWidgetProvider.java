@@ -50,7 +50,6 @@ public class RecipeWidgetProvider extends AppWidgetProvider {
             // adapter connects to a RemoteViewsService  through the specified
             // intent. This is how we populate the data.
             remoteViews.setRemoteAdapter(R.id.widget_ingredients_list_items, intent);
-                    // RecipeRemoteViewsService.getIntent(context));
 
             // Set the empty view which is displayed when the collection has no items.
             // It should be a sibling of the collection view.

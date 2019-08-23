@@ -8,11 +8,11 @@ import android.view.MenuItem;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.ViewModelProviders;
 
 import com.ang.acb.bakeit.R;
+import com.ang.acb.bakeit.ui.common.NavigationController;
 import com.ang.acb.bakeit.ui.widget.PreferencesUtils;
 import com.ang.acb.bakeit.ui.widget.RecipeWidgetProvider;
 
@@ -32,16 +32,15 @@ import static com.ang.acb.bakeit.ui.recipelist.MainActivity.INVALID_RECIPE_ID;
 public class DetailsActivity extends AppCompatActivity
                              implements HasSupportFragmentInjector {
 
-    private RecipeDetailsViewModel viewModel;
     private Integer recipeId;
     private String recipeName;
 
     @Inject
-    ViewModelProvider.Factory viewModelFactory;
+    NavigationController navigationController;
 
-    // A DispatchingAndroidInjector<T> performs members-injection on instances of
-    // core Android types (e.g. Activity, Fragment) that are constructed by the
-    // Android framework and not by Dagger.
+    // A DispatchingAndroidInjector<T> performs members-injection on
+    // instances of core Android types (e.g. Activity, Fragment) that
+    // are constructed by the Android framework and not by Dagger.
     @Inject
     DispatchingAndroidInjector<Fragment> dispatchingAndroidInjector;
 
@@ -52,26 +51,17 @@ public class DetailsActivity extends AppCompatActivity
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        // Note: when using Dagger for injecting Activity objects, inject as early as possible.
-        // For this reason, call AndroidInjection.inject() immediately in onCreate(), before
-        // calling super.onCreate()
+        // Note: when using Dagger for injecting Activity
+        // objects, inject as early as possible.
         AndroidInjection.inject(this);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_details);
 
         getIntentExtras();
-        createViewModel();
 
         if (savedInstanceState == null) {
-            viewModel.init(recipeId);
-            addRecipeDetailsFragment();
+            navigationController.navigateToRecipeDetails(recipeId, isTwoPane());
         }
-
-        // Observe steps list click event
-        viewModel.getOpenStepDetailsEvent().observe(this, stepPosition -> {
-            if (!isTwoPane()) replaceRecipeDetailsFragment();
-            else addStepDetailsFragment();
-        });
     }
 
     private void getIntentExtras() {
@@ -79,45 +69,10 @@ public class DetailsActivity extends AppCompatActivity
         recipeName = getIntent().getStringExtra(EXTRA_RECIPE_NAME);
         Timber.d("Recipe ID: %s.", recipeId);
         if (recipeId.equals(INVALID_RECIPE_ID)) Timber.d("Invalid recipe id.");
-
     }
 
-    private void createViewModel(){
-        viewModel = ViewModelProviders.of(this, viewModelFactory)
-                .get(RecipeDetailsViewModel.class);
-    }
-
-    private boolean isTwoPane() {
+    public boolean isTwoPane() {
         return findViewById(R.id.step_details_fragment_container) != null;
-    }
-
-    private void addRecipeDetailsFragment() {
-        getSupportFragmentManager().beginTransaction()
-                .replace(R.id.partial_details_fragment_container,
-                        RecipeDetailsFragment.newInstance(recipeId))
-                .commit();
-        Timber.d("Add RecipeDetailsFragment to its fragment container.");
-    }
-
-    private void replaceRecipeDetailsFragment() {
-        // Replace RecipeDetailsFragment with StepDetailsFragment
-        // using the same fragment container.
-        getSupportFragmentManager()
-                .beginTransaction()
-                .addToBackStack(getString(R.string.add_to_back_stack_key))
-                .replace(R.id.partial_details_fragment_container,
-                        StepDetailsFragment.newInstance(recipeId))
-                .commit();
-        Timber.d("Add StepDetailsFragment in the same fragment container.");
-    }
-
-    private void addStepDetailsFragment() {
-        getSupportFragmentManager()
-                .beginTransaction()
-                .replace(R.id.step_details_fragment_container,
-                        StepDetailsFragment.newInstance(recipeId))
-                .commit();
-        Timber.d("Add StepDetailsFragment to its own separate fragment container.");
     }
 
     public void addWidgetToHomeScreen(Integer recipeId, String recipeName) {
@@ -128,8 +83,10 @@ public class DetailsActivity extends AppCompatActivity
         int[] appWidgetIds = appWidgetManager.getAppWidgetIds(
                 new ComponentName(this, RecipeWidgetProvider.class));
 
-        appWidgetManager.notifyAppWidgetViewDataChanged(appWidgetIds, R.id.widget_ingredients_list_items);
-        RecipeWidgetProvider.updateRecipeWidget(this, appWidgetManager, appWidgetIds);
+        appWidgetManager.notifyAppWidgetViewDataChanged(
+                appWidgetIds, R.id.widget_ingredients_list_items);
+        RecipeWidgetProvider.updateRecipeWidget(
+                this, appWidgetManager, appWidgetIds);
     }
 
     @Override

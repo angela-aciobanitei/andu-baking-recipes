@@ -18,6 +18,7 @@ import android.view.ViewGroup;
 import com.ang.acb.bakeit.data.model.WholeRecipe;
 
 import com.ang.acb.bakeit.databinding.FragmentRecipeDetailsBinding;
+import com.ang.acb.bakeit.ui.common.NavigationController;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -32,21 +33,28 @@ import static com.ang.acb.bakeit.ui.recipelist.MainActivity.EXTRA_RECIPE_ID;
 
 public class RecipeDetailsFragment extends Fragment {
 
+    private static final String EXTRA_IS_TWO_PANE = "EXTRA_IS_TWO_PANE";
+
     private FragmentRecipeDetailsBinding binding;
     private RecipeDetailsViewModel viewModel;
     private Integer recipeId;
+    private boolean isTwoPane;
 
     @Inject
     ViewModelProvider.Factory viewModelFactory;
 
+    @Inject
+    NavigationController navigationController;
+
     // Required empty public constructor
     public RecipeDetailsFragment() {}
 
-    public static RecipeDetailsFragment newInstance(Integer recipeId) {
+    public static RecipeDetailsFragment newInstance(Integer recipeId, boolean isTwoPane) {
         Timber.d("RecipeDetailsFragment created.");
         RecipeDetailsFragment fragment = new RecipeDetailsFragment();
         Bundle args = new Bundle();
         args.putInt(EXTRA_RECIPE_ID, recipeId);
+        args.putBoolean(EXTRA_IS_TWO_PANE, isTwoPane);
         fragment.setArguments(args);
 
         return fragment;
@@ -72,17 +80,21 @@ public class RecipeDetailsFragment extends Fragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        initializeViewModel();
+        initViewModel();
         setupIngredientsAdapter();
         setupStepsAdapter();
         observeRecipeDetails();
     }
 
-    private void initializeViewModel() {
+    private void initViewModel() {
         viewModel = ViewModelProviders.of(this, viewModelFactory)
                 .get(RecipeDetailsViewModel.class);
 
-        if (getArguments() != null) recipeId = getArguments().getInt(EXTRA_RECIPE_ID);
+        Bundle args = getArguments();
+        if (args != null) {
+            recipeId = args.getInt(EXTRA_RECIPE_ID);
+            isTwoPane = args.getBoolean(EXTRA_IS_TWO_PANE, false);
+        }
         viewModel.init(recipeId);
     }
 
@@ -102,7 +114,9 @@ public class RecipeDetailsFragment extends Fragment {
         rvSteps.setLayoutManager(new LinearLayoutManager(
                 getContext(), RecyclerView.VERTICAL, false));
         rvSteps.setHasFixedSize(true);
-        rvSteps.setAdapter(new StepAdapter(viewModel));
+        // FIXME: Handle step clicks here
+        rvSteps.setAdapter(new StepAdapter(step ->
+                navigationController.navigateToStepDetails(recipeId, isTwoPane)));
         // Disable nested scrolling for this view.
         ViewCompat.setNestedScrollingEnabled(rvSteps, false);
         Timber.d("Recipe [id=%s]: setup steps adapter.", recipeId);
@@ -110,7 +124,7 @@ public class RecipeDetailsFragment extends Fragment {
 
     private void observeRecipeDetails() {
         Timber.d("Recipe [id=%s]: observe recipe details.", recipeId);
-        viewModel.getWholeRecipeLiveData().observe(
+        viewModel.getWholeRecipeLiveData(recipeId).observe(
                 getViewLifecycleOwner(),
                 new Observer<WholeRecipe>() {
                     @Override
