@@ -21,12 +21,6 @@ public class StepAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     private StepClickCallback clickCallback;
     private List<Step> stepList;
-    private RecipeDetailsViewModel viewModel;
-
-
-    public StepAdapter(RecipeDetailsViewModel viewModel) {
-        this.viewModel = viewModel;
-    }
 
     public StepAdapter (StepClickCallback clickCallback) {
         this.clickCallback = clickCallback;
@@ -42,8 +36,8 @@ public class StepAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         }
 
         void bindTo(Step step) {
+            // Bind step data.
             binding.setStep(step);
-
             // Binding must be executed immediately.
             binding.executePendingBindings();
         }
@@ -58,20 +52,16 @@ public class StepAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                 parent,
                 false);
 
-//        binding.getRoot().setOnClickListener(v -> {
-//            Step step = binding.getStep();
-//            if (step != null && clickCallback != null) {
-//                clickCallback.onClick(step);
-//            }
-//        });
         return new StepItemViewHolder(binding);
     }
 
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
-        // Bind step data
+        // Bind step data.
         Step step = stepList.get(position);
         ((StepItemViewHolder) holder).bindTo(step);
+
+        // Handle step item click events.
         holder.itemView.setOnClickListener(v -> {
             if (step != null && clickCallback != null) {
                 clickCallback.onClick(position);

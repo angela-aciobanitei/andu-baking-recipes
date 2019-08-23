@@ -104,6 +104,7 @@ public class RecipeDetailsFragment extends Fragment {
                 getContext(), RecyclerView.VERTICAL, false));
         rvIngredients.setHasFixedSize(true);
         rvIngredients.setAdapter(new IngredientAdapter());
+
         // Disable nested scrolling for this view.
         ViewCompat.setNestedScrollingEnabled(rvIngredients, false);
         Timber.d("Recipe [id=%s]: setup ingredients adapter.", recipeId);
@@ -114,9 +115,10 @@ public class RecipeDetailsFragment extends Fragment {
         rvSteps.setLayoutManager(new LinearLayoutManager(
                 getContext(), RecyclerView.VERTICAL, false));
         rvSteps.setHasFixedSize(true);
-        // FIXME: Handle step clicks here
+        // On item click, navigate to StepDetailsFragment.
         rvSteps.setAdapter(new StepAdapter(position ->
                 navigationController.navigateToStepDetails(recipeId, position, isTwoPane)));
+
         // Disable nested scrolling for this view.
         ViewCompat.setNestedScrollingEnabled(rvSteps, false);
         Timber.d("Recipe [id=%s]: setup steps adapter.", recipeId);
@@ -138,5 +140,4 @@ public class RecipeDetailsFragment extends Fragment {
                 }
         );
     }
-
 }

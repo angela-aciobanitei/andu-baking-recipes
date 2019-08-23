@@ -38,14 +38,14 @@ public class DetailsActivity extends AppCompatActivity
     @Inject
     NavigationController navigationController;
 
-    // A DispatchingAndroidInjector<T> performs members-injection on
-    // instances of core Android types (e.g. Activity, Fragment) that
-    // are constructed by the Android framework and not by Dagger.
     @Inject
     DispatchingAndroidInjector<Fragment> dispatchingAndroidInjector;
 
     @Override
     public AndroidInjector<Fragment> supportFragmentInjector() {
+        // Note: a DispatchingAndroidInjector<T> performs members-injection
+        // on instances of core Android types (e.g. Activity, Fragment) that
+        // are constructed by the Android framework and not by Dagger.
         return dispatchingAndroidInjector;
     }
 

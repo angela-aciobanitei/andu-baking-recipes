@@ -180,7 +180,6 @@ public class StepDetailsFragment extends Fragment  {
                 new Observer<Step>() {
                     @Override
                     public void onChanged(Step step) {
-                        // Bind step
                         binding.setStep(step);
                         binding.setStepCount(viewModel.getStepCount());
                         handleVideoUrl(step);

@@ -16,13 +16,13 @@ import javax.inject.Inject;
 public class RecipeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     private RecipeListViewModel viewModel;
-    private Resource<List<Recipe>> resourceRecipeList;
+    private Resource<List<Recipe>> recipes;
     private Resource networkState = null;
 
     @Inject
     public RecipeAdapter (RecipeListViewModel viewModel) {
         this.viewModel = viewModel;
-        resourceRecipeList = viewModel.getRecipeListResourceLiveData().getValue();
+        recipes = viewModel.getRecipeListResourceLiveData().getValue();
     }
 
     @NonNull
@@ -43,7 +43,7 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         switch (getItemViewType(position)) {
             case R.layout.recipe_item:
                 ((RecipeItemViewHolder) holder).bindTo(
-                        resourceRecipeList.getData().get(position));
+                        recipes.getData().get(position));
                 break;
             case R.layout.network_state_item:
                 ((NetworkStateItemViewHolder) holder).bindTo(networkState);
@@ -65,7 +65,7 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
 
     @Override
     public int getItemCount() {
-        int listSize = resourceRecipeList.getData() == null ? 0 :  resourceRecipeList.getData().size();
+        int listSize = recipes.getData() == null ? 0 :  recipes.getData().size();
         return listSize + (hasExtraRow() ? 1 : 0);
     }
 
@@ -74,7 +74,7 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
     }
 
     public void submitList(Resource<List<Recipe>> recipes) {
-        resourceRecipeList = recipes;
+        this.recipes = recipes;
         notifyDataSetChanged();
     }
 
@@ -83,7 +83,7 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         boolean hadExtraRow = hasExtraRow();
         networkState = currentNetworkState;
         boolean hasExtraRow = hasExtraRow();
-        int listSize = resourceRecipeList.getData() == null ? 0 :  resourceRecipeList.getData().size();
+        int listSize = recipes.getData() == null ? 0 :  recipes.getData().size();
         if (hadExtraRow != hasExtraRow) {
             if (hadExtraRow) {
                 notifyItemRemoved(listSize);

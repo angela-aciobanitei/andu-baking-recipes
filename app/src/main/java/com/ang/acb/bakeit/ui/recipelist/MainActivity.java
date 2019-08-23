@@ -36,18 +36,17 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        // Note: when using Dagger for injecting Activity objects, inject as early as possible.
-        // For this reason, call AndroidInjection.inject() immediately in onCreate(), before
-        // calling super.onCreate()
+        // Note: when using Dagger for injecting Activity
+        // objects, inject as early as possible.
         AndroidInjection.inject(this);
         super.onCreate(savedInstanceState);
 
-        setupBinding();
-        setupViewModel();
+        initBinding();
+        initViewModel();
         observeResult(getRecipeAdapter());
     }
 
-    private void setupBinding() {
+    private void initBinding() {
         // Inflate view and obtain an instance of the binding class.
         ActivityMainBinding binding = DataBindingUtil
                 .setContentView(this, R.layout.activity_main);
@@ -56,7 +55,7 @@ public class MainActivity extends AppCompatActivity {
         binding.setLifecycleOwner(this);
     }
 
-    private void setupViewModel() {
+    private void initViewModel() {
         viewModel = ViewModelProviders.of(this, viewModelFactory)
                 .get(RecipeListViewModel.class);
         Timber.d("Setup recipe list view model.");
