@@ -61,12 +61,23 @@ public class RecipeDetailsViewModel extends ViewModel {
         return stepIndexLiveData;
     }
 
+    public void setStepIndexLiveData(int value) {
+        if (stepIndexLiveData == null) {
+            stepIndexLiveData = new MutableLiveData<>();
+        }
+        stepIndexLiveData.setValue(value);
+    }
+
     public void nextStepIndex() {
-        stepIndexLiveData.setValue(Objects.requireNonNull(getStepIndex().getValue()) + 1);
+        if (hasNext()) {
+            stepIndexLiveData.setValue(Objects.requireNonNull(getStepIndex().getValue()) + 1);
+        }
     }
 
     public void previousStepIndex() {
-        stepIndexLiveData.setValue(Objects.requireNonNull(getStepIndex().getValue()) - 1);
+        if (hasPrevious()) {
+            stepIndexLiveData.setValue(Objects.requireNonNull(getStepIndex().getValue()) - 1);
+        }
     }
 
     public boolean hasNext() {

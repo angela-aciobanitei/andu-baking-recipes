@@ -16,7 +16,7 @@ import javax.inject.Inject;
 public class StepAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     public interface StepClickCallback {
-        void onClick(Step step);
+        void onClick(int position);
     }
 
     private StepClickCallback clickCallback;
@@ -58,12 +58,12 @@ public class StepAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                 parent,
                 false);
 
-        binding.getRoot().setOnClickListener(v -> {
-            Step step = binding.getStep();
-            if (step != null && clickCallback != null) {
-                clickCallback.onClick(step);
-            }
-        });
+//        binding.getRoot().setOnClickListener(v -> {
+//            Step step = binding.getStep();
+//            if (step != null && clickCallback != null) {
+//                clickCallback.onClick(step);
+//            }
+//        });
         return new StepItemViewHolder(binding);
     }
 
@@ -72,12 +72,11 @@ public class StepAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         // Bind step data
         Step step = stepList.get(position);
         ((StepItemViewHolder) holder).bindTo(step);
-//        // Handle step click events
-//        holder.itemView.setOnClickListener(view -> {
-//            // Update the current step position.
-//            viewModel.setStepIndex(position);
-//            viewModel.setOpenStepDetailsEvent(position);
-//        });
+        holder.itemView.setOnClickListener(v -> {
+            if (step != null && clickCallback != null) {
+                clickCallback.onClick(position);
+            }
+        });
     }
 
     @Override

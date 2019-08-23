@@ -48,6 +48,7 @@ public class StepDetailsFragment extends Fragment  {
     private static final String CURRENT_STEP_POSITION_KEY = "CURRENT_STEP_POSITION_KEY";
     private static final String CURRENT_PLAYBACK_POSITION_KEY = "CURRENT_PLAYBACK_POSITION_KEY";
     private static final String SHOULD_PLAY_WHEN_READY_KEY = "SHOULD_PLAY_WHEN_READY_KEY";
+    private static final String EXTRA_STEP_POSITION = "EXTRA_STEP_POSITION";
 
     private FragmentStepDetailsBinding binding;
     private RecipeDetailsViewModel viewModel;
@@ -67,11 +68,12 @@ public class StepDetailsFragment extends Fragment  {
     // Required empty public constructor
     public StepDetailsFragment() {}
 
-    public static StepDetailsFragment newInstance(Integer recipeId) {
+    public static StepDetailsFragment newInstance(Integer recipeId, int stepPosition) {
         Timber.d("StepDetailsFragment created.");
         StepDetailsFragment fragment = new StepDetailsFragment();
         Bundle args = new Bundle();
         args.putInt(EXTRA_RECIPE_ID, recipeId);
+        args.putInt(EXTRA_STEP_POSITION, stepPosition);
         fragment.setArguments(args);
 
         return fragment;
@@ -163,8 +165,13 @@ public class StepDetailsFragment extends Fragment  {
         viewModel = ViewModelProviders.of(this, viewModelFactory)
                 .get(RecipeDetailsViewModel.class);
 
-        if (getArguments() != null) recipeId = getArguments().getInt(EXTRA_RECIPE_ID);
+        Bundle args = getArguments();
+        if (args != null) {
+            recipeId = args.getInt(EXTRA_RECIPE_ID);
+            currentStepPosition = args.getInt(EXTRA_STEP_POSITION);
+        }
         viewModel.init(recipeId);
+        viewModel.setStepIndexLiveData(currentStepPosition);
     }
 
     private void observeSteps(){

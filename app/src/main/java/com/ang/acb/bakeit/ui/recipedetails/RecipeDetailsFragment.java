@@ -115,8 +115,8 @@ public class RecipeDetailsFragment extends Fragment {
                 getContext(), RecyclerView.VERTICAL, false));
         rvSteps.setHasFixedSize(true);
         // FIXME: Handle step clicks here
-        rvSteps.setAdapter(new StepAdapter(step ->
-                navigationController.navigateToStepDetails(recipeId, isTwoPane)));
+        rvSteps.setAdapter(new StepAdapter(position ->
+                navigationController.navigateToStepDetails(recipeId, position, isTwoPane)));
         // Disable nested scrolling for this view.
         ViewCompat.setNestedScrollingEnabled(rvSteps, false);
         Timber.d("Recipe [id=%s]: setup steps adapter.", recipeId);

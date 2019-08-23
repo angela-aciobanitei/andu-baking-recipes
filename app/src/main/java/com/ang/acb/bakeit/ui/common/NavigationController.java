@@ -36,13 +36,13 @@ public class NavigationController {
         Timber.d("Navigate to RecipeDetailsFragment.");
     }
 
-    public void navigateToStepDetails(Integer recipeId, boolean isTwoPane) {
+    public void navigateToStepDetails(Integer recipeId, int stepPosition, boolean isTwoPane) {
         if (isTwoPane) {
             // Add StepDetailsFragment to its own separate fragment container.
             fragmentManager
                     .beginTransaction()
                     .replace(stepsDetailsContainerId,
-                            StepDetailsFragment.newInstance(recipeId))
+                            StepDetailsFragment.newInstance(recipeId, stepPosition))
                     .commit();
         } else {
             // Replace RecipeDetailsFragment with StepDetailsFragment
@@ -51,7 +51,7 @@ public class NavigationController {
                     .beginTransaction()
                     .addToBackStack(null)
                     .replace(recipeDetailsContainerId,
-                            StepDetailsFragment.newInstance(recipeId))
+                            StepDetailsFragment.newInstance(recipeId, stepPosition))
                     .commit();
         }
         Timber.d("Navigate to StepDetailsFragment.");
