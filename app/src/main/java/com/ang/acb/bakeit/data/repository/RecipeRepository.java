@@ -78,7 +78,7 @@ public class RecipeRepository {
                 // Get the cached data from the database.
                 return localDataSource.loadAllRecipes();
             }
-        }.getAsLiveData();
+        }.asLiveData();
     }
 
     public LiveData<WholeRecipe> getWholeRecipe(Integer recipeId) {

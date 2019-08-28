@@ -164,7 +164,7 @@ public abstract class NetworkBoundResource<ResultType, RequestType> {
 
     // Returns a LiveData object that represents the resource that's
     // implemented in the base class.
-    public final LiveData<Resource<ResultType>> getAsLiveData() {
+    public final LiveData<Resource<ResultType>> asLiveData() {
         return result;
     }
 }

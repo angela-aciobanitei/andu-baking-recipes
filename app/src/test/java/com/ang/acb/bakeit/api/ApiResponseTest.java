@@ -37,7 +37,7 @@ public class ApiResponseTest {
     @Test
     public void error() {
         ApiResponse<String> response = new ApiResponse<String>(Response.error(400,
-                ResponseBody.create(MediaType.parse("application/txt"), "blah")));
+                ResponseBody.create("blah", MediaType.parse("application/txt"))));
         assertThat(response.code, is(400));
         assertThat(response.errorMessage, is("blah"));
     }
