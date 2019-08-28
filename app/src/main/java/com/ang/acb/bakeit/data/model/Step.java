@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.ForeignKey;
+import androidx.room.Ignore;
 import androidx.room.Index;
 import androidx.room.PrimaryKey;
 
@@ -19,6 +20,8 @@ import static androidx.room.ForeignKey.CASCADE;
  */
 @Entity(tableName = "steps")
 public class Step {
+
+    public static final int UNKNOWN_ID = -3;
 
     @PrimaryKey(autoGenerate = true)
     private Integer roomId;
@@ -49,6 +52,27 @@ public class Step {
     @SerializedName("thumbnailURL")
     @Expose
     private String thumbnailURL;
+
+    @Ignore
+    public Step(Integer id, Integer recipeId, String shortDescription,
+                String description, String videoURL, String thumbnailURL) {
+        this.id = id;
+        this.recipeId = recipeId;
+        this.shortDescription = shortDescription;
+        this.description = description;
+        this.videoURL = videoURL;
+        this.thumbnailURL = thumbnailURL;
+    }
+
+    @Ignore
+    public Step(Integer id, String shortDescription, String description,
+                String videoURL, String thumbnailURL) {
+        this.id = id;
+        this.shortDescription = shortDescription;
+        this.description = description;
+        this.videoURL = videoURL;
+        this.thumbnailURL = thumbnailURL;
+    }
 
     public Integer getRoomId() {
         return roomId;

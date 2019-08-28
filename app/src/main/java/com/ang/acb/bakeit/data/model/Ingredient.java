@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.ForeignKey;
+import androidx.room.Ignore;
 import androidx.room.Index;
 import androidx.room.PrimaryKey;
 
@@ -22,6 +23,8 @@ import static androidx.room.ForeignKey.CASCADE;
 @Entity(tableName = "ingredients")
 public class Ingredient {
 
+    public static final int UNKNOWN_ID = -2;
+
     @PrimaryKey(autoGenerate = true)
     private Integer id;
 
@@ -36,6 +39,26 @@ public class Ingredient {
 
     @SerializedName("ingredient")
     private String ingredient;
+
+    @Ignore
+    public Ingredient(Integer id, Integer recipeId, double quantity,
+                      String measure, String ingredient) {
+        this.id = id;
+        this.recipeId = recipeId;
+        this.quantity = quantity;
+        this.measure = measure;
+        this.ingredient = ingredient;
+    }
+
+    @Ignore
+    public Ingredient(Integer id, double quantity,
+                      String measure, String ingredient) {
+        this.id = id;
+        this.quantity = quantity;
+        this.measure = measure;
+        this.ingredient = ingredient;
+    }
+
 
     @NonNull
     public Integer getId() {
