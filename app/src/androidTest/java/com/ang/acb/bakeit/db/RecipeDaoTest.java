@@ -4,8 +4,8 @@ import androidx.arch.core.executor.testing.InstantTaskExecutorRule;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 
 import com.ang.acb.bakeit.data.model.Recipe;
-import com.ang.acb.bakeit.util.DbTestUtil;
 import com.ang.acb.bakeit.util.LiveDataTestUtil;
+import com.ang.acb.bakeit.util.TestUtil;
 
 import org.junit.Rule;
 import org.junit.Test;
@@ -25,7 +25,7 @@ public class RecipeDaoTest extends DbTest {
 
     @Test
     public void insertSimpleRecipe() throws InterruptedException {
-        Recipe simpleRecipe = DbTestUtil.createSimpleRecipe("Nutella Pie", 8);
+        Recipe simpleRecipe = TestUtil.createSimpleRecipe("Nutella Pie", 8);
         db.recipeDao().insertRecipe(simpleRecipe);
         Recipe loaded = LiveDataTestUtil.getValue(db.recipeDao().loadSimpleRecipe(Recipe.UNKNOWN_ID));
         assertThat(loaded, notNullValue());

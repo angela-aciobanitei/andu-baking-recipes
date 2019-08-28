@@ -7,7 +7,7 @@ import com.ang.acb.bakeit.data.model.WholeRecipe;
 
 import java.util.List;
 
-public class DbTestUtil {
+public class TestUtil {
 
     public static Recipe createSimpleRecipe(String name, Integer servings) {
         return new Recipe(Recipe.UNKNOWN_ID, name, servings, "");
