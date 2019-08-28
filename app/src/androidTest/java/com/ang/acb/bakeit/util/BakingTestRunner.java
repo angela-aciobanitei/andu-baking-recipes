@@ -1,10 +1,10 @@
-package com.ang.acb.bakeit.db.util;
+package com.ang.acb.bakeit.util;
 
 import android.app.Application;
 import android.content.Context;
 import androidx.test.runner.AndroidJUnitRunner;
 
-import com.ang.acb.bakeit.db.TestApp;
+import com.ang.acb.bakeit.TestApp;
 
 /**
  * Custom runner to disable dependency injection.

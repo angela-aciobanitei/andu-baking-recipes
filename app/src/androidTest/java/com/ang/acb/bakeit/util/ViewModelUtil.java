@@ -1,4 +1,4 @@
-package com.ang.acb.bakeit.db.util;
+package com.ang.acb.bakeit.util;
 
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;

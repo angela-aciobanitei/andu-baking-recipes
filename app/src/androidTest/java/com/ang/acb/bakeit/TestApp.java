@@ -1,4 +1,4 @@
-package com.ang.acb.bakeit.db;
+package com.ang.acb.bakeit;
 
 import android.app.Application;
 

@@ -1,4 +1,4 @@
-package com.ang.acb.bakeit.db.util;
+package com.ang.acb.bakeit.util;
 
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;

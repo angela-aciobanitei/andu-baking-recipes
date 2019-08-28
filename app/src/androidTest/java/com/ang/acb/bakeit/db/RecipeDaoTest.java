@@ -1,11 +1,11 @@
-package com.ang.acb.bakeit.db.db;
+package com.ang.acb.bakeit.db;
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 
 import com.ang.acb.bakeit.data.model.Recipe;
-import com.ang.acb.bakeit.db.util.DbTestUtil;
-import com.ang.acb.bakeit.db.util.LiveDataTestUtil;
+import com.ang.acb.bakeit.util.DbTestUtil;
+import com.ang.acb.bakeit.util.LiveDataTestUtil;
 
 import org.junit.Rule;
 import org.junit.Test;

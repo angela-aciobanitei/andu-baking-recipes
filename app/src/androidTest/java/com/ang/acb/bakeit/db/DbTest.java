@@ -1,4 +1,4 @@
-package com.ang.acb.bakeit.db.db;
+package com.ang.acb.bakeit.db;
 
 import org.junit.After;
 import org.junit.Before;

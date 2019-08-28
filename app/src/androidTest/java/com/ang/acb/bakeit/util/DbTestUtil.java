@@ -1,4 +1,4 @@
-package com.ang.acb.bakeit.db.util;
+package com.ang.acb.bakeit.util;
 
 import com.ang.acb.bakeit.data.model.Ingredient;
 import com.ang.acb.bakeit.data.model.Recipe;

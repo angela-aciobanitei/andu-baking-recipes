@@ -1,4 +1,4 @@
-package com.ang.acb.bakeit.db.util;
+package com.ang.acb.bakeit.util;
 
 import androidx.annotation.Nullable;
 import androidx.lifecycle.LiveData;
