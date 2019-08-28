@@ -6,6 +6,7 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Observer;
 
 import com.ang.acb.bakeit.data.local.RecipeLocalDataSource;
+import com.ang.acb.bakeit.data.model.Ingredient;
 import com.ang.acb.bakeit.data.model.Recipe;
 import com.ang.acb.bakeit.data.model.Resource;
 import com.ang.acb.bakeit.data.remote.RecipeRemoteDataSource;
@@ -23,6 +24,7 @@ import org.mockito.ArgumentCaptor;
 import org.mockito.Mockito;
 
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -67,8 +69,9 @@ public class RecipeRepositoryTest {
 
     @Test
     public void getWholeRecipe() {
-        Recipe simpleRecipe = TestUtil.createSimpleRecipe("Nutella Pie", 8);
-        
+
+
+
     }
 
 

@@ -13,14 +13,18 @@ public class TestUtil {
         return new Recipe(Recipe.UNKNOWN_ID, name, servings, "");
     }
 
-    public static Ingredient createIngredient(Integer recipeId, double quantity,
-                                              String measure, String ingredient) {
-        return new Ingredient(Ingredient.UNKNOWN_ID, recipeId, quantity, measure, ingredient);
+    public static Recipe createSimpleRecipe(Integer recipeId, String name, Integer servings) {
+        return new Recipe(recipeId, name, servings, "");
     }
 
-    public static Step createStep(Integer recipeId, String shortDescription,
+    public static Ingredient createIngredient(Integer ingredientId, Integer recipeId, double quantity,
+                                              String measure, String ingredient) {
+        return new Ingredient(ingredientId, recipeId, quantity, measure, ingredient);
+    }
+
+    public static Step createStep(Integer stepId, Integer recipeId, String shortDescription,
                                   String description, String videoURL, String thumbnailURL) {
-        return new Step(Step.UNKNOWN_ID, recipeId, shortDescription, description,
+        return new Step(stepId, recipeId, shortDescription, description,
                 videoURL, thumbnailURL);
     }
 
