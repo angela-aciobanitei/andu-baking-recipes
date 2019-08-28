@@ -47,13 +47,6 @@ public class Recipe {
     @Expose
     private List<Step> steps;
 
-    public Recipe(Integer id, String name, Integer servings, String image) {
-        this.id = id;
-        this.name = name;
-        this.servings = servings;
-        this.image = image;
-    }
-
     @NonNull
     public Integer getId() {
         return id;

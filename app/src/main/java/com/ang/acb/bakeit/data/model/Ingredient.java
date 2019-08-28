@@ -23,8 +23,6 @@ import static androidx.room.ForeignKey.CASCADE;
 @Entity(tableName = "ingredients")
 public class Ingredient {
 
-    public static final int UNKNOWN_ID = -2;
-
     @PrimaryKey(autoGenerate = true)
     private Integer id;
 
@@ -44,6 +42,13 @@ public class Ingredient {
                       String measure, String ingredient) {
         this.id = id;
         this.recipeId = recipeId;
+        this.quantity = quantity;
+        this.measure = measure;
+        this.ingredient = ingredient;
+    }
+
+    @Ignore
+    public Ingredient(double quantity,  String measure, String ingredient) {
         this.quantity = quantity;
         this.measure = measure;
         this.ingredient = ingredient;

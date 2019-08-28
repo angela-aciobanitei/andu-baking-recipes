@@ -21,8 +21,6 @@ import static androidx.room.ForeignKey.CASCADE;
 @Entity(tableName = "steps")
 public class Step {
 
-    public static final int UNKNOWN_ID = -3;
-
     @PrimaryKey(autoGenerate = true)
     private Integer roomId;
 
@@ -57,6 +55,15 @@ public class Step {
                 String description, String videoURL, String thumbnailURL) {
         this.id = id;
         this.recipeId = recipeId;
+        this.shortDescription = shortDescription;
+        this.description = description;
+        this.videoURL = videoURL;
+        this.thumbnailURL = thumbnailURL;
+    }
+
+    @Ignore
+    public Step(Integer id, String shortDescription, String description, String videoURL, String thumbnailURL) {
+        this.id = id;
         this.shortDescription = shortDescription;
         this.description = description;
         this.videoURL = videoURL;
