@@ -130,7 +130,7 @@ public abstract class NetworkBoundResource<ResultType, RequestType> {
             else {
                 onFetchFailed();
                 result.addSource(dbSource, newData -> {
-                    String errorMessage = response.getError().getMessage();
+                    String errorMessage = response.getErrorMessage();
                     setValue(Resource.error(errorMessage, newData));
                 });
             }

@@ -71,9 +71,13 @@ public class ApiServiceTest {
         mockWebServer.enqueue(mockResponse.setBody(source.readString(StandardCharsets.UTF_8)));
     }
 
+    private void enqueueResponse(String fileName) throws IOException {
+        enqueueResponse(fileName, Collections.emptyMap());
+    }
+
     @Test
     public void getAllRecipes() throws IOException, InterruptedException {
-        enqueueResponse("baking.json", Collections.emptyMap());
+        enqueueResponse("baking.json");
         List<Recipe> recipes = LiveDataTestUtil.getValue(service.getAllRecipes()).body;
 
         RecordedRequest request = mockWebServer.takeRequest();
@@ -122,7 +126,7 @@ public class ApiServiceTest {
 
     @Test
     public void getLastRecipe() throws IOException, InterruptedException {
-        enqueueResponse("baking.json", Collections.emptyMap());
+        enqueueResponse("baking.json");
         List<Recipe> recipes = LiveDataTestUtil.getValue(service.getAllRecipes()).body;
 
         RecordedRequest request = mockWebServer.takeRequest();
@@ -167,7 +171,7 @@ public class ApiServiceTest {
 
     @Test
     public void getDifferentRecipes() throws IOException, InterruptedException {
-        enqueueResponse("baking2.json", Collections.emptyMap());
+        enqueueResponse("baking2.json");
         List<Recipe> recipes = LiveDataTestUtil.getValue(service.getAllRecipes()).body;
 
         assertThat(recipes, notNullValue());

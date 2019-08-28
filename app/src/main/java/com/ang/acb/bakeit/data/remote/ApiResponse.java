@@ -21,22 +21,22 @@ public class ApiResponse<T> {
     @Nullable
     public final T body;
 
-    // Error
+    // Error message
     @Nullable
-    public final Throwable error;
+    public final String errorMessage;
 
 
-    public ApiResponse(@Nullable Throwable throwable) {
+    public ApiResponse(Throwable throwable) {
         code = 500;
         body = null;
-        error = throwable;
+        errorMessage = throwable.getMessage();
     }
 
     public ApiResponse(Response<T> response) {
         code = response.code();
         if (response.isSuccessful()) {
             body = response.body();
-            error = null;
+            errorMessage = null;
         } else {
             String message = null;
             if (response.errorBody() != null) {
@@ -49,7 +49,7 @@ public class ApiResponse<T> {
             if (message == null || message.trim().length() == 0) {
                 message = response.message();
             }
-            error = new IOException(message);
+            errorMessage = message;
             body = null;
         }
     }
@@ -79,8 +79,8 @@ public class ApiResponse<T> {
     }
 
     @Nullable
-    public Throwable getError() {
-        return error;
+    public String getErrorMessage() {
+        return errorMessage;
     }
 }
 
