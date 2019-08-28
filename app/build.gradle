@@ -9,7 +9,8 @@ android {
         versionCode 1
         versionName "1.0"
         vectorDrawables.useSupportLibrary = true
-        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        // testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        testInstrumentationRunner "com.ang.acb.bakeit.db.util.BakingTestRunner"
         // Export schemas
         javaCompileOptions {
             annotationProcessorOptions {
@@ -92,11 +93,15 @@ dependencies {
     // Required for local unit tests (JUnit 4 framework and Robolectric environment)
     testImplementation 'junit:junit:4.12'
     testImplementation 'androidx.test:core:1.2.0'
+    testImplementation 'androidx.test.ext:junit:1.1.1'
 
-    // Required for instrumented tests
+    // Required for instrumented tests (AndroidJUnitRunner, JUnit Rules, Assertions)
     androidTestImplementation 'androidx.test:core:1.2.0'
     androidTestImplementation 'androidx.test:runner:1.2.0'
     androidTestImplementation 'androidx.test:rules:1.2.0'
+    androidTestImplementation 'androidx.test.ext:junit:1.1.1'
+    androidTestImplementation 'androidx.test.ext:truth:1.2.0'
+    androidTestImplementation 'com.google.truth:truth:0.42'
 
     // Mockito
     testImplementation 'org.mockito:mockito-core:3.0.0'

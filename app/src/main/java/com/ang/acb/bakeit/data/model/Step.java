@@ -53,7 +53,6 @@ public class Step {
     @Expose
     private String thumbnailURL;
 
-    @Ignore
     public Step(Integer id, Integer recipeId, String shortDescription,
                 String description, String videoURL, String thumbnailURL) {
         this.id = id;
@@ -64,15 +63,6 @@ public class Step {
         this.thumbnailURL = thumbnailURL;
     }
 
-    @Ignore
-    public Step(Integer id, String shortDescription, String description,
-                String videoURL, String thumbnailURL) {
-        this.id = id;
-        this.shortDescription = shortDescription;
-        this.description = description;
-        this.videoURL = videoURL;
-        this.thumbnailURL = thumbnailURL;
-    }
 
     public Integer getRoomId() {
         return roomId;

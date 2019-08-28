@@ -40,7 +40,6 @@ public class Ingredient {
     @SerializedName("ingredient")
     private String ingredient;
 
-    @Ignore
     public Ingredient(Integer id, Integer recipeId, double quantity,
                       String measure, String ingredient) {
         this.id = id;
@@ -49,16 +48,6 @@ public class Ingredient {
         this.measure = measure;
         this.ingredient = ingredient;
     }
-
-    @Ignore
-    public Ingredient(Integer id, double quantity,
-                      String measure, String ingredient) {
-        this.id = id;
-        this.quantity = quantity;
-        this.measure = measure;
-        this.ingredient = ingredient;
-    }
-
 
     @NonNull
     public Integer getId() {

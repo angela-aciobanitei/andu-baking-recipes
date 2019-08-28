@@ -47,15 +47,11 @@ public class Recipe {
     @Expose
     private List<Step> steps;
 
-    @Ignore
-    public Recipe(Integer id, String name, Integer servings, String image,
-                  List<Ingredient> ingredients, List<Step> steps) {
+    public Recipe(Integer id, String name, Integer servings, String image) {
         this.id = id;
         this.name = name;
         this.servings = servings;
         this.image = image;
-        this.ingredients = ingredients;
-        this.steps = steps;
     }
 
     @NonNull

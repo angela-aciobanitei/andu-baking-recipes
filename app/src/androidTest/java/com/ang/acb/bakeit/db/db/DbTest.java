@@ -3,7 +3,7 @@ package com.ang.acb.bakeit.db.db;
 import org.junit.After;
 import org.junit.Before;
 
-import android.support.test.InstrumentationRegistry;
+import androidx.test.core.app.ApplicationProvider;
 
 import androidx.room.Room;
 
@@ -16,7 +16,7 @@ abstract public class DbTest {
     @Before
     public void initDb() {
         db = Room.inMemoryDatabaseBuilder(
-                InstrumentationRegistry.getContext(),
+                ApplicationProvider.getApplicationContext(),
                 AppDatabase.class)
                 .build();
     }

@@ -65,6 +65,10 @@ public abstract class RecipeDao {
 
     @Transaction
     @Query("SELECT * FROM recipes WHERE id= :recipeId")
+    public abstract LiveData<Recipe> loadSimpleRecipe(Integer recipeId);
+
+    @Transaction
+    @Query("SELECT * FROM recipes WHERE id= :recipeId")
     public abstract LiveData<WholeRecipe> loadWholeRecipe(Integer recipeId);
 
     @Transaction
