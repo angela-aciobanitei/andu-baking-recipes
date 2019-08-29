@@ -127,13 +127,12 @@ public class MainActivityTest {
         List<Recipe> data = TestUtil.createRecipeList();
         recipes.postValue(Resource.success(data));
 
-        onView(withId(R.id.rv_recipe_list)).check(matches(isDisplayed()));
-
-        // FIXME: Expected: has descendant: with text: is "Carrot Cake" Got: "CardView{id=2131230890}
+        onView(withId(R.id.rv_recipe_list))
+                .check(matches(isDisplayed()));
         onView(listMatcher().atPosition(0))
-                .check(matches(hasDescendant(withText("Carrot Cake"))));
+                .check(matches(hasDescendant(withText("Nutella Pie"))));
         onView(listMatcher().atPosition(1))
-                .check(matches(hasDescendant(withText("Blueberry Pie"))));
+                .check(matches(hasDescendant(withText("Brownies"))));
     }
 
     @Test
@@ -145,6 +144,7 @@ public class MainActivityTest {
                 .perform(actionOnItemAtPosition(0, click()));
         onView(withId(R.id.partial_details_fragment_container))
                 .check(matches(isDisplayed()));
+
     }
 
     @NonNull

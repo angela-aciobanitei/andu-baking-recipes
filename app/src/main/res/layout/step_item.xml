@@ -19,7 +19,7 @@
         android:focusable="true"
         android:foreground="?android:attr/selectableItemBackground"
         app:cardCornerRadius="4dp"
-        app:cardElevation="8dp">
+        app:cardElevation="4dp">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
@@ -36,6 +36,8 @@
                 android:textAppearance="@style/TextAppearance.MaterialComponents.Subtitle2"
                 android:drawableStart="@drawable/ic_loyalty_black_24dp"
                 android:drawablePadding="8dp"
+                android:layout_gravity="center"
+                android:gravity="center"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 tools:text="Start prep" />

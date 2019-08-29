@@ -14,12 +14,12 @@
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="8dp"
+        android:layout_margin="4dp"
         android:clickable="true"
         android:focusable="true"
         android:foreground="?android:attr/selectableItemBackground"
         app:cardCornerRadius="4dp"
-        app:cardElevation="8dp">
+        app:cardElevation="4dp">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
@@ -36,6 +36,8 @@
                 android:textAppearance="@style/TextAppearance.MaterialComponents.Subtitle2"
                 android:drawableStart="@drawable/ic_cake_black_24dp"
                 android:drawablePadding="8dp"
+                android:layout_gravity="center"
+                android:gravity="center"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 tools:text="Apple Blood Orange Buckle" />
