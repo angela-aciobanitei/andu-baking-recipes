@@ -10,6 +10,7 @@ import android.widget.ProgressBar;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentManager;
+import androidx.recyclerview.widget.RecyclerView;
 import androidx.test.rule.ActivityTestRule;
 
 import org.jetbrains.annotations.NotNull;
@@ -20,13 +21,12 @@ import org.jetbrains.annotations.NotNull;
 public class EspressoTestUtil {
     /**
      * Disables progress bar animations for the views of the given activity rule
-     *
      * @param activityTestRule The activity rule whose views will be checked
      */
-    public static void disableProgressBarAnimations(
+    public static void disableAnimations(
             ActivityTestRule<? extends FragmentActivity> activityTestRule) {
-        activityTestRule.getActivity().getSupportFragmentManager()
-                .registerFragmentLifecycleCallbacks(
+                activityTestRule.getActivity().getSupportFragmentManager()
+                    .registerFragmentLifecycleCallbacks(
                         new FragmentManager.FragmentLifecycleCallbacks() {
                             @Override
                             public void onFragmentViewCreated(@NotNull FragmentManager fm,
@@ -50,10 +50,18 @@ public class EspressoTestUtil {
     }
 
     private static void traverseViewGroup(ViewGroup view) {
-        final int count = view.getChildCount();
-        for (int i = 0; i < count; i++) {
-            traverseViews(view.getChildAt(i));
+        if (view instanceof RecyclerView) {
+            disableRecyclerViewAnimations((RecyclerView) view);
+        } else {
+            final int count = view.getChildCount();
+            for (int i = 0; i < count; i++) {
+                traverseViews(view.getChildAt(i));
+            }
         }
+    }
+
+    private static void disableRecyclerViewAnimations(RecyclerView view) {
+        view.setItemAnimator(null);
     }
 
     /**

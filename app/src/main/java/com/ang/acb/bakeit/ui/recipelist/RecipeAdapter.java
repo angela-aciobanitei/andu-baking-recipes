@@ -22,7 +22,7 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
     @Inject
     public RecipeAdapter (RecipeListViewModel viewModel) {
         this.viewModel = viewModel;
-        recipes = viewModel.getRecipeListResourceLiveData().getValue();
+        recipes = viewModel.getRecipesLiveData().getValue();
     }
 
     @NonNull

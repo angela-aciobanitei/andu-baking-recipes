@@ -41,9 +41,9 @@ public class RecipeDaoTest {
     @Before
     public void initDb() {
         database = Room.inMemoryDatabaseBuilder(
-                ApplicationProvider.getApplicationContext(),
-                AppDatabase.class)
-                .build();
+                        ApplicationProvider.getApplicationContext(),
+                        AppDatabase.class)
+                            .build();
     }
 
     @After
@@ -55,9 +55,12 @@ public class RecipeDaoTest {
     public void insertSimpleRecipeThenLoad() throws InterruptedException {
         Recipe simpleRecipe = TestUtil.createSimpleRecipe(
                 1, "Nutella Pie", 8, "");
+
         database.recipeDao().insertRecipe(simpleRecipe);
+
         Recipe loaded = LiveDataTestUtil.getValue(
                 database.recipeDao().loadSimpleRecipe(1));
+
         assertThat(loaded, notNullValue());
         assertThat(loaded.getName(), is("Nutella Pie"));
         assertThat(loaded.getServings(), is(8));
@@ -69,7 +72,6 @@ public class RecipeDaoTest {
     public void insertWholeRecipeThenLoad() throws InterruptedException {
         Recipe recipe = TestUtil.createSimpleRecipe(
                 1, "Nutella Pie", 8, "");
-
         recipe.setIngredients(Arrays.asList(
                 createIngredient(1,"CUP", "foo"),
                 createIngredient(2,"TBLSP", "bar"),
@@ -176,6 +178,4 @@ public class RecipeDaoTest {
         assertThat(second.steps, notNullValue());
         assertThat(second.steps.size(), is(3));
     }
-
-
 }

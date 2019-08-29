@@ -6,7 +6,6 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Observer;
 
 import com.ang.acb.bakeit.data.local.RecipeLocalDataSource;
-import com.ang.acb.bakeit.data.model.Ingredient;
 import com.ang.acb.bakeit.data.model.Recipe;
 import com.ang.acb.bakeit.data.model.Resource;
 import com.ang.acb.bakeit.data.remote.ApiResponse;
@@ -14,7 +13,6 @@ import com.ang.acb.bakeit.data.remote.RecipeRemoteDataSource;
 import com.ang.acb.bakeit.data.repository.RecipeRepository;
 import com.ang.acb.bakeit.util.InstantAppExecutors;
 import com.ang.acb.bakeit.util.TestUtil;
-import com.ang.acb.bakeit.utils.AppExecutors;
 
 import org.junit.Before;
 import org.junit.Rule;
@@ -35,8 +33,6 @@ import static com.ang.acb.bakeit.util.TestUtil.createStep;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.ArgumentMatchers.isNotNull;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;

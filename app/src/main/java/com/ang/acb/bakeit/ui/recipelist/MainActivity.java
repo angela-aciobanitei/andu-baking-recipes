@@ -2,17 +2,21 @@ package com.ang.acb.bakeit.ui.recipelist;
 
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.VisibleForTesting;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.test.espresso.IdlingResource;
 
 import com.ang.acb.bakeit.R;
 import com.ang.acb.bakeit.data.model.Recipe;
 import com.ang.acb.bakeit.data.model.Resource;
 import com.ang.acb.bakeit.databinding.ActivityMainBinding;
+import com.ang.acb.bakeit.utils.RecipeIdlingResource;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -29,10 +33,11 @@ public class MainActivity extends AppCompatActivity {
     public static final String EXTRA_RECIPE_NAME ="EXTRA_RECIPE_NAME";
     public static final Integer INVALID_RECIPE_ID = -1;
 
+    private RecipeIdlingResource idlingResource;
     private RecipeListViewModel viewModel;
 
     @Inject
-    ViewModelProvider.Factory viewModelFactory;
+    public ViewModelProvider.Factory viewModelFactory;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,6 +49,7 @@ public class MainActivity extends AppCompatActivity {
         initBinding();
         initViewModel();
         observeResult(getRecipeAdapter());
+        getIdlingResource();
     }
 
     private void initBinding() {
@@ -72,7 +78,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void observeResult(RecipeAdapter adapter) {
         // Observe data and network status.
-        viewModel.getRecipeListResourceLiveData().observe(this,
+        viewModel.getRecipesLiveData().observe(this,
             new Observer<Resource<List<Recipe>>>() {
                 @Override
                 public void onChanged(Resource<List<Recipe>> resource) {
@@ -82,6 +88,15 @@ public class MainActivity extends AppCompatActivity {
                     adapter.setNetworkState(resource);
                 }
         });
+    }
+
+    @VisibleForTesting
+    @NonNull
+    public IdlingResource getIdlingResource() {
+        if (idlingResource == null) {
+            idlingResource = new RecipeIdlingResource();
+        }
+        return idlingResource;
     }
 
 }

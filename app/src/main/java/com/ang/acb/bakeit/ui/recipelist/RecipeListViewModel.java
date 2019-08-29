@@ -1,5 +1,6 @@
 package com.ang.acb.bakeit.ui.recipelist;
 
+import androidx.annotation.VisibleForTesting;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModel;
 
@@ -13,18 +14,24 @@ import javax.inject.Inject;
 
 public class RecipeListViewModel extends ViewModel {
 
-    private LiveData<Resource<List<Recipe>>> recipeListResourceLiveData;
+    @VisibleForTesting
+    private LiveData<Resource<List<Recipe>>> recipesLiveData;
+    private RecipeRepository repository;
 
     @Inject
     public RecipeListViewModel(RecipeRepository repository) {
-        recipeListResourceLiveData = repository.loadAllRecipes();
+        this.repository = repository;
     }
 
-    public LiveData<Resource<List<Recipe>>> getRecipeListResourceLiveData() {
-        return recipeListResourceLiveData;
+    public LiveData<Resource<List<Recipe>>> getRecipesLiveData() {
+        if (recipesLiveData == null) {
+            recipesLiveData = repository.loadAllRecipes();
+        }
+        return recipesLiveData;
     }
 
     // FIXME Retry any failed requests.
     public void retry() {
+        recipesLiveData = repository.loadAllRecipes();
     }
 }
