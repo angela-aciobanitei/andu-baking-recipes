@@ -35,6 +35,7 @@ public abstract class RecipeDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     public abstract void insertSteps(List<Step> steps);
 
+    // TESTED
     public void insertAllRecipes(List<Recipe> recipes) {
         for (Recipe recipe : recipes) {
             // Insert recipe ingredients

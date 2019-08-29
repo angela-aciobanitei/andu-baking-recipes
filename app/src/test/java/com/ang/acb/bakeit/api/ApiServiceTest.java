@@ -40,8 +40,8 @@ public class ApiServiceTest {
     @Rule
     public InstantTaskExecutorRule instantExecutorRule = new InstantTaskExecutorRule();
 
-    private ApiService service;
     private MockWebServer mockWebServer;
+    private ApiService service;
 
     @Before
     public void createService() throws IOException {
@@ -121,7 +121,6 @@ public class ApiServiceTest {
         assertThat(recipe4.getIngredients().size(), is(9));
         assertThat(recipe4.getSteps(), notNullValue());
         assertThat(recipe4.getSteps().size(), is(13));
-
     }
 
     @Test
@@ -171,7 +170,7 @@ public class ApiServiceTest {
 
     @Test
     public void getDifferentRecipes() throws IOException, InterruptedException {
-        enqueueResponse("baking2.json");
+        enqueueResponse("baking_different.json");
         List<Recipe> recipes = LiveDataTestUtil.getValue(service.getAllRecipes()).body;
 
         assertThat(recipes, notNullValue());

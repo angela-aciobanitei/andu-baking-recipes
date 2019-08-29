@@ -1,8 +1,11 @@
 package com.ang.acb.bakeit.db;
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule;
+import androidx.room.Room;
+import androidx.test.core.app.ApplicationProvider;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 
+import com.ang.acb.bakeit.data.local.AppDatabase;
 import com.ang.acb.bakeit.data.model.Ingredient;
 import com.ang.acb.bakeit.data.model.Recipe;
 import com.ang.acb.bakeit.data.model.Step;
@@ -10,6 +13,8 @@ import com.ang.acb.bakeit.data.model.WholeRecipe;
 import com.ang.acb.bakeit.util.LiveDataTestUtil;
 import com.ang.acb.bakeit.util.TestUtil;
 
+import org.junit.After;
+import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -26,19 +31,33 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.IsNull.nullValue;
 
 @RunWith(AndroidJUnit4.class)
-public class RecipeDaoTest extends DbTest {
+public class RecipeDaoTest {
 
     @Rule
-    // See: https://stackoverflow.com/questions/52274924/cannot-invoke-observeforever-on-a-background-thread
     public InstantTaskExecutorRule instantTaskExecutorRule = new InstantTaskExecutorRule();
 
+    private AppDatabase database;
+
+    @Before
+    public void initDb() {
+        database = Room.inMemoryDatabaseBuilder(
+                ApplicationProvider.getApplicationContext(),
+                AppDatabase.class)
+                .build();
+    }
+
+    @After
+    public void closeDb() {
+        database.close();
+    }
+
     @Test
-    public void insertSimpleRecipe() throws InterruptedException {
+    public void insertSimpleRecipeThenLoad() throws InterruptedException {
         Recipe simpleRecipe = TestUtil.createSimpleRecipe(
                 1, "Nutella Pie", 8, "");
-        db.recipeDao().insertRecipe(simpleRecipe);
+        database.recipeDao().insertRecipe(simpleRecipe);
         Recipe loaded = LiveDataTestUtil.getValue(
-                db.recipeDao().loadSimpleRecipe(Recipe.UNKNOWN_ID));
+                database.recipeDao().loadSimpleRecipe(1));
         assertThat(loaded, notNullValue());
         assertThat(loaded.getName(), is("Nutella Pie"));
         assertThat(loaded.getServings(), is(8));
@@ -47,40 +66,66 @@ public class RecipeDaoTest extends DbTest {
     }
 
     @Test
-    public void insertWholeRecipe() throws InterruptedException {
-        Recipe simpleRecipe = TestUtil.createSimpleRecipe(
+    public void insertWholeRecipeThenLoad() throws InterruptedException {
+        Recipe recipe = TestUtil.createSimpleRecipe(
                 1, "Nutella Pie", 8, "");
 
-        simpleRecipe.setIngredients(Arrays.asList(
+        recipe.setIngredients(Arrays.asList(
                 createIngredient(1,"CUP", "foo"),
                 createIngredient(2,"TBLSP", "bar"),
                 createIngredient(3,"K", "Nutella")
         ));
-        simpleRecipe.setSteps(Arrays.asList(
+        recipe.setSteps(Arrays.asList(
                 createStep(0, "foo","foo foo", "",""),
                 createStep(1, "bar","bar bar", "",""),
                 createStep(2, "moo","moo moo", "","")
         ));
 
-        db.recipeDao().insertAllRecipes(Collections.singletonList(simpleRecipe));
-        WholeRecipe loaded = LiveDataTestUtil.getValue(db.recipeDao().loadWholeRecipe(1));
-        assertThat(loaded, notNullValue());
-        assertThat(loaded.getRecipe().getName(), is("Nutella Pie"));
-        assertThat(loaded.getRecipe().getServings(), is(8));
+        database.recipeDao().insertAllRecipes(Collections.singletonList(recipe));
+        WholeRecipe wholeRecipe = LiveDataTestUtil.getValue(database.recipeDao().loadWholeRecipe(1));
+
+        assertThat(wholeRecipe, notNullValue());
+        assertThat(wholeRecipe.recipe.getName(), is("Nutella Pie"));
+        assertThat(wholeRecipe.recipe.getServings(), is(8));
+
+        assertThat(wholeRecipe.ingredients, notNullValue());
+        assertThat(wholeRecipe.ingredients.size(), is(3));
+
+        assertThat(wholeRecipe.steps, notNullValue());
+        assertThat(wholeRecipe.steps.size(), is(3));
+    }
+
+    @Test
+    public void loadStepsAndIngredients() throws InterruptedException {
+        Recipe cake = TestUtil.createSimpleRecipe(
+                3, "Yellow Cake", 6,"");
+        cake.setIngredients(Arrays.asList(
+                createIngredient(400,"G", "flour"),
+                createIngredient(700,"G", "sugar"),
+                createIngredient(2,"TBS", "salt"),
+                createIngredient(4,"TSP", "baking powder")
+        ));
+        cake.setSteps(Arrays.asList(
+                createStep(0,"foo","foo foo", "",""),
+                createStep(1, "coo","coo coo", "",""),
+                createStep(2, "moo","moo moo", "","")
+        ));
+
+        database.recipeDao().insertAllRecipes(Collections.singletonList(cake));
 
         List<Ingredient> ingredients = LiveDataTestUtil.getValue(
-                db.recipeDao().loadRecipeIngredients(loaded.getRecipe().getId()));
+                database.recipeDao().loadRecipeIngredients(3));
         assertThat(ingredients, notNullValue());
-        assertThat(ingredients.size(), is(3));
+        assertThat(ingredients.size(), is(4));
 
         List<Step> steps = LiveDataTestUtil.getValue(
-                db.recipeDao().loadRecipeSteps(loaded.getRecipe().getId()));
+                database.recipeDao().loadRecipeSteps(3));
         assertThat(steps, notNullValue());
         assertThat(steps.size(), is(3));
     }
 
     @Test
-    public void insertWholeRecipes() throws InterruptedException {
+    public void insertWholeRecipesThenLoad() throws InterruptedException {
         Recipe recipe1 = TestUtil.createSimpleRecipe(
                 1,"Nutella Pie", 8,"");
         recipe1.setIngredients(Arrays.asList(
@@ -101,7 +146,6 @@ public class RecipeDaoTest extends DbTest {
                 createIngredient(700,"G", "sugar"),
                 createIngredient(2,"TBS", "salt"),
                 createIngredient(4,"TSP", "baking powder")
-
         ));
         recipe2.setSteps(Arrays.asList(
                 createStep(0,"loo","loo loo", "",""),
@@ -109,37 +153,29 @@ public class RecipeDaoTest extends DbTest {
                 createStep(2, "moo","moo moo", "","")
         ));
 
-        db.recipeDao().insertAllRecipes(Arrays.asList(recipe1, recipe2));
-        List<WholeRecipe> loaded = LiveDataTestUtil.getValue(db.recipeDao().loadWholeRecipes());
+        database.recipeDao().insertAllRecipes(Arrays.asList(recipe1, recipe2));
+        List<WholeRecipe> loaded = LiveDataTestUtil.getValue(database.recipeDao().loadWholeRecipes());
         assertThat(loaded, notNullValue());
 
-        assertThat(loaded.get(0).getRecipe().getName(), is("Nutella Pie"));
-        assertThat(loaded.get(0).getRecipe().getId(), is(1));
-        assertThat(loaded.get(0).getRecipe().getServings(), is(8));
+        WholeRecipe first = loaded.get(0);
+        WholeRecipe second = loaded.get(1);
 
-        List<Ingredient> recipe1Ingredients = LiveDataTestUtil.getValue(
-                db.recipeDao().loadRecipeIngredients(loaded.get(0).getRecipe().getId()));
-        assertThat(recipe1Ingredients, notNullValue());
-        assertThat(recipe1Ingredients.size(), is(3));
+        assertThat(first.recipe.getName(), is("Nutella Pie"));
+        assertThat(first.recipe.getId(), is(1));
+        assertThat(first.recipe.getServings(), is(8));
+        assertThat(first.ingredients, notNullValue());
+        assertThat(first.ingredients.size(), is(3));
+        assertThat(first.steps, notNullValue());
+        assertThat(first.steps.size(), is(3));
 
-        List<Step> recipe1steps = LiveDataTestUtil.getValue(
-                db.recipeDao().loadRecipeSteps(loaded.get(0).getRecipe().getId()));
-        assertThat(recipe1steps, notNullValue());
-        assertThat(recipe1steps.size(), is(3));
-
-        assertThat(loaded.get(1).getRecipe().getName(), is("Yellow Cake"));
-        assertThat(loaded.get(1).getRecipe().getId(), is(3));
-        assertThat(loaded.get(1).getRecipe().getServings(), is(6));
-
-        List<Ingredient> recipe2Ingredients = LiveDataTestUtil.getValue(
-                db.recipeDao().loadRecipeIngredients(loaded.get(1).getRecipe().getId()));
-        assertThat(recipe2Ingredients, notNullValue());
-        assertThat(recipe2Ingredients.size(), is(4));
-
-        List<Step> recipe2steps = LiveDataTestUtil.getValue(
-                db.recipeDao().loadRecipeSteps(loaded.get(1).getRecipe().getId()));
-        assertThat(recipe2steps, notNullValue());
-        assertThat(recipe2steps.size(), is(3));
-
+        assertThat(second.recipe.getName(), is("Yellow Cake"));
+        assertThat(second.recipe.getId(), is(3));
+        assertThat(second.recipe.getServings(), is(6));
+        assertThat(second.ingredients, notNullValue());
+        assertThat(second.ingredients.size(), is(4));
+        assertThat(second.steps, notNullValue());
+        assertThat(second.steps.size(), is(3));
     }
+
+
 }
