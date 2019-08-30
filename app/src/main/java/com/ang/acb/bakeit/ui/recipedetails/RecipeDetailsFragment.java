@@ -41,10 +41,10 @@ public class RecipeDetailsFragment extends Fragment {
     private boolean isTwoPane;
 
     @Inject
-    ViewModelProvider.Factory viewModelFactory;
+    public ViewModelProvider.Factory viewModelFactory;
 
     @Inject
-    NavigationController navigationController;
+    public NavigationController navigationController;
 
     // Required empty public constructor
     public RecipeDetailsFragment() {}
@@ -126,16 +126,16 @@ public class RecipeDetailsFragment extends Fragment {
 
     private void observeRecipeDetails() {
         Timber.d("Recipe [id=%s]: observe recipe details.", recipeId);
-        viewModel.getWholeRecipeLiveData(recipeId).observe(
+        viewModel.getRecipeDetailsLiveData(recipeId).observe(
                 getViewLifecycleOwner(),
                 new Observer<RecipeDetails>() {
                     @Override
                     public void onChanged(RecipeDetails recipeDetails) {
                         // Bind recipe data
                         binding.setRecipeDetails(recipeDetails);
-                        // Set recipe title for the action bar
-                        Objects.requireNonNull(getActivity())
-                                .setTitle(recipeDetails.getRecipe().getName());
+//                        // Set recipe title for the action bar
+//                        Objects.requireNonNull(getActivity())
+//                                .setTitle(recipeDetails.getRecipe().getName());
                     }
                 }
         );

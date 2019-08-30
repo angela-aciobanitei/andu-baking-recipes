@@ -1,7 +1,13 @@
 package com.ang.acb.bakeit.ui;
 
+import android.content.Intent;
+
 import androidx.annotation.NonNull;
+import androidx.arch.core.executor.testing.InstantTaskExecutorRule;
 import androidx.lifecycle.MutableLiveData;
+import androidx.test.espresso.intent.Intents;
+import androidx.test.espresso.intent.rule.IntentsTestRule;
+import androidx.test.platform.app.InstrumentationRegistry;
 import androidx.test.espresso.IdlingRegistry;
 import androidx.test.espresso.IdlingResource;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
@@ -11,6 +17,7 @@ import com.ang.acb.bakeit.R;
 import com.ang.acb.bakeit.data.model.Recipe;
 import com.ang.acb.bakeit.data.model.Resource;
 import com.ang.acb.bakeit.ui.common.NavigationController;
+import com.ang.acb.bakeit.ui.recipedetails.DetailsActivity;
 import com.ang.acb.bakeit.ui.recipelist.MainActivity;
 import com.ang.acb.bakeit.ui.recipelist.RecipeListViewModel;
 import com.ang.acb.bakeit.util.EspressoTestUtil;
@@ -33,6 +40,8 @@ import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.contrib.RecyclerViewActions.actionOnItemAtPosition;
+import static androidx.test.espresso.intent.Intents.intended;
+import static androidx.test.espresso.intent.matcher.IntentMatchers.hasComponent;
 import static androidx.test.espresso.matcher.ViewMatchers.hasDescendant;
 import static androidx.test.espresso.matcher.ViewMatchers.hasMinimumChildCount;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
@@ -53,33 +62,23 @@ public class MainActivityTest {
     public TaskExecutorWithIdlingResourceRule executorRule =
             new TaskExecutorWithIdlingResourceRule();
 
+    // FIXME: This live data value is not updated
     private MutableLiveData<Resource<List<Recipe>>> recipes = new MutableLiveData<>();
     private RecipeListViewModel viewModel;
-    private RecipeIdlingResource idlingResource;
 
     @Before
     public void init() {
         EspressoTestUtil.disableAnimations(activityRule);
-        registerIdlingResource();
+        Intents.init();
 
         viewModel = Mockito.mock(RecipeListViewModel.class);
         when(viewModel.getRecipesLiveData()).thenReturn(recipes);
     }
 
-    private void registerIdlingResource() {
-        idlingResource = (RecipeIdlingResource) activityRule.getActivity().getIdlingResource();
-        IdlingRegistry.getInstance().register(idlingResource);
-    }
-
-    @After
-    public void unregisterIdlingResource() {
-        IdlingRegistry.getInstance().unregister(idlingResource);
-    }
-
     @Test
     public void testLoading() {
         recipes.postValue(Resource.loading(null));
-        // FIXME: Expected: is displayed on the screen to the user Got: "ProgressBar{id=2131230886...}
+        // FIXME: Expected: is displayed on the screen to the user, Got: ProgressBar
         onView(withId(R.id.progress_bar)).check(matches(isDisplayed()));
         onView(withId(R.id.retry_button)).check(matches(not(isDisplayed())));
     }
@@ -105,9 +104,9 @@ public class MainActivityTest {
     public void testError() throws InterruptedException {
         recipes.postValue(Resource.error("foo", null));
         onView(withId(R.id.progress_bar)).check(matches(not(isDisplayed())));
-        // FIXME: Expected: is displayed on the screen to the user Got: "MaterialButton{id=2131230892}
+        // FIXME: Expected: is displayed on the screen to the user Got: MaterialButton
         onView(withId(R.id.retry_button)).check(matches(isDisplayed()));
-        // FIXME: Error performing 'single click' on view 'with id: com.ang.acb.bakeit:id/retry_button'.
+        // FIXME: Error performing 'single click' on view with id:retry_button
         onView(withId(R.id.retry_button)).perform(click());
 
         verify(viewModel).retry();
@@ -144,7 +143,7 @@ public class MainActivityTest {
                 .perform(actionOnItemAtPosition(0, click()));
         onView(withId(R.id.partial_details_fragment_container))
                 .check(matches(isDisplayed()));
-
+        intended(hasComponent(DetailsActivity.class.getName()));
     }
 
     @NonNull

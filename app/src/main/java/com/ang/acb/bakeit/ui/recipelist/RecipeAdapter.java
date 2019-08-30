@@ -5,22 +5,14 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.ang.acb.bakeit.R;
 import com.ang.acb.bakeit.data.model.Recipe;
-import com.ang.acb.bakeit.data.model.Resource;
 
 import java.util.List;
 
-import javax.inject.Inject;
 
 public class RecipeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     private List<Recipe> recipes;
-
-    @Inject
-    public RecipeAdapter (RecipeListViewModel viewModel) {
-        recipes = viewModel.getRecipesLiveData().getValue().getData();
-    }
 
     @NonNull
     @Override

@@ -7,6 +7,7 @@ import androidx.lifecycle.Observer;
 
 import com.ang.acb.bakeit.data.local.RecipeLocalDataSource;
 import com.ang.acb.bakeit.data.model.Recipe;
+import com.ang.acb.bakeit.data.model.RecipeDetails;
 import com.ang.acb.bakeit.data.model.Resource;
 import com.ang.acb.bakeit.data.remote.ApiResponse;
 import com.ang.acb.bakeit.data.remote.RecipeRemoteDataSource;
@@ -60,10 +61,10 @@ public class RecipeRepositoryTest {
 
     @Test
     public void loadAllRecipes() throws IOException {
-        MutableLiveData<List<Recipe>> dbData = new MutableLiveData<>();
+        MutableLiveData<List<RecipeDetails>> dbData = new MutableLiveData<>();
         when(localDataSource.getRecipeDetailsList()).thenReturn(dbData);
 
-        LiveData<Resource<List<Recipe>>> loadedData = repository.loadAllRecipes();
+        LiveData<Resource<List<RecipeDetails>>> loadedData = repository.loadAllRecipes();
         verify(localDataSource).getRecipeDetailsList();
         verify(remoteDataSource, never()).loadAllRecipes();
 
@@ -78,6 +79,11 @@ public class RecipeRepositoryTest {
                 createStep(1, "bar","bar bar", "","")
         ));
 
+        RecipeDetails carrotCakeDetails = new RecipeDetails();
+        carrotCakeDetails.setRecipe(carrotCake);
+        carrotCakeDetails.setIngredients(carrotCake.getIngredients());
+        carrotCakeDetails.setSteps(carrotCake.getSteps());
+
         Recipe blueberryPie = TestUtil.createSimpleRecipe(
                 6, "Blueberry Pie", 6, "");
         blueberryPie.setIngredients(Arrays.asList(
@@ -91,15 +97,22 @@ public class RecipeRepositoryTest {
                 createStep(2, "serve","bon appetit", "","")
         ));
 
-        List<Recipe> recipes = Arrays.asList(carrotCake, blueberryPie);
-        LiveData<ApiResponse<List<Recipe>>> call = successCall(recipes);
+        RecipeDetails blueberryPieDetails = new RecipeDetails();
+        blueberryPieDetails.setRecipe(blueberryPie);
+        blueberryPieDetails.setIngredients(blueberryPie.getIngredients());
+        blueberryPieDetails.setSteps(blueberryPie.getSteps());
+
+        List<RecipeDetails> recipeDetailsList = Arrays.asList(carrotCakeDetails, blueberryPieDetails);
+        List<Recipe> recipeList = Arrays.asList(carrotCake, blueberryPie);
+
+        LiveData<ApiResponse<List<Recipe>>> call = successCall(recipeList);
         when(remoteDataSource.loadAllRecipes()).thenReturn(call);
 
-        Observer<Resource<List<Recipe>>> observer = mock(Observer.class);
+        Observer<Resource<List<RecipeDetails>>> observer = mock(Observer.class);
         loadedData.observeForever(observer);
         verify(observer).onChanged(Resource.loading( null));
 
-        MutableLiveData<List<Recipe>> updatedDbData = new MutableLiveData<>();
+        MutableLiveData<List<RecipeDetails>> updatedDbData = new MutableLiveData<>();
         when(localDataSource.getRecipeDetailsList()).thenReturn(updatedDbData);
         dbData.setValue(Collections.emptyList());
 
@@ -126,8 +139,8 @@ public class RecipeRepositoryTest {
         assertThat(second.getSteps(), notNullValue());
         assertThat(second.getSteps().size(), is(3));
 
-        updatedDbData.setValue(recipes);
-        verify(observer).onChanged(Resource.success(recipes));
+        updatedDbData.setValue(recipeDetailsList);
+        verify(observer).onChanged(Resource.success(recipeDetailsList));
     }
 
 
