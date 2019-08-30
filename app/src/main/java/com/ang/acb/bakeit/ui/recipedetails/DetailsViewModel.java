@@ -16,7 +16,7 @@ import java.util.Objects;
 import javax.inject.Inject;
 
 
-public class RecipeDetailsViewModel extends ViewModel {
+public class DetailsViewModel extends ViewModel {
 
     private RecipeRepository repository;
 
@@ -27,7 +27,7 @@ public class RecipeDetailsViewModel extends ViewModel {
     private MutableLiveData<Integer> stepIndexLiveData;
 
     @Inject
-    public RecipeDetailsViewModel(RecipeRepository repository) {
+    public DetailsViewModel(RecipeRepository repository) {
         this.repository = repository;
     }
 

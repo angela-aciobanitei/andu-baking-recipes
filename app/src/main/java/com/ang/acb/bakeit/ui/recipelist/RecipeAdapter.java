@@ -9,7 +9,6 @@ import com.ang.acb.bakeit.data.model.Recipe;
 
 import java.util.List;
 
-
 public class RecipeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     private List<Recipe> recipes;

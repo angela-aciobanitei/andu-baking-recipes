@@ -6,6 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:padding="8dp"
-    android:textAppearance="@style/TextAppearance.MaterialComponents.Body2"
-    android:textStyle="bold|italic"
-    tools:text="350 G Bittersweet chocolate (60-70% cacao) " />
+    android:textAppearance="@style/TextAppearance.MaterialComponents.Subtitle2"
+    android:textColor="@android:color/white"
+    tools:text="350 G Bittersweet chocolate (60-70% cacao) "
+    tools:background="@color/colorPrimary"/>

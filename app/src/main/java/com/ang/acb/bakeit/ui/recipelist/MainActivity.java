@@ -32,7 +32,6 @@ public class MainActivity extends AppCompatActivity {
     public static final Integer INVALID_RECIPE_ID = -1;
 
     private ActivityMainBinding binding;
-    private RecipeIdlingResource idlingResource;
     private RecipeListViewModel viewModel;
     private RecipeAdapter adapter;
 

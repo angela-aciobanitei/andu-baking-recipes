@@ -33,7 +33,7 @@
 
         <include
             android:id="@+id/network_state"
-            layout="@layout/network_state_item"
+            layout="@layout/network_state"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"

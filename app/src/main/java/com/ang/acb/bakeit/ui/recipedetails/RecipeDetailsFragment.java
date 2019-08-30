@@ -36,7 +36,7 @@ public class RecipeDetailsFragment extends Fragment {
     private static final String EXTRA_IS_TWO_PANE = "EXTRA_IS_TWO_PANE";
 
     private FragmentRecipeDetailsBinding binding;
-    private RecipeDetailsViewModel viewModel;
+    private DetailsViewModel viewModel;
     private Integer recipeId;
     private boolean isTwoPane;
 
@@ -88,7 +88,7 @@ public class RecipeDetailsFragment extends Fragment {
 
     private void initViewModel() {
         viewModel = ViewModelProviders.of(this, viewModelFactory)
-                .get(RecipeDetailsViewModel.class);
+                .get(DetailsViewModel.class);
 
         Bundle args = getArguments();
         if (args != null) {
@@ -133,9 +133,9 @@ public class RecipeDetailsFragment extends Fragment {
                     public void onChanged(RecipeDetails recipeDetails) {
                         // Bind recipe data
                         binding.setRecipeDetails(recipeDetails);
-//                        // Set recipe title for the action bar
-//                        Objects.requireNonNull(getActivity())
-//                                .setTitle(recipeDetails.getRecipe().getName());
+                        // Set recipe title for the action bar
+                        Objects.requireNonNull(getActivity())
+                                .setTitle(recipeDetails.getRecipe().getName());
                     }
                 }
         );

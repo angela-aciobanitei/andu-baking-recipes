@@ -6,13 +6,11 @@ import androidx.test.ext.junit.runners.AndroidJUnit4;
 import androidx.test.rule.ActivityTestRule;
 
 import com.ang.acb.bakeit.R;
-import com.ang.acb.bakeit.data.model.Ingredient;
 import com.ang.acb.bakeit.data.model.RecipeDetails;
-import com.ang.acb.bakeit.data.model.Step;
 import com.ang.acb.bakeit.ui.common.NavigationController;
 import com.ang.acb.bakeit.ui.recipedetails.DetailsActivity;
+import com.ang.acb.bakeit.ui.recipedetails.DetailsViewModel;
 import com.ang.acb.bakeit.ui.recipedetails.RecipeDetailsFragment;
-import com.ang.acb.bakeit.ui.recipedetails.RecipeDetailsViewModel;
 import com.ang.acb.bakeit.util.EspressoTestUtil;
 import com.ang.acb.bakeit.util.RecyclerViewMatcher;
 import com.ang.acb.bakeit.util.TaskExecutorWithIdlingResourceRule;
@@ -24,8 +22,6 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mockito;
-
-import java.util.List;
 
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
@@ -53,7 +49,7 @@ public class RecipeDetailsFragmentTest {
 
     private RecipeDetailsFragment detailsFragment;
     private NavigationController navigationController;
-    private RecipeDetailsViewModel viewModel;
+    private DetailsViewModel viewModel;
     private MutableLiveData<RecipeDetails> recipeDetails = new MutableLiveData<>();
 
     @Before
@@ -61,7 +57,7 @@ public class RecipeDetailsFragmentTest {
         EspressoTestUtil.disableAnimations(activityRule);
 
         detailsFragment = RecipeDetailsFragment.newInstance(0, false);
-        viewModel = Mockito.mock(RecipeDetailsViewModel.class);
+        viewModel = Mockito.mock(DetailsViewModel.class);
         navigationController = mock(NavigationController.class);
 
         when(viewModel.getRecipeDetailsLiveData(0)).thenReturn(recipeDetails);
@@ -72,7 +68,8 @@ public class RecipeDetailsFragmentTest {
         activityRule.getActivity()
                 .getSupportFragmentManager()
                 .beginTransaction()
-                .replace(R.id.partial_details_fragment_container, detailsFragment, "TEST")
+                .replace(R.id.partial_details_fragment_container,
+                        detailsFragment, "TEST")
                 .commit();
     }
 

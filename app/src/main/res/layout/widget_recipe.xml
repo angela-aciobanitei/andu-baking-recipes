@@ -5,27 +5,27 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/widget_recipe_container"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
     android:orientation="vertical"
-    android:backgroundTint="@color/colorAccent"
-    android:padding="@dimen/widget_margin">
+    android:background="@color/colorPrimary">
 
     <TextView
         android:id="@+id/widget_ingredients_list_title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/colorPrimary"
-        android:padding="8dp"
-        android:textAppearance="@style/TextAppearance.MaterialComponents.Headline4"
+        android:background="@color/colorPrimaryDark"
+        android:padding="16dp"
+        android:textAppearance="@style/TextAppearance.MaterialComponents.Headline6"
         android:textColor="@android:color/white"
-        android:textStyle="bold|italic"
+        android:textStyle="bold"
         tools:text="Nutella"/>
 
     <ListView
         android:id="@+id/widget_ingredients_list_items"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:padding="8dp"
         tools:listitem="@layout/widget_ingredient_item" />
 
     <TextView
