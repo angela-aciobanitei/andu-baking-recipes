@@ -11,14 +11,11 @@ import androidx.room.Room;
 import com.ang.acb.bakeit.R;
 import com.ang.acb.bakeit.data.local.AppDatabase;
 import com.ang.acb.bakeit.data.model.Ingredient;
-import com.ang.acb.bakeit.data.model.WholeRecipe;
-import com.ang.acb.bakeit.data.repository.RecipeRepository;
+import com.ang.acb.bakeit.data.model.RecipeDetails;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
-
-import javax.inject.Inject;
 
 /**
  * A custom class that implements the RemoteViewsFactory interface and provides
@@ -49,9 +46,9 @@ public class RecipeRemoteViewsFactory implements RemoteViewsService.RemoteViewsF
 
         if (recipeId != -1) {
             ingredients = new ArrayList<>();
-            WholeRecipe wholeRecipe = database.recipeDao().loadRecipe(recipeId);
-            if (wholeRecipe != null) {
-                for (Ingredient ingredient : wholeRecipe.ingredients) {
+            RecipeDetails recipeDetails = database.recipeDao().getRecipeDetailsForWidget(recipeId);
+            if (recipeDetails != null) {
+                for (Ingredient ingredient : recipeDetails.ingredients) {
                     ingredients.add(String.format(
                             Locale.getDefault(),
                             "%.1f %s %s",

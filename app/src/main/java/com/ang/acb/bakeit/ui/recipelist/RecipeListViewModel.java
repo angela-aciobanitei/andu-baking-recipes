@@ -5,6 +5,7 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModel;
 
 import com.ang.acb.bakeit.data.model.Recipe;
+import com.ang.acb.bakeit.data.model.RecipeDetails;
 import com.ang.acb.bakeit.data.model.Resource;
 import com.ang.acb.bakeit.data.repository.RecipeRepository;
 
@@ -25,13 +26,15 @@ public class RecipeListViewModel extends ViewModel {
 
     public LiveData<Resource<List<Recipe>>> getRecipesLiveData() {
         if (recipesLiveData == null) {
-            recipesLiveData = repository.loadAllRecipes();
+            recipesLiveData = repository.getRecipeList();
         }
         return recipesLiveData;
     }
 
     // FIXME Retry any failed requests.
     public void retry() {
-        recipesLiveData = repository.loadAllRecipes();
+        if (recipesLiveData == null) {
+            recipesLiveData = repository.getRecipeList();
+        }
     }
 }

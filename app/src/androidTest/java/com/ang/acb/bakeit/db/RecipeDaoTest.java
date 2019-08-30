@@ -8,8 +8,8 @@ import androidx.test.ext.junit.runners.AndroidJUnit4;
 import com.ang.acb.bakeit.data.local.AppDatabase;
 import com.ang.acb.bakeit.data.model.Ingredient;
 import com.ang.acb.bakeit.data.model.Recipe;
+import com.ang.acb.bakeit.data.model.RecipeDetails;
 import com.ang.acb.bakeit.data.model.Step;
-import com.ang.acb.bakeit.data.model.WholeRecipe;
 import com.ang.acb.bakeit.util.LiveDataTestUtil;
 import com.ang.acb.bakeit.util.TestUtil;
 
@@ -59,7 +59,7 @@ public class RecipeDaoTest {
         database.recipeDao().insertRecipe(simpleRecipe);
 
         Recipe loaded = LiveDataTestUtil.getValue(
-                database.recipeDao().loadSimpleRecipe(1));
+                database.recipeDao().getRecipe(1));
 
         assertThat(loaded, notNullValue());
         assertThat(loaded.getName(), is("Nutella Pie"));
@@ -84,17 +84,17 @@ public class RecipeDaoTest {
         ));
 
         database.recipeDao().insertAllRecipes(Collections.singletonList(recipe));
-        WholeRecipe wholeRecipe = LiveDataTestUtil.getValue(database.recipeDao().loadWholeRecipe(1));
+        RecipeDetails recipeDetails = LiveDataTestUtil.getValue(database.recipeDao().getRecipeDetails(1));
 
-        assertThat(wholeRecipe, notNullValue());
-        assertThat(wholeRecipe.recipe.getName(), is("Nutella Pie"));
-        assertThat(wholeRecipe.recipe.getServings(), is(8));
+        assertThat(recipeDetails, notNullValue());
+        assertThat(recipeDetails.recipe.getName(), is("Nutella Pie"));
+        assertThat(recipeDetails.recipe.getServings(), is(8));
 
-        assertThat(wholeRecipe.ingredients, notNullValue());
-        assertThat(wholeRecipe.ingredients.size(), is(3));
+        assertThat(recipeDetails.ingredients, notNullValue());
+        assertThat(recipeDetails.ingredients.size(), is(3));
 
-        assertThat(wholeRecipe.steps, notNullValue());
-        assertThat(wholeRecipe.steps.size(), is(3));
+        assertThat(recipeDetails.steps, notNullValue());
+        assertThat(recipeDetails.steps.size(), is(3));
     }
 
     @Test
@@ -116,12 +116,12 @@ public class RecipeDaoTest {
         database.recipeDao().insertAllRecipes(Collections.singletonList(cake));
 
         List<Ingredient> ingredients = LiveDataTestUtil.getValue(
-                database.recipeDao().loadRecipeIngredients(3));
+                database.recipeDao().getRecipeIngredients(3));
         assertThat(ingredients, notNullValue());
         assertThat(ingredients.size(), is(4));
 
         List<Step> steps = LiveDataTestUtil.getValue(
-                database.recipeDao().loadRecipeSteps(3));
+                database.recipeDao().getRecipeSteps(3));
         assertThat(steps, notNullValue());
         assertThat(steps.size(), is(3));
     }
@@ -156,11 +156,11 @@ public class RecipeDaoTest {
         ));
 
         database.recipeDao().insertAllRecipes(Arrays.asList(recipe1, recipe2));
-        List<WholeRecipe> loaded = LiveDataTestUtil.getValue(database.recipeDao().loadWholeRecipes());
+        List<RecipeDetails> loaded = LiveDataTestUtil.getValue(database.recipeDao().getRecipeDetailsList());
         assertThat(loaded, notNullValue());
 
-        WholeRecipe first = loaded.get(0);
-        WholeRecipe second = loaded.get(1);
+        RecipeDetails first = loaded.get(0);
+        RecipeDetails second = loaded.get(1);
 
         assertThat(first.recipe.getName(), is("Nutella Pie"));
         assertThat(first.recipe.getId(), is(1));

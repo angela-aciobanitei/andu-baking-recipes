@@ -1,15 +1,12 @@
 package com.ang.acb.bakeit.data.local;
 
 import androidx.lifecycle.LiveData;
-import androidx.lifecycle.MediatorLiveData;
 
 import com.ang.acb.bakeit.data.model.Ingredient;
+import com.ang.acb.bakeit.data.model.RecipeDetails;
 import com.ang.acb.bakeit.data.model.Step;
-import com.ang.acb.bakeit.data.model.WholeRecipe;
 import com.ang.acb.bakeit.data.model.Recipe;;
-import com.ang.acb.bakeit.utils.AppExecutors;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -37,47 +34,23 @@ public class RecipeLocalDataSource {
         Timber.d("%s detailed recipes saved into the database.", recipes.size());
     }
 
-    public LiveData<List<Recipe>> loadAllRecipes(){
-        // Initial live data source.
-        LiveData<List<WholeRecipe>> wholeRecipesLiveData = database.recipeDao().loadWholeRecipes();
-
-        // Final live data result. Note: MediatorLiveData<T> is a LiveData
-        // subclass which may observe other LiveData objects and react on
-        // OnChanged events from them.
-        MediatorLiveData<List<Recipe>> result = new MediatorLiveData<>();
-        result.addSource(wholeRecipesLiveData, wholeRecipes -> {
-            List<Recipe> recipes = new ArrayList<>();
-            if (wholeRecipes != null) {
-                for (WholeRecipe wholeRecipe : wholeRecipes) {
-                    wholeRecipe.recipe.setIngredients(wholeRecipe.ingredients);
-                    wholeRecipe.recipe.setSteps(wholeRecipe.steps);
-                    recipes.add(wholeRecipe.recipe);
-                }
-            }
-
-            result.setValue(recipes);
-        });
-
-        return result;
+    public LiveData<List<RecipeDetails>> getRecipeDetailsList(){
+        return database.recipeDao().getRecipeDetailsList();
     }
 
-    public LiveData<WholeRecipe> getWholeRecipe(Integer recipeId) {
-        return database.recipeDao().loadWholeRecipe(recipeId);
+    public LiveData<RecipeDetails> getRecipeDetails(Integer recipeId) {
+        return database.recipeDao().getRecipeDetails(recipeId);
     }
 
-    public WholeRecipe getRecipe(Integer recipeId) {
-        return database.recipeDao().loadRecipe(recipeId);
-    }
-
-    public LiveData<List<WholeRecipe>> getWholeRecipes() {
-        return database.recipeDao().loadWholeRecipes();
+    public RecipeDetails getRecipeDetailsForWidget(Integer recipeId) {
+        return database.recipeDao().getRecipeDetailsForWidget(recipeId);
     }
 
     public LiveData<List<Step>> getRecipeSteps(Integer recipeId) {
-        return database.recipeDao().loadRecipeSteps(recipeId);
+        return database.recipeDao().getRecipeSteps(recipeId);
     }
 
     public LiveData<List<Ingredient>> getRecipeIngredients(Integer recipeId) {
-        return database.recipeDao().loadRecipeIngredients(recipeId);
+        return database.recipeDao().getRecipeIngredients(recipeId);
     }
 }

@@ -5,8 +5,8 @@ import androidx.lifecycle.MediatorLiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
+import com.ang.acb.bakeit.data.model.RecipeDetails;
 import com.ang.acb.bakeit.data.model.Step;
-import com.ang.acb.bakeit.data.model.WholeRecipe;
 import com.ang.acb.bakeit.data.repository.RecipeRepository;
 
 import java.util.List;
@@ -19,7 +19,7 @@ public class RecipeDetailsViewModel extends ViewModel {
 
     private RecipeRepository repository;
 
-    private LiveData<WholeRecipe> wholeRecipeLiveData;
+    private LiveData<RecipeDetails> wholeRecipeLiveData;
     private LiveData<List<Step>> stepsLiveData;
     private MediatorLiveData<Step> currentStepLiveData;
     private MutableLiveData<Integer> stepIndexLiveData;
@@ -30,13 +30,13 @@ public class RecipeDetailsViewModel extends ViewModel {
     }
 
     public void init(Integer recipeId) {
-        wholeRecipeLiveData = repository.getWholeRecipe(recipeId);
+        wholeRecipeLiveData = repository.getRecipeDetails(recipeId);
         stepsLiveData = repository.getRecipeSteps(recipeId);
     }
 
-    public LiveData<WholeRecipe> getWholeRecipeLiveData(Integer recipeId) {
+    public LiveData<RecipeDetails> getWholeRecipeLiveData(Integer recipeId) {
         if (wholeRecipeLiveData == null) {
-            wholeRecipeLiveData = repository.getWholeRecipe(recipeId);
+            wholeRecipeLiveData = repository.getRecipeDetails(recipeId);
         }
         return wholeRecipeLiveData;
     }

@@ -17,8 +17,6 @@ import java.util.List;
 @Entity(tableName = "recipes")
 public class Recipe {
 
-    public static final int UNKNOWN_ID = -1;
-
     @PrimaryKey
     @ColumnInfo(name = "id")
     @SerializedName("id")

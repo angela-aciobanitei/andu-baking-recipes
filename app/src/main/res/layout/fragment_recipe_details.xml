@@ -7,8 +7,8 @@
     <data>
 
         <variable
-            name="wholeRecipe"
-            type="com.ang.acb.bakeit.data.model.WholeRecipe" />
+            name="recipeDetails"
+            type="com.ang.acb.bakeit.data.model.RecipeDetails" />
 
     </data>
 
@@ -29,7 +29,7 @@
                 android:text="@string/ingredients"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:toggleVisibility="@{wholeRecipe.ingredients.size > 0}" />
+                app:toggleVisibility="@{recipeDetails.ingredients.size > 0}" />
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rv_ingredients"
@@ -38,8 +38,8 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/label_ingredients"
-                app:ingredientItems="@{wholeRecipe.ingredients}"
-                app:toggleVisibility="@{wholeRecipe.ingredients.size > 0}" />
+                app:ingredientItems="@{recipeDetails.ingredients}"
+                app:toggleVisibility="@{recipeDetails.ingredients.size > 0}" />
 
             <TextView
                 android:id="@+id/label_steps"
@@ -47,7 +47,7 @@
                 android:text="@string/steps"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/rv_ingredients"
-                app:toggleVisibility="@{wholeRecipe.steps.size > 0}" />
+                app:toggleVisibility="@{recipeDetails.steps.size > 0}" />
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rv_steps"
@@ -56,8 +56,8 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/label_steps"
-                app:stepItems="@{wholeRecipe.steps}"
-                app:toggleVisibility="@{wholeRecipe.steps.size > 0}" />
+                app:stepItems="@{recipeDetails.steps}"
+                app:toggleVisibility="@{recipeDetails.steps.size > 0}" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.core.widget.NestedScrollView>

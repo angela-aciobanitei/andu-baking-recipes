@@ -12,7 +12,7 @@ import java.util.List;
  * See: https://developer.android.com/reference/android/arch/persistence/room/Embedded
  * See: https://android.jlelse.eu/android-architecture-components-room-relationships-bf473510c14a
  */
-public class WholeRecipe {
+public class RecipeDetails {
 
     // The @Embedded annotation can be used on a field of an Entity or POJO to
     // signal that nested fields (i.e. fields of the annotated field's class)

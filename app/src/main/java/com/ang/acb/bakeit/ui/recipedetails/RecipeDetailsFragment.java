@@ -15,7 +15,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.ang.acb.bakeit.data.model.WholeRecipe;
+import com.ang.acb.bakeit.data.model.RecipeDetails;
 
 import com.ang.acb.bakeit.databinding.FragmentRecipeDetailsBinding;
 import com.ang.acb.bakeit.ui.common.NavigationController;
@@ -128,14 +128,14 @@ public class RecipeDetailsFragment extends Fragment {
         Timber.d("Recipe [id=%s]: observe recipe details.", recipeId);
         viewModel.getWholeRecipeLiveData(recipeId).observe(
                 getViewLifecycleOwner(),
-                new Observer<WholeRecipe>() {
+                new Observer<RecipeDetails>() {
                     @Override
-                    public void onChanged(WholeRecipe wholeRecipe) {
+                    public void onChanged(RecipeDetails recipeDetails) {
                         // Bind recipe data
-                        binding.setWholeRecipe(wholeRecipe);
+                        binding.setRecipeDetails(recipeDetails);
                         // Set recipe title for the action bar
                         Objects.requireNonNull(getActivity())
-                                .setTitle(wholeRecipe.getRecipe().getName());
+                                .setTitle(recipeDetails.getRecipe().getName());
                     }
                 }
         );

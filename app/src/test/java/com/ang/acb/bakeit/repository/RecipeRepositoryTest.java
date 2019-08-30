@@ -61,10 +61,10 @@ public class RecipeRepositoryTest {
     @Test
     public void loadAllRecipes() throws IOException {
         MutableLiveData<List<Recipe>> dbData = new MutableLiveData<>();
-        when(localDataSource.loadAllRecipes()).thenReturn(dbData);
+        when(localDataSource.getRecipeDetailsList()).thenReturn(dbData);
 
         LiveData<Resource<List<Recipe>>> loadedData = repository.loadAllRecipes();
-        verify(localDataSource).loadAllRecipes();
+        verify(localDataSource).getRecipeDetailsList();
         verify(remoteDataSource, never()).loadAllRecipes();
 
         Recipe carrotCake = TestUtil.createSimpleRecipe(
@@ -100,7 +100,7 @@ public class RecipeRepositoryTest {
         verify(observer).onChanged(Resource.loading( null));
 
         MutableLiveData<List<Recipe>> updatedDbData = new MutableLiveData<>();
-        when(localDataSource.loadAllRecipes()).thenReturn(updatedDbData);
+        when(localDataSource.getRecipeDetailsList()).thenReturn(updatedDbData);
         dbData.setValue(Collections.emptyList());
 
         verify(remoteDataSource).loadAllRecipes();

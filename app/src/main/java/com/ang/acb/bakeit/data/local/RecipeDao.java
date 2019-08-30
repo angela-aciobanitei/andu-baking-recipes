@@ -7,7 +7,7 @@ import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
 import androidx.room.Transaction;
 
-import com.ang.acb.bakeit.data.model.WholeRecipe;
+import com.ang.acb.bakeit.data.model.RecipeDetails;
 import com.ang.acb.bakeit.data.model.Ingredient;
 import com.ang.acb.bakeit.data.model.Recipe;
 import com.ang.acb.bakeit.data.model.Step;
@@ -27,7 +27,7 @@ public abstract class RecipeDao {
     public abstract void insertRecipe(Recipe recipe);
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    public abstract void insertSimpleRecipes(List<Recipe> recipes);
+    public abstract void insertRecipes(List<Recipe> recipes);
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     public abstract void insertIngredients(List<Ingredient> ingredients);
@@ -35,49 +35,58 @@ public abstract class RecipeDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     public abstract void insertSteps(List<Step> steps);
 
+    public void insertRecipeDetails(Recipe recipe) {
+        // Insert recipe ingredients
+        List<Ingredient> ingredients = recipe.getIngredients();
+        for (Ingredient ingredient : ingredients) {
+            ingredient.setRecipeId(recipe.getId());
+        }
+        insertIngredients(ingredients);
+
+        // Insert recipe steps
+        List<Step> steps = recipe.getSteps();
+        for (Step step : steps) {
+            step.setRecipeId(recipe.getId());
+        }
+        insertSteps(steps);
+
+        // Insert rest of the recipe details
+        insertRecipe(recipe);
+    }
+
     // TESTED
     public void insertAllRecipes(List<Recipe> recipes) {
         for (Recipe recipe : recipes) {
-            // Insert recipe ingredients
-            List<Ingredient> ingredients = recipe.getIngredients();
-            for (Ingredient ingredient : ingredients) {
-                ingredient.setRecipeId(recipe.getId());
-            }
-            insertIngredients(ingredients);
-
-            // Insert recipe steps
-            List<Step> steps = recipe.getSteps();
-            for (Step step : steps) {
-                step.setRecipeId(recipe.getId());
-            }
-            insertSteps(steps);
+            insertRecipeDetails(recipe);
         }
-        // Insert recipe
-        insertSimpleRecipes(recipes);
     }
 
     @Transaction
     @Query("SELECT * FROM ingredients where recipe_id= :recipeId")
-    public abstract LiveData<List<Ingredient>> loadRecipeIngredients(Integer recipeId);
+    public abstract LiveData<List<Ingredient>> getRecipeIngredients(Integer recipeId);
 
     @Transaction
     @Query("SELECT * FROM steps where recipe_id= :recipeId")
-    public abstract LiveData<List<Step>> loadRecipeSteps(Integer recipeId);
+    public abstract LiveData<List<Step>> getRecipeSteps(Integer recipeId);
 
     @Transaction
     @Query("SELECT * FROM recipes WHERE id= :recipeId")
-    public abstract LiveData<Recipe> loadSimpleRecipe(Integer recipeId);
+    public abstract LiveData<Recipe> getRecipe(Integer recipeId);
 
     @Transaction
     @Query("SELECT * FROM recipes WHERE id= :recipeId")
-    public abstract LiveData<WholeRecipe> loadWholeRecipe(Integer recipeId);
+    public abstract LiveData<RecipeDetails> getRecipeDetails(Integer recipeId);
 
     @Transaction
     @Query("SELECT * FROM recipes WHERE id= :recipeId")
-    public abstract WholeRecipe loadRecipe(Integer recipeId);
+    public abstract RecipeDetails getRecipeDetailsForWidget(Integer recipeId);
 
     @Transaction
     @Query("SELECT * FROM recipes")
-    public abstract LiveData<List<WholeRecipe>> loadWholeRecipes();
+    public abstract LiveData<List<RecipeDetails>> getRecipeDetailsList();
+
+    @Transaction
+    @Query("SELECT * FROM recipes")
+    public abstract LiveData<List<Recipe>> getRecipeList();
 
 }

@@ -15,83 +15,31 @@ import javax.inject.Inject;
 
 public class RecipeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
-    private RecipeListViewModel viewModel;
-    private Resource<List<Recipe>> recipes;
-    private Resource networkState = null;
+    private List<Recipe> recipes;
 
     @Inject
     public RecipeAdapter (RecipeListViewModel viewModel) {
-        this.viewModel = viewModel;
-        recipes = viewModel.getRecipesLiveData().getValue();
+        recipes = viewModel.getRecipesLiveData().getValue().getData();
     }
 
     @NonNull
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        switch (viewType) {
-            case R.layout.recipe_item:
-                return RecipeItemViewHolder.create(parent);
-            case R.layout.network_state_item:
-                return NetworkStateItemViewHolder.create(parent, viewModel);
-            default:
-                throw new IllegalArgumentException("Unknown view type " + viewType);
-        }
+        return RecipeItemViewHolder.create(parent);
     }
 
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
-        switch (getItemViewType(position)) {
-            case R.layout.recipe_item:
-                ((RecipeItemViewHolder) holder).bindTo(
-                        recipes.getData().get(position));
-                break;
-            case R.layout.network_state_item:
-                ((NetworkStateItemViewHolder) holder).bindTo(networkState);
-                break;
-            default:
-                throw new IllegalArgumentException(
-                        "Unknown view type " + getItemViewType(position));
-        }
-    }
-
-    @Override
-    public int getItemViewType(int position) {
-        if (hasExtraRow() && position == getItemCount() - 1) {
-            return R.layout.network_state_item;
-        } else {
-            return R.layout.recipe_item;
-        }
+        ((RecipeItemViewHolder) holder).bindTo(recipes.get(position));
     }
 
     @Override
     public int getItemCount() {
-        int listSize = recipes.getData() == null ? 0 :  recipes.getData().size();
-        return listSize + (hasExtraRow() ? 1 : 0);
+        return recipes == null ? 0 :  recipes.size();
     }
 
-    private boolean hasExtraRow() {
-        return networkState != null && networkState.status != Resource.Status.SUCCESS;
-    }
-
-    public void submitList(Resource<List<Recipe>> recipes) {
+    public void submitList(List<Recipe> recipes) {
         this.recipes = recipes;
         notifyDataSetChanged();
-    }
-
-    public void setNetworkState(Resource currentNetworkState) {
-        Resource previousNetworkState = networkState;
-        boolean hadExtraRow = hasExtraRow();
-        networkState = currentNetworkState;
-        boolean hasExtraRow = hasExtraRow();
-        int listSize = recipes.getData() == null ? 0 :  recipes.getData().size();
-        if (hadExtraRow != hasExtraRow) {
-            if (hadExtraRow) {
-                notifyItemRemoved(listSize);
-            } else {
-                notifyItemInserted(listSize);
-            }
-        } else if (hasExtraRow && !previousNetworkState.equals(currentNetworkState)) {
-            notifyItemChanged(getItemCount() - 1);
-        }
     }
 }

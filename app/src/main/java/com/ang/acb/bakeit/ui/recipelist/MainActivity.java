@@ -20,6 +20,7 @@ import com.ang.acb.bakeit.utils.RecipeIdlingResource;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Collections;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -33,6 +34,7 @@ public class MainActivity extends AppCompatActivity {
     public static final String EXTRA_RECIPE_NAME ="EXTRA_RECIPE_NAME";
     public static final Integer INVALID_RECIPE_ID = -1;
 
+    ActivityMainBinding binding;
     private RecipeIdlingResource idlingResource;
     private RecipeListViewModel viewModel;
 
@@ -54,8 +56,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void initBinding() {
         // Inflate view and obtain an instance of the binding class.
-        ActivityMainBinding binding = DataBindingUtil
-                .setContentView(this, R.layout.activity_main);
+        binding = DataBindingUtil.setContentView(this, R.layout.activity_main);
 
         // Specify the current activity as the lifecycle owner.
         binding.setLifecycleOwner(this);
@@ -70,7 +71,7 @@ public class MainActivity extends AppCompatActivity {
     @NotNull
     private RecipeAdapter getRecipeAdapter() {
         final RecipeAdapter adapter =  new RecipeAdapter(viewModel);
-        RecyclerView recyclerView = findViewById(R.id.rv_recipe_list);
+        RecyclerView recyclerView = binding.rvRecipeList;
         recyclerView.setAdapter(adapter);
         Timber.d("Setup recipe list adapter.");
         return adapter;
@@ -83,9 +84,17 @@ public class MainActivity extends AppCompatActivity {
                 @Override
                 public void onChanged(Resource<List<Recipe>> resource) {
                     Timber.d("Observe recipe list.");
-                    adapter.submitList(resource);
+                    if (resource != null && resource.data != null) {
+                        adapter.submitList(resource.data);
+                    } else {
+                        adapter.submitList(Collections.emptyList());
+                    }
                     Timber.d("Observe network status.");
-                    adapter.setNetworkState(resource);
+                    binding.setResource(resource);
+                    // FIXME: HANDLE retries
+                    Timber.d("Handle retries.");
+                    binding.setCallback(() -> viewModel.retry());
+                    binding.executePendingBindings();
                 }
         });
     }
