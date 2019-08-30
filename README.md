@@ -21,6 +21,8 @@ An app that displays recipes from a network resource. When user selects a recipe
 *   [Gson](https://github.com/google/gson), a Java serialization/deserialization library to convert Java Objects into JSON and back.
 *   [Glide](https://github.com/bumptech/glide), an image loading and caching library for Android.
 *   [ExoPlayer](https://github.com/google/ExoPlayer), an extensible media player for Android.
-*   [Timber](https://github.com/JakeWharton/timber), for logging. 
-*   [Dagger 2](https://github.com/google/dagger), for dependency injection.
-*   [Espresso](https://developer.android.com/training/testing/espresso/),  for UI testing.
+*   [Timber](https://github.com/JakeWharton/timber), a logger that provides utility on top of Android's normal Log class. 
+*   [Dagger 2](https://github.com/google/dagger), a fast dependency injector for Android and Java.
+*   [Mockito](https://github.com/mockito/mockito), a popular mocking framework for Java.
+*   [MockWebServer](https://github.com/square/okhttp/tree/master/mockwebserver), a scriptable web server for testing HTTP clients.
+*   [Espresso](https://developer.android.com/training/testing/espresso/) for UI testing.
