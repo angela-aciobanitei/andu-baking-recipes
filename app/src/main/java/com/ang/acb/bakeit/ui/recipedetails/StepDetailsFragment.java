@@ -45,18 +45,17 @@ import static com.ang.acb.bakeit.ui.recipelist.MainActivity.EXTRA_RECIPE_ID;
 
 public class StepDetailsFragment extends Fragment  {
 
-    private static final String CURRENT_STEP_POSITION_KEY = "CURRENT_STEP_POSITION_KEY";
-    private static final String CURRENT_STEP_COUNT = "CURRENT_STEP_COUNT";
+    private static final String CURRENT_STEP_COUNT_KEY = "CURRENT_STEP_COUNT_KEY";
     private static final String CURRENT_PLAYBACK_POSITION_KEY = "CURRENT_PLAYBACK_POSITION_KEY";
     private static final String SHOULD_PLAY_WHEN_READY_KEY = "SHOULD_PLAY_WHEN_READY_KEY";
-    private static final String EXTRA_STEP_POSITION = "EXTRA_STEP_POSITION";
     private static final String EXTRA_IS_TWO_PANE = "EXTRA_IS_TWO_PANE";
+    private static final String EXTRA_STEP_POSITION = "EXTRA_STEP_POSITION";
 
     private FragmentStepDetailsBinding binding;
     private DetailsViewModel viewModel;
     private Integer recipeId;
-    private int currentStepPosition;
     private int currentStepCount;
+    private int stepPosition;
     private boolean isTwoPane;
 
     private SimpleExoPlayer simpleExoPlayer;
@@ -121,19 +120,15 @@ public class StepDetailsFragment extends Fragment  {
     @Override
     public void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
-        outState.putInt(CURRENT_STEP_COUNT, currentStepCount);
-        outState.putInt(CURRENT_STEP_POSITION_KEY, currentStepPosition);
+        outState.putInt(CURRENT_STEP_COUNT_KEY, currentStepCount);
         outState.putLong(CURRENT_PLAYBACK_POSITION_KEY, currentPlaybackPosition);
         outState.putBoolean(SHOULD_PLAY_WHEN_READY_KEY, shouldPlayWhenReady);
     }
 
     private void restoreInstanceState(Bundle savedInstanceState){
         if (savedInstanceState != null) {
-            if (savedInstanceState.containsKey(CURRENT_STEP_COUNT)) {
-                currentStepCount = savedInstanceState.getInt(CURRENT_STEP_COUNT);
-            }
-            if (savedInstanceState.containsKey(CURRENT_STEP_POSITION_KEY)) {
-                currentStepPosition = savedInstanceState.getInt(CURRENT_STEP_POSITION_KEY);
+            if (savedInstanceState.containsKey(CURRENT_STEP_COUNT_KEY)) {
+                currentStepCount = savedInstanceState.getInt(CURRENT_STEP_COUNT_KEY);
             }
             if (savedInstanceState.containsKey(CURRENT_PLAYBACK_POSITION_KEY)) {
                 currentPlaybackPosition = savedInstanceState.getLong(CURRENT_PLAYBACK_POSITION_KEY);
@@ -179,11 +174,12 @@ public class StepDetailsFragment extends Fragment  {
         Bundle args = getArguments();
         if (args != null) {
             recipeId = args.getInt(EXTRA_RECIPE_ID);
+            stepPosition = args.getInt(EXTRA_STEP_POSITION);
             isTwoPane = args.getBoolean(EXTRA_IS_TWO_PANE);
-            currentStepPosition = args.getInt(EXTRA_STEP_POSITION);
         }
+
         viewModel.init(recipeId);
-        viewModel.setStepIndexLiveData(currentStepPosition);
+        viewModel.setStepIndexLiveData(stepPosition);
     }
 
     private void observeSteps(){

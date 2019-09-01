@@ -24,7 +24,6 @@ public class DetailsViewModel extends ViewModel {
 
     private LiveData<RecipeDetails> recipeDetailsLiveData;
     private LiveData<List<Step>> stepsLiveData;
-    private LiveData<List<Ingredient>> ingredientsLiveData;
     private MediatorLiveData<Step> currentStepLiveData;
     private MutableLiveData<Integer> stepIndexLiveData;
     private MutableLiveData<Integer> recipeIdLiveData = new MutableLiveData<>();
@@ -35,20 +34,18 @@ public class DetailsViewModel extends ViewModel {
     }
 
     public void init(Integer recipeId) {
-        if (recipeDetailsLiveData == null) {
-            recipeDetailsLiveData = Transformations.switchMap(
-                    recipeIdLiveData, repository::getRecipeDetails);
-        }
+        recipeDetailsLiveData = Transformations.switchMap(
+                recipeIdLiveData, repository::getRecipeDetails);
+
         recipeIdLiveData.setValue(recipeId);
     }
 
     public LiveData<RecipeDetails> getRecipeDetailsLiveData() {
-//        // Prevent NullPointerException
-//        if (recipeDetailsLiveData == null) {
-//            recipeDetailsLiveData = Transformations.switchMap(
-//                    recipeIdLiveData, repository::getRecipeDetails);
-//        }
-//        recipeIdLiveData.setValue(recipeId);
+        // Prevent NullPointerException
+        if (recipeDetailsLiveData == null) {
+            recipeDetailsLiveData = Transformations.switchMap(
+                    recipeIdLiveData, repository::getRecipeDetails);
+        }
         return recipeDetailsLiveData;
     }
 
@@ -59,14 +56,6 @@ public class DetailsViewModel extends ViewModel {
                     recipeIdLiveData, repository::getRecipeSteps);
         }
         return stepsLiveData;
-    }
-
-    public LiveData<List<Ingredient>> getIngredientsLiveData() {
-        if(ingredientsLiveData == null) {
-            ingredientsLiveData = Transformations.switchMap(
-                    recipeIdLiveData, repository::getRecipeIngredients);
-        }
-        return ingredientsLiveData;
     }
 
     public int getStepCount(){
@@ -122,8 +111,8 @@ public class DetailsViewModel extends ViewModel {
 
         LiveData<List<Step>> stepsLiveData = getStepsLiveData();
         currentStepLiveData.addSource(stepsLiveData, steps -> {
-            if (steps != null && stepIndexLiveData.getValue() != null) {
-               currentStepLiveData.setValue(steps.get(stepIndexLiveData.getValue()));
+            if (steps != null && getStepIndex().getValue() != null) {
+               currentStepLiveData.setValue(steps.get(getStepIndex().getValue()));
             }
         });
 
@@ -133,5 +122,9 @@ public class DetailsViewModel extends ViewModel {
                 currentStepLiveData.setValue(stepsLiveData.getValue().get(stepIndex));
             }
         });
+    }
+
+    public void retry(Integer recipeId) {
+        recipeIdLiveData.setValue(recipeId);
     }
 }

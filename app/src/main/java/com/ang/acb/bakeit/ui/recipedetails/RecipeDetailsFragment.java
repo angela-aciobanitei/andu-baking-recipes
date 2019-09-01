@@ -116,8 +116,9 @@ public class RecipeDetailsFragment extends Fragment {
                 getContext(), RecyclerView.VERTICAL, false));
         rvSteps.setHasFixedSize(true);
         // On item click, navigate to StepDetailsFragment.
-        rvSteps.setAdapter(new StepAdapter(position ->
-                navigationController.navigateToStepDetails(recipeId, position, isTwoPane)));
+        rvSteps.setAdapter(new StepAdapter(position -> {
+            navigationController.navigateToStepDetails(recipeId, position, isTwoPane);
+        }));
 
         // Disable nested scrolling for this view.
         ViewCompat.setNestedScrollingEnabled(rvSteps, false);
