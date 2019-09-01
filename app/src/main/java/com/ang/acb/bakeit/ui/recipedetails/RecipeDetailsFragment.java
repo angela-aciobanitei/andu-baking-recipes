@@ -126,13 +126,15 @@ public class RecipeDetailsFragment extends Fragment {
 
     private void observeRecipeDetails() {
         Timber.d("Recipe [id=%s]: observe recipe details.", recipeId);
-        viewModel.getRecipeDetailsLiveData(recipeId).observe(
+        viewModel.getRecipeDetailsLiveData().observe(
                 getViewLifecycleOwner(),
                 new Observer<RecipeDetails>() {
                     @Override
                     public void onChanged(RecipeDetails recipeDetails) {
-                        // Bind recipe data
+                        // Bind recipe data.
                         binding.setRecipeDetails(recipeDetails);
+                        // Necessary because Espresso cannot read data binding callbacks.
+                        binding.executePendingBindings();
                         // Set recipe title for the action bar
                         Objects.requireNonNull(getActivity())
                                 .setTitle(recipeDetails.getRecipe().getName());

@@ -46,14 +46,18 @@ import static com.ang.acb.bakeit.ui.recipelist.MainActivity.EXTRA_RECIPE_ID;
 public class StepDetailsFragment extends Fragment  {
 
     private static final String CURRENT_STEP_POSITION_KEY = "CURRENT_STEP_POSITION_KEY";
+    private static final String CURRENT_STEP_COUNT = "CURRENT_STEP_COUNT";
     private static final String CURRENT_PLAYBACK_POSITION_KEY = "CURRENT_PLAYBACK_POSITION_KEY";
     private static final String SHOULD_PLAY_WHEN_READY_KEY = "SHOULD_PLAY_WHEN_READY_KEY";
     private static final String EXTRA_STEP_POSITION = "EXTRA_STEP_POSITION";
+    private static final String EXTRA_IS_TWO_PANE = "EXTRA_IS_TWO_PANE";
 
     private FragmentStepDetailsBinding binding;
     private DetailsViewModel viewModel;
     private Integer recipeId;
     private int currentStepPosition;
+    private int currentStepCount;
+    private boolean isTwoPane;
 
     private SimpleExoPlayer simpleExoPlayer;
     private boolean shouldPlayWhenReady;
@@ -68,12 +72,13 @@ public class StepDetailsFragment extends Fragment  {
     // Required empty public constructor
     public StepDetailsFragment() {}
 
-    public static StepDetailsFragment newInstance(Integer recipeId, int stepPosition) {
+    public static StepDetailsFragment newInstance(Integer recipeId, int stepPosition, boolean isTwoPane) {
         Timber.d("StepDetailsFragment created.");
         StepDetailsFragment fragment = new StepDetailsFragment();
         Bundle args = new Bundle();
         args.putInt(EXTRA_RECIPE_ID, recipeId);
         args.putInt(EXTRA_STEP_POSITION, stepPosition);
+        args.putBoolean(EXTRA_IS_TWO_PANE, isTwoPane);
         fragment.setArguments(args);
 
         return fragment;
@@ -105,6 +110,8 @@ public class StepDetailsFragment extends Fragment  {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
+        currentStepCount = -1;
+
         restoreInstanceState(savedInstanceState);
         enableFullscreenMode();
         initViewModel();
@@ -114,6 +121,7 @@ public class StepDetailsFragment extends Fragment  {
     @Override
     public void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
+        outState.putInt(CURRENT_STEP_COUNT, currentStepCount);
         outState.putInt(CURRENT_STEP_POSITION_KEY, currentStepPosition);
         outState.putLong(CURRENT_PLAYBACK_POSITION_KEY, currentPlaybackPosition);
         outState.putBoolean(SHOULD_PLAY_WHEN_READY_KEY, shouldPlayWhenReady);
@@ -121,6 +129,9 @@ public class StepDetailsFragment extends Fragment  {
 
     private void restoreInstanceState(Bundle savedInstanceState){
         if (savedInstanceState != null) {
+            if (savedInstanceState.containsKey(CURRENT_STEP_COUNT)) {
+                currentStepCount = savedInstanceState.getInt(CURRENT_STEP_COUNT);
+            }
             if (savedInstanceState.containsKey(CURRENT_STEP_POSITION_KEY)) {
                 currentStepPosition = savedInstanceState.getInt(CURRENT_STEP_POSITION_KEY);
             }
@@ -168,6 +179,7 @@ public class StepDetailsFragment extends Fragment  {
         Bundle args = getArguments();
         if (args != null) {
             recipeId = args.getInt(EXTRA_RECIPE_ID);
+            isTwoPane = args.getBoolean(EXTRA_IS_TWO_PANE);
             currentStepPosition = args.getInt(EXTRA_STEP_POSITION);
         }
         viewModel.init(recipeId);
@@ -180,8 +192,12 @@ public class StepDetailsFragment extends Fragment  {
                 new Observer<Step>() {
                     @Override
                     public void onChanged(Step step) {
-                        binding.setStep(step);
+                        if (currentStepCount == -1 || currentStepCount != viewModel.getStepCount()) {
+                            resetPlayer();
+                            currentStepCount = viewModel.getStepCount();
+                        }
                         binding.setStepCount(viewModel.getStepCount());
+                        binding.setStep(step);
                         handleVideoUrl(step);
                         handleStepButtons();
                     }
@@ -261,6 +277,7 @@ public class StepDetailsFragment extends Fragment  {
     }
 
     private void handleStepButtons(){
+        if (!isTwoPane) {
             // Handle click events
             binding.nextStepButton.setOnClickListener(view -> {
                 resetPlayer();
@@ -270,6 +287,9 @@ public class StepDetailsFragment extends Fragment  {
                 resetPlayer();
                 viewModel.previousStepIndex();
             });
+            // Necessary because Espresso cannot read data binding callbacks.
+            binding.executePendingBindings();
+        }
     }
 
     @Override

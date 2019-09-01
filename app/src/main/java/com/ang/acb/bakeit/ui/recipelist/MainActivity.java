@@ -82,10 +82,10 @@ public class MainActivity extends AppCompatActivity {
                         adapter.submitList(resource.data);
                     } else {
                         adapter.submitList(Collections.emptyList());
-                        // FIXME: HANDLE retries
-                        Timber.d("Handle retries.");
-                        binding.setCallback(() -> viewModel.retry());
                     }
+                    // FIXME: HANDLE retries
+                    Timber.d("Handle retries.");
+                    binding.setCallback(() -> viewModel.retry());
                     Timber.d("Observe network status.");
                     binding.setResource(resource);
                     binding.executePendingBindings();

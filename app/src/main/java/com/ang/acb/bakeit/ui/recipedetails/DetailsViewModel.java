@@ -3,10 +3,12 @@ package com.ang.acb.bakeit.ui.recipedetails;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MediatorLiveData;
 import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.Transformations;
 import androidx.lifecycle.ViewModel;
 
 import com.ang.acb.bakeit.data.model.Ingredient;
 import com.ang.acb.bakeit.data.model.RecipeDetails;
+import com.ang.acb.bakeit.data.model.Resource;
 import com.ang.acb.bakeit.data.model.Step;
 import com.ang.acb.bakeit.data.repository.RecipeRepository;
 
@@ -25,6 +27,7 @@ public class DetailsViewModel extends ViewModel {
     private LiveData<List<Ingredient>> ingredientsLiveData;
     private MediatorLiveData<Step> currentStepLiveData;
     private MutableLiveData<Integer> stepIndexLiveData;
+    private MutableLiveData<Integer> recipeIdLiveData = new MutableLiveData<>();
 
     @Inject
     public DetailsViewModel(RecipeRepository repository) {
@@ -32,33 +35,43 @@ public class DetailsViewModel extends ViewModel {
     }
 
     public void init(Integer recipeId) {
-        recipeDetailsLiveData = repository.getRecipeDetails(recipeId);
-        stepsLiveData = repository.getRecipeSteps(recipeId);
+        // Prevent NullPointerException
+        if (recipeDetailsLiveData == null) {
+            recipeDetailsLiveData = Transformations.switchMap(
+                    recipeIdLiveData, repository::getRecipeDetails);
+        }
+        recipeIdLiveData.setValue(recipeId);
     }
 
-    public LiveData<RecipeDetails> getRecipeDetailsLiveData(Integer recipeId) {
-        if (recipeDetailsLiveData == null) {
-            recipeDetailsLiveData = repository.getRecipeDetails(recipeId);
-        }
+    public LiveData<RecipeDetails> getRecipeDetailsLiveData() {
+//        // Prevent NullPointerException
+//        if (recipeDetailsLiveData == null) {
+//            recipeDetailsLiveData = Transformations.switchMap(
+//                    recipeIdLiveData, repository::getRecipeDetails);
+//        }
+//        recipeIdLiveData.setValue(recipeId);
         return recipeDetailsLiveData;
     }
 
-    public LiveData<List<Step>> getStepsLiveData(Integer recipeId) {
+    public LiveData<List<Step>> getStepsLiveData() {
+        // Prevent NullPointerException
         if(stepsLiveData == null) {
-            stepsLiveData = repository.getRecipeSteps(recipeId);
+            stepsLiveData = Transformations.switchMap(
+                    recipeIdLiveData, repository::getRecipeSteps);
         }
         return stepsLiveData;
     }
 
-    public LiveData<List<Ingredient>> getIngredientsLiveData(Integer recipeId) {
+    public LiveData<List<Ingredient>> getIngredientsLiveData() {
         if(ingredientsLiveData == null) {
-            ingredientsLiveData = repository.getRecipeIngredients(recipeId);
+            ingredientsLiveData = Transformations.switchMap(
+                    recipeIdLiveData, repository::getRecipeIngredients);
         }
         return ingredientsLiveData;
     }
 
     public int getStepCount(){
-        return Objects.requireNonNull(stepsLiveData.getValue()).size();
+        return Objects.requireNonNull(getStepsLiveData().getValue()).size();
     }
 
     public LiveData<Integer> getStepIndex() {
@@ -108,9 +121,10 @@ public class DetailsViewModel extends ViewModel {
             currentStepLiveData = new MediatorLiveData<>();
         }
 
+        LiveData<List<Step>> stepsLiveData = getStepsLiveData();
         currentStepLiveData.addSource(stepsLiveData, steps -> {
             if (steps != null && stepIndexLiveData.getValue() != null) {
-                currentStepLiveData.setValue(steps.get(stepIndexLiveData.getValue()));
+               currentStepLiveData.setValue(steps.get(stepIndexLiveData.getValue()));
             }
         });
 

@@ -17,13 +17,14 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:layout_margin="16dp">
 
         <com.google.android.exoplayer2.ui.PlayerView
             android:id="@+id/exoplayer_view"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            app:layout_constraintDimensionRatio="16:9"
+            app:layout_constraintDimensionRatio="H,16:9"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
@@ -39,8 +40,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:toggleVisibility="@{step.getVideoURL() == null || step.getVideoURL().isEmpty()}"
-            tools:src ="@drawable/bakeit" />
+            app:toggleVisibility="@{step.getVideoURL() == null || step.getVideoURL().isEmpty()}" />
 
         <androidx.constraintlayout.widget.Barrier
             android:id="@+id/barrier"
@@ -68,50 +68,12 @@
             android:layout_margin="16dp"
             android:text="@{step.getDescription()}"
             android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-            app:layout_constraintBottom_toTopOf="@+id/previous_step_button"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/video_short_description"
             tools:text="2. Melt the butter and bittersweet chocolate together in a microwave or a double boiler. If microwaving, heat for 30 seconds at a time, removing bowl and stirring ingredients in between."/>
 
-        <androidx.constraintlayout.widget.Barrier
-            android:id="@+id/barrier2"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:barrierDirection="bottom"
-            app:constraint_referenced_ids="video_description" />
 
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/next_step_button"
-            style="@style/Widget.MaterialComponents.Button.TextButton"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginBottom="16dp"
-            android:layout_marginEnd="16dp"
-            android:text="@string/next_step"
-            android:textAppearance="@style/TextAppearance.AppCompat.Button"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toEndOf="@+id/previous_step_button"
-            app:toggleVisibility="@{step.getId() + 1 != stepCount}"/>
-
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/previous_step_button"
-            style="@style/Widget.MaterialComponents.Button.TextButton"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginBottom="16dp"
-            android:text="@string/previous_step"
-            android:textAppearance="@style/TextAppearance.AppCompat.Button"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/next_step_button"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintHorizontal_chainStyle="spread"
-            app:layout_constraintStart_toStartOf="parent"
-            app:toggleVisibility="@{step.getId() > 0}"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
