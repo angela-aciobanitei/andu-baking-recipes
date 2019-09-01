@@ -35,7 +35,6 @@ public class DetailsViewModel extends ViewModel {
     }
 
     public void init(Integer recipeId) {
-        // Prevent NullPointerException
         if (recipeDetailsLiveData == null) {
             recipeDetailsLiveData = Transformations.switchMap(
                     recipeIdLiveData, repository::getRecipeDetails);
