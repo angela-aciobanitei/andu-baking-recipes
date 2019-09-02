@@ -15,6 +15,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.ang.acb.bakeit.R;
 import com.ang.acb.bakeit.data.model.RecipeDetails;
 
 import com.ang.acb.bakeit.databinding.FragmentRecipeDetailsBinding;

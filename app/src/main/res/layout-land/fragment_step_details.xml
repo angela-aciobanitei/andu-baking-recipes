@@ -38,7 +38,8 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:toggleVisibility="@{step.getVideoURL() == null || step.getVideoURL().isEmpty()}" />
+            app:toggleVisibility="@{step.getVideoURL() == null || step.getVideoURL().isEmpty()}"
+            tools:src ="@drawable/bakeit" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

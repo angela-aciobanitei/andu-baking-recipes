@@ -140,13 +140,7 @@ public class StepDetailsFragment extends Fragment  {
     }
 
     private void enableFullscreenMode() {
-        Configuration configuration = Objects.requireNonNull(
-                getContext()).getResources().getConfiguration();
-
-        boolean isFullscreenMode = configuration.smallestScreenWidthDp < 600 &&
-                configuration.orientation == Configuration.ORIENTATION_LANDSCAPE;
-
-        if (isFullscreenMode) {
+        if (isFullscreenMode()) {
             // Hide action bar
             Objects.requireNonNull(((AppCompatActivity) Objects.requireNonNull(getActivity()))
                     .getSupportActionBar()).hide();
@@ -165,6 +159,12 @@ public class StepDetailsFragment extends Fragment  {
                     View.SYSTEM_UI_FLAG_HIDE_NAVIGATION |
                     View.SYSTEM_UI_FLAG_FULLSCREEN);
         }
+    }
+
+    private boolean isFullscreenMode() {
+        Configuration configuration = getResources().getConfiguration();
+        return configuration.smallestScreenWidthDp < 600 &&
+                configuration.orientation == Configuration.ORIENTATION_LANDSCAPE;
     }
 
     private void initViewModel() {
@@ -273,7 +273,7 @@ public class StepDetailsFragment extends Fragment  {
     }
 
     private void handleStepButtons(){
-        if (!isTwoPane) {
+        if (!isTwoPane && !isFullscreenMode()) {
             // Handle click events
             binding.nextStepButton.setOnClickListener(view -> {
                 resetPlayer();

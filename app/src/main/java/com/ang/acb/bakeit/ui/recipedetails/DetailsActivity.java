@@ -61,7 +61,7 @@ public class DetailsActivity extends AppCompatActivity
 
         if (savedInstanceState == null) {
             navigationController.navigateToRecipeDetails(recipeId, isTwoPane());
-            navigationController.navigateToStepDetails(recipeId, 0, isTwoPane());
+            if (isTwoPane()) navigationController.navigateToStepDetails(recipeId, 0, isTwoPane());
         }
     }
 
