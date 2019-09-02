@@ -35,6 +35,7 @@ public class RecipeRepository {
     private final RecipeLocalDataSource localDataSource;
     private final RecipeRemoteDataSource remoteDataSource;
     private final AppExecutors appExecutors;
+    private Boolean retry = false;
 
     @Inject
     public RecipeRepository(RecipeLocalDataSource localDataSource,
@@ -67,7 +68,9 @@ public class RecipeRepository {
             }
 
             @Override
-            protected void onFetchFailed() {}
+            protected void onFetchFailed() {
+                retry = true;
+            }
 
             @Override
             protected boolean shouldFetch(@Nullable List<RecipeDetails> localData) {
@@ -120,5 +123,7 @@ public class RecipeRepository {
         return localDataSource.getRecipeIngredients(recipeId);
     }
 
-
+    public Boolean getRetry() {
+        return retry;
+    }
 }

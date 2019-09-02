@@ -72,20 +72,19 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void initRecipeList() {
+        // FIXME: HANDLE retries
+        Timber.d("Handle retries.");
+        binding.setCallback(() -> viewModel.retry());
+
         // Observe data and network status.
-        viewModel.getRecipesLiveData().observe(this,
+        viewModel.getResult().observe(this,
             new Observer<Resource<List<Recipe>>>() {
                 @Override
                 public void onChanged(Resource<List<Recipe>> resource) {
                     Timber.d("Observe recipe list.");
                     if (resource != null && resource.data != null) {
                         adapter.submitList(resource.data);
-                    } else {
-                        adapter.submitList(Collections.emptyList());
                     }
-                    // FIXME: HANDLE retries
-                    Timber.d("Handle retries.");
-                    binding.setCallback(() -> viewModel.retry());
                     Timber.d("Observe network status.");
                     binding.setResource(resource);
                     binding.executePendingBindings();
