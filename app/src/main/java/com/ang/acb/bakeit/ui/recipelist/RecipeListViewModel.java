@@ -14,6 +14,8 @@ import java.util.List;
 
 import javax.inject.Inject;
 
+import timber.log.Timber;
+
 public class RecipeListViewModel extends ViewModel {
 
     private RecipeRepository repository;
@@ -44,8 +46,8 @@ public class RecipeListViewModel extends ViewModel {
     public void setRetryLiveData(boolean value) {
         if (retryLiveData == null) {
             retryLiveData = new MutableLiveData<>();
-            retryLiveData.setValue(value);
         }
+        retryLiveData.setValue(value);
     }
 
     public MediatorLiveData<Resource<List<Recipe>>> getResult() {
@@ -80,6 +82,7 @@ public class RecipeListViewModel extends ViewModel {
     // See: https://stackoverflow.com/questions/54087466/refreshing-livedata-with-retrofit-request-response
     // See: https://stackoverflow.com/questions/55913293/is-this-the-right-way-to-have-a-button-that-retries-an-api-call-on-an-android-ap
     public void retry() {
+        Timber.d("Retry: update retry live data.");
         setRetryLiveData(true);
     }
 }

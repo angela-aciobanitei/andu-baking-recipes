@@ -60,7 +60,7 @@ public class RecipeDetailsFragmentTest {
         viewModel = Mockito.mock(DetailsViewModel.class);
         navigationController = mock(NavigationController.class);
 
-        when(viewModel.getRecipeDetailsLiveData(0)).thenReturn(recipeDetails);
+        when(viewModel.getRecipeDetailsLiveData()).thenReturn(recipeDetails);
 
         detailsFragment.viewModelFactory = ViewModelUtil.createFor(viewModel);
         detailsFragment.navigationController = navigationController;
