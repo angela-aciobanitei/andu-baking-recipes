@@ -26,12 +26,13 @@
                 android:id="@+id/label_ingredients"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/margin_normal"
                 android:layout_marginStart="@dimen/margin_normal"
+                android:layout_marginTop="@dimen/margin_normal"
                 android:layout_marginEnd="@dimen/margin_normal"
-                android:textAppearance="@style/TextAppearance.AppCompat.Title"
+                android:fontFamily="@font/alegreya"
                 android:text="@string/ingredients"
-                app:toggleVisibility="@{recipeDetails.ingredients != null}"/>
+                android:textAppearance="@style/TextAppearance.AppCompat.Title"
+                app:toggleVisibility="@{recipeDetails.ingredients != null}" />
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rv_ingredients"

@@ -22,7 +22,7 @@
             android:id="@+id/recipe_item_name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:drawableEnd="@drawable/ic_chevron_right_black_24dp"
+            android:drawableEnd="@drawable/ic_navigate_next_black_24dp"
             android:drawablePadding="@dimen/padding_small"
             android:padding="@dimen/padding_normal"
             android:text="@{recipe.name}"

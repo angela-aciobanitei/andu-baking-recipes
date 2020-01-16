@@ -29,7 +29,7 @@
             android:padding="@dimen/padding_mini"
             android:text="@{step.shortDescription}"
             android:textAppearance="@style/TextAppearance.MaterialComponents.Subtitle1"
-            android:drawableEnd="@drawable/ic_chevron_right_black_24dp"
+            android:drawableEnd="@drawable/ic_navigate_next_black_24dp"
             android:drawablePadding="@dimen/padding_small"
             tools:text="Start prep" />
 
