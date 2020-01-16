@@ -1,13 +1,10 @@
 package com.ang.acb.bakeit.ui.recipedetails;
 
 import androidx.annotation.Nullable;
-import androidx.core.view.ViewCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.ViewModelProviders;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -35,7 +32,7 @@ public class RecipeDetailsFragment extends Fragment {
     private static final String EXTRA_IS_TWO_PANE = "EXTRA_IS_TWO_PANE";
 
     private FragmentRecipeDetailsBinding binding;
-    private DetailsViewModel viewModel;
+    private RecipeDetailsViewModel viewModel;
     private Integer recipeId;
     private boolean isTwoPane;
 
@@ -83,61 +80,40 @@ public class RecipeDetailsFragment extends Fragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        initViewModel();
-        setupIngredientsAdapter();
-        setupStepsAdapter();
-        observeRecipeDetails();
-    }
-
-    private void initViewModel() {
-        viewModel = ViewModelProviders.of(this, viewModelFactory)
-                .get(DetailsViewModel.class);
-
         Bundle args = getArguments();
         if (args != null) {
             recipeId = args.getInt(EXTRA_RECIPE_ID);
             isTwoPane = args.getBoolean(EXTRA_IS_TWO_PANE, false);
         }
+
+        initViewModel();
+        setupAdapters();
+        populateUi();
+    }
+
+    private void initViewModel() {
+        viewModel = ViewModelProviders.of(this, viewModelFactory)
+                .get(RecipeDetailsViewModel.class);
         viewModel.init(recipeId);
     }
 
-    private void setupIngredientsAdapter() {
-        RecyclerView rvIngredients = binding.rvIngredients;
-        rvIngredients.setLayoutManager(new LinearLayoutManager(
-                getContext(), RecyclerView.VERTICAL, false));
-        rvIngredients.setHasFixedSize(true);
-        rvIngredients.setAdapter(new IngredientAdapter());
-        Timber.d("Recipe [id=%s]: setup ingredients adapter.", recipeId);
+    private void setupAdapters() {
+        binding.rvIngredients.setAdapter(new IngredientAdapter());
+        binding.rvSteps.setAdapter(new StepAdapter(position ->
+                // On item click, navigate to StepDetailsFragment.
+                navigationController.navigateToStepDetails(recipeId, position, isTwoPane)));
     }
 
-    private void setupStepsAdapter() {
-        RecyclerView rvSteps = binding.rvSteps;
-        rvSteps.setLayoutManager(new LinearLayoutManager(
-                getContext(), RecyclerView.VERTICAL, false));
-        rvSteps.setHasFixedSize(true);
-        // On item click, navigate to StepDetailsFragment.
-        rvSteps.setAdapter(new StepAdapter(position -> {
-            navigationController.navigateToStepDetails(recipeId, position, isTwoPane);
-        }));
-
-        Timber.d("Recipe [id=%s]: setup steps adapter.", recipeId);
-    }
-
-    private void observeRecipeDetails() {
-        Timber.d("Recipe [id=%s]: observe recipe details.", recipeId);
+    private void populateUi() {
         viewModel.getRecipeDetailsLiveData().observe(
-                getViewLifecycleOwner(),
-                new Observer<RecipeDetails>() {
-                    @Override
-                    public void onChanged(RecipeDetails recipeDetails) {
-                        // Bind recipe data.
-                        binding.setRecipeDetails(recipeDetails);
-                        // Necessary because Espresso cannot read data binding callbacks.
-                        binding.executePendingBindings();
-                        // Set recipe title for the action bar
-                        Objects.requireNonNull(getActivity())
-                                .setTitle(recipeDetails.getRecipe().getName());
-                    }
+                getViewLifecycleOwner(), recipeDetails -> {
+                    // Bind recipe data.
+                    binding.setRecipeDetails(recipeDetails);
+                    // Necessary because Espresso cannot read data binding callbacks.
+                    binding.executePendingBindings();
+                    // Set recipe title for the action bar
+                    Objects.requireNonNull(getActivity())
+                            .setTitle(recipeDetails.getRecipe().getName());
                 }
         );
     }

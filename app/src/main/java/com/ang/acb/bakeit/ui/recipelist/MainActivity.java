@@ -2,28 +2,19 @@ package com.ang.acb.bakeit.ui.recipelist;
 
 import android.os.Bundle;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.VisibleForTesting;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.ViewModelProviders;
-import androidx.test.espresso.IdlingResource;
 
 import com.ang.acb.bakeit.R;
-import com.ang.acb.bakeit.data.model.Recipe;
-import com.ang.acb.bakeit.data.model.Resource;
 import com.ang.acb.bakeit.databinding.ActivityMainBinding;
-import com.ang.acb.bakeit.utils.RecipeIdlingResource;
 
-import java.util.Collections;
-import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.inject.Inject;
 
 import dagger.android.AndroidInjection;
-import timber.log.Timber;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -40,15 +31,14 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        // Note: when using Dagger for injecting Activity
-        // objects, inject as early as possible.
+        // When using Dagger with Activities, inject as early as possible.
         AndroidInjection.inject(this);
         super.onCreate(savedInstanceState);
 
         initBinding();
         initViewModel();
         initRecipeAdapter();
-        initRecipeList();
+        populateUi();
     }
 
     private void initBinding() {
@@ -62,33 +52,26 @@ public class MainActivity extends AppCompatActivity {
     private void initViewModel() {
         viewModel = ViewModelProviders.of(this, viewModelFactory)
                 .get(RecipeListViewModel.class);
-        Timber.d("Setup recipe list view model.");
     }
 
     private void initRecipeAdapter() {
         adapter =  new RecipeAdapter();
         binding.rvRecipeList.setAdapter(adapter);
-        Timber.d("Setup recipe list adapter.");
     }
 
-    private void initRecipeList() {
-        // FIXME: HANDLE retries
-        Timber.d("Handle retries.");
-        binding.setCallback(() -> viewModel.retry());
-
+    private void populateUi() {
         // Observe data and network status.
-        viewModel.getResult().observe(this,
-            new Observer<Resource<List<Recipe>>>() {
-                @Override
-                public void onChanged(Resource<List<Recipe>> resource) {
-                    Timber.d("Observe recipe list.");
-                    if (resource != null && resource.data != null) {
-                        adapter.submitList(resource.data);
-                    }
-                    Timber.d("Observe network status.");
-                    binding.setResource(resource);
-                    binding.executePendingBindings();
-                }
+        viewModel.getLiveRecipes().observe(this, resource -> {
+            if (resource != null && resource.data != null) {
+                adapter.submitList(resource.data
+                        .stream()
+                        .map(item -> item.recipe)
+                        .collect(Collectors.toList()));
+            }
+
+            binding.setResource(resource);
+            binding.setCallback(() -> viewModel.retry());
+            binding.executePendingBindings();
         });
     }
 }

@@ -51,7 +51,7 @@ public class StepDetailsFragment extends Fragment  {
     private static final String EXTRA_STEP_POSITION = "EXTRA_STEP_POSITION";
 
     private FragmentStepDetailsBinding binding;
-    private DetailsViewModel viewModel;
+    private StepDetailsViewModel viewModel;
     private Integer recipeId;
     private int currentStepIndex;
     private int stepPosition;
@@ -162,7 +162,7 @@ public class StepDetailsFragment extends Fragment  {
 
     private void initViewModel(Bundle savedInstanceState) {
         viewModel = ViewModelProviders.of(this, viewModelFactory)
-                .get(DetailsViewModel.class);
+                .get(StepDetailsViewModel.class);
 
         Bundle args = getArguments();
         if (args != null) {

@@ -6,9 +6,7 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Transformations;
 import androidx.lifecycle.ViewModel;
 
-import com.ang.acb.bakeit.data.model.Ingredient;
 import com.ang.acb.bakeit.data.model.RecipeDetails;
-import com.ang.acb.bakeit.data.model.Resource;
 import com.ang.acb.bakeit.data.model.Step;
 import com.ang.acb.bakeit.data.repository.RecipeRepository;
 
@@ -22,18 +20,18 @@ import javax.inject.Inject;
  *
  * See: https://medium.com/androiddevelopers/viewmodels-and-livedata-patterns-antipatterns-21efaef74a54
  */
-public class DetailsViewModel extends ViewModel {
+public class StepDetailsViewModel extends ViewModel {
 
     private RecipeRepository repository;
-
     private LiveData<RecipeDetails> recipeDetailsLiveData;
+
     private LiveData<List<Step>> stepsLiveData;
     private MediatorLiveData<Step> currentStepLiveData;
     private MutableLiveData<Integer> stepIndexLiveData;
     private MutableLiveData<Integer> recipeIdLiveData = new MutableLiveData<>();
 
     @Inject
-    public DetailsViewModel(RecipeRepository repository) {
+    public StepDetailsViewModel(RecipeRepository repository) {
         this.repository = repository;
     }
 

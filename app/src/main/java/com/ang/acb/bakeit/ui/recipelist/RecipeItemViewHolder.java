@@ -43,10 +43,6 @@ public class RecipeItemViewHolder extends RecyclerView.ViewHolder {
             view.getContext().startActivity(intent);
         });
 
-        // Note: when a variable or observable object changes, the binding is scheduled
-        // to change before the next frame. There are times, however, when binding must
-        // be executed immediately. To force execution, use executePendingBindings().
-        // https://developer.android.com/topic/libraries/data-binding/generated-binding#immediate_binding
         binding.executePendingBindings();
     }
 

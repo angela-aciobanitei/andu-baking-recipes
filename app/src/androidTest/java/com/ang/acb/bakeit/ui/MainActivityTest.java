@@ -61,7 +61,7 @@ public class MainActivityTest {
         Intents.init();
 
         viewModel = Mockito.mock(RecipeListViewModel.class);
-        when(viewModel.getRecipesLiveData()).thenReturn(recipes);
+        when(viewModel.getLiveRecipes()).thenReturn(recipes);
     }
 
     @Test

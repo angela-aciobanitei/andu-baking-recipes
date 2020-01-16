@@ -9,7 +9,7 @@ import com.ang.acb.bakeit.R;
 import com.ang.acb.bakeit.data.model.RecipeDetails;
 import com.ang.acb.bakeit.ui.recipedetails.NavigationController;
 import com.ang.acb.bakeit.ui.recipedetails.DetailsActivity;
-import com.ang.acb.bakeit.ui.recipedetails.DetailsViewModel;
+import com.ang.acb.bakeit.ui.recipedetails.RecipeDetailsViewModel;
 import com.ang.acb.bakeit.ui.recipedetails.RecipeDetailsFragment;
 import com.ang.acb.bakeit.util.EspressoTestUtil;
 import com.ang.acb.bakeit.util.RecyclerViewMatcher;
@@ -49,7 +49,7 @@ public class RecipeDetailsFragmentTest {
 
     private RecipeDetailsFragment detailsFragment;
     private NavigationController navigationController;
-    private DetailsViewModel viewModel;
+    private RecipeDetailsViewModel viewModel;
     private MutableLiveData<RecipeDetails> recipeDetails = new MutableLiveData<>();
 
     @Before
@@ -57,7 +57,7 @@ public class RecipeDetailsFragmentTest {
         EspressoTestUtil.disableAnimations(activityRule);
 
         detailsFragment = RecipeDetailsFragment.newInstance(0, false);
-        viewModel = Mockito.mock(DetailsViewModel.class);
+        viewModel = Mockito.mock(RecipeDetailsViewModel.class);
         navigationController = mock(NavigationController.class);
 
         when(viewModel.getRecipeDetailsLiveData()).thenReturn(recipeDetails);

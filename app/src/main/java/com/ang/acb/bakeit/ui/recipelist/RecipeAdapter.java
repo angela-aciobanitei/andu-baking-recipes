@@ -9,19 +9,19 @@ import com.ang.acb.bakeit.data.model.Recipe;
 
 import java.util.List;
 
-public class RecipeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+public class RecipeAdapter extends RecyclerView.Adapter<RecipeItemViewHolder> {
 
     private List<Recipe> recipes;
 
     @NonNull
     @Override
-    public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public RecipeItemViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         return RecipeItemViewHolder.create(parent);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
-        ((RecipeItemViewHolder) holder).bindTo(recipes.get(position));
+    public void onBindViewHolder(@NonNull RecipeItemViewHolder holder, int position) {
+        holder.bindTo(recipes.get(position));
     }
 
     @Override
