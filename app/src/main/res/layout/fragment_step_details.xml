@@ -6,11 +6,11 @@
 
     <data>
         <variable
+            name="stepViewModel"
+            type="com.ang.acb.bakeit.ui.recipedetails.StepDetailsViewModel"/>
+        <variable
             name="step"
             type="com.ang.acb.bakeit.data.model.Step"/>
-        <variable
-            name="stepCount"
-            type="Integer"/>
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -89,7 +89,7 @@
             app:layout_constraintEnd_toStartOf="@+id/next_step_button"
             app:layout_constraintHorizontal_chainStyle="spread"
             app:layout_constraintHorizontal_bias="0.5"
-            app:toggleVisibility="@{step.id > 0}"
+            app:toggleVisibility="@{stepViewModel.hasPrevious()}"
             style="@style/Widget.AppCompat.Button.Borderless.Colored"/>
 
         <Button
@@ -103,7 +103,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/previous_step_button"
             app:layout_constraintHorizontal_bias="0.5"
-            app:toggleVisibility="@{step.id + 1 != stepCount}"
+            app:toggleVisibility="@{stepViewModel.hasNext()}"
             style="@style/Widget.AppCompat.Button.Borderless.Colored"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>

@@ -6,11 +6,11 @@
 
     <data>
         <variable
+            name="stepViewModel"
+            type="com.ang.acb.bakeit.ui.recipedetails.StepDetailsViewModel"/>
+        <variable
             name="step"
             type="com.ang.acb.bakeit.data.model.Step"/>
-        <variable
-            name="stepCount"
-            type="Integer"/>
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout

@@ -73,11 +73,12 @@ public class StepDetailsViewModel extends ViewModel {
         Integer position = positionResult.getValue();
         List<Step> steps = stepsResult.getValue();
 
-        if (position != null && steps != null) {
+        // Don't send a success until we have both results.
+        if(position == null || steps == null) {
+            return Resource.loading(null);
+        } else if (position != null && steps != null) {
             stepsSize = steps.size();
             return Resource.success(steps.get(position));
-        } else if(position == null || steps == null) {
-            return Resource.loading(null);
         } else {
             return Resource.error("Error", null);
         }

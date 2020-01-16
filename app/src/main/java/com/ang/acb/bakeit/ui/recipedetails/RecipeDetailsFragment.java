@@ -16,8 +16,6 @@ import com.ang.acb.bakeit.databinding.FragmentRecipeDetailsBinding;
 
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Objects;
-
 import javax.inject.Inject;
 
 import dagger.android.support.AndroidSupportInjection;
@@ -109,9 +107,6 @@ public class RecipeDetailsFragment extends Fragment {
                     binding.setRecipeDetails(recipeDetails);
                     // Necessary because Espresso cannot read data binding callbacks.
                     binding.executePendingBindings();
-                    // Set recipe title for the action bar
-                    Objects.requireNonNull(getActivity())
-                            .setTitle(recipeDetails.getRecipe().getName());
                 }
         );
     }

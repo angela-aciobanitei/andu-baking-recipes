@@ -5,6 +5,7 @@ import android.content.ComponentName;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
@@ -51,16 +52,18 @@ public class DetailsActivity extends AppCompatActivity
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        // Note: when using Dagger for injecting Activity
-        // objects, inject as early as possible.
+        // When using Dagger with activities, inject as early as possible.
         AndroidInjection.inject(this);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_details);
 
         getIntentExtras();
+        setupToolbar();
 
         if (savedInstanceState == null) {
+            // Display only recipe details (ingredients list ans step list) on phones.
             navigationController.navigateToRecipeDetails(recipeId, isTwoPane());
+            // Display both recipe details and step details on tablets.
             if (isTwoPane()) {
                 navigationController.navigateToStepDetails(recipeId, 0, isTwoPane());
             }
@@ -71,11 +74,26 @@ public class DetailsActivity extends AppCompatActivity
         recipeId = getIntent().getIntExtra(EXTRA_RECIPE_ID, INVALID_RECIPE_ID);
         recipeName = getIntent().getStringExtra(EXTRA_RECIPE_NAME);
         Timber.d("Recipe ID: %s.", recipeId);
-        if (recipeId.equals(INVALID_RECIPE_ID)) Timber.d("Invalid recipe id.");
+        if (recipeId.equals(INVALID_RECIPE_ID)) closeOnError();
+    }
+
+    private void setupToolbar() {
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setTitle(recipeName);
+        }
     }
 
     public boolean isTwoPane() {
         return findViewById(R.id.step_details_fragment_container) != null;
+    }
+
+    private void closeOnError() {
+        finish();
+        Toast.makeText(
+                this,
+                R.string.detail_error_message,
+                Toast.LENGTH_SHORT)
+                .show();
     }
 
     public void addWidgetToHomeScreen(Integer recipeId, String recipeName) {

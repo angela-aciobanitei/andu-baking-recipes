@@ -13,6 +13,7 @@ import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.ViewModelProviders;
@@ -56,7 +57,7 @@ public class StepDetailsFragment extends Fragment  {
     private boolean isTwoPane;
 
     private SimpleExoPlayer simpleExoPlayer;
-    private boolean shouldPlayWhenReady;
+    private boolean shouldPlayWhenReady = true;
     private long currentPlaybackPosition;
     private int currentWindowIndex;
 
@@ -69,11 +70,11 @@ public class StepDetailsFragment extends Fragment  {
     // Required empty public constructor
     public StepDetailsFragment() {}
 
-    public static StepDetailsFragment newInstance(Integer recipeId, int stepPosition, boolean isTwoPane) {
+    public static StepDetailsFragment newInstance(Integer recipeId, int initialStepPosition, boolean isTwoPane) {
         StepDetailsFragment fragment = new StepDetailsFragment();
         Bundle args = new Bundle();
         args.putInt(EXTRA_RECIPE_ID, recipeId);
-        args.putInt(EXTRA_STEP_POSITION, stepPosition);
+        args.putInt(EXTRA_STEP_POSITION, initialStepPosition);
         args.putBoolean(EXTRA_IS_TWO_PANE, isTwoPane);
         fragment.setArguments(args);
 
@@ -107,8 +108,8 @@ public class StepDetailsFragment extends Fragment  {
 
         if(isFullscreenMode()) hideSystemUi();
         getArgExtras();
-        initViewModel();
         restoreInstanceState(savedInstanceState);
+        initViewModel();
         observeCurrentStep();
     }
 
@@ -157,11 +158,14 @@ public class StepDetailsFragment extends Fragment  {
         viewModel.getCurrentStep().observe(getViewLifecycleOwner(), stepResource -> {
             // Make Step data available to data binding.
             binding.setStep(stepResource.data);
-            binding.setStepCount(viewModel.getStepsSize());
+            binding.setStepViewModel(viewModel);
+
             if (stepResource.data != null) {
                 handleStepUrl(stepResource.data);
             }
             handleStepButtons();
+            // Necessary because Espresso cannot read data binding callbacks.
+            binding.executePendingBindings();
         });
     }
 
