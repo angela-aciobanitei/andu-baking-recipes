@@ -1,18 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools">
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
-
         <variable
             name="step"
             type="com.ang.acb.bakeit.data.model.Step"/>
-
         <variable
             name="stepCount"
             type="Integer"/>
-
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -22,24 +19,24 @@
         <com.google.android.exoplayer2.ui.PlayerView
             android:id="@+id/exoplayer_view"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="0dp"
+            app:layout_constraintDimensionRatio="16:9"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:toggleVisibility="@{step.getVideoURL() != null || !step.getVideoURL().isEmpty()}"/>
+            app:toggleVisibility="@{step.videoURL != null &amp;&amp; !step.videoURL.isEmpty()}"/>
 
         <ImageView
             android:id="@+id/placeholder_image"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="0dp"
             android:scaleType="centerCrop"
             android:contentDescription="@string/exoplayer_placeholder_image"
             app:layout_constraintDimensionRatio="H,16:9"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:toggleVisibility="@{step.getVideoURL() == null || step.getVideoURL().isEmpty()}"
-            tools:src ="@drawable/bakeit" />
+            app:toggleVisibility="@{step.videoURL == null || step.videoURL.isEmpty()}"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

@@ -5,45 +5,31 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
-
         <variable
             name="recipe"
             type="com.ang.acb.bakeit.data.model.Recipe" />
     </data>
 
-    <androidx.cardview.widget.CardView
+    <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="4dp"
+        android:layout_margin="@dimen/margin_small"
         android:clickable="true"
         android:focusable="true"
-        android:foreground="?android:attr/selectableItemBackground"
-        app:cardCornerRadius="4dp"
-        app:cardElevation="4dp">
+        android:foreground="?android:attr/selectableItemBackground">
 
-        <androidx.constraintlayout.widget.ConstraintLayout
+        <TextView
+            android:id="@+id/recipe_item_name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="16dp">
+            android:drawableEnd="@drawable/ic_chevron_right_black_24dp"
+            android:drawablePadding="@dimen/padding_small"
+            android:padding="@dimen/padding_normal"
+            android:text="@{recipe.name}"
+            android:textAppearance="@style/TextAppearance.AppCompat.Title"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="Apple Blood Orange Buckle" />
 
-            <TextView
-                android:id="@+id/recipe_item_name"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:paddingStart="8dp"
-                android:paddingEnd="8dp"
-                android:text="@{recipe.getName()}"
-                android:textAppearance="@style/TextAppearance.MaterialComponents.Subtitle2"
-                android:drawableStart="@drawable/ic_cake_black_24dp"
-                android:drawablePadding="8dp"
-                android:layout_gravity="center"
-                android:gravity="center"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                tools:text="Apple Blood Orange Buckle" />
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
-
-    </androidx.cardview.widget.CardView>
-
+    </FrameLayout>
 </layout>

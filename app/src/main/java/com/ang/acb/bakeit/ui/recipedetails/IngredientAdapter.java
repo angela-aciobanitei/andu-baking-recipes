@@ -15,24 +15,6 @@ public class IngredientAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
 
     private List<Ingredient> ingredientList;
 
-    class IngredientItemViewHolder extends RecyclerView.ViewHolder {
-
-        private IngredientItemBinding binding;
-
-        // Required constructor matching super
-        IngredientItemViewHolder(@NonNull IngredientItemBinding binding) {
-            super(binding.getRoot());
-            this.binding = binding;
-        }
-
-        void bindTo(Ingredient ingredient) {
-            binding.setIngredient(ingredient);
-
-            // Binding must be executed immediately.
-            binding.executePendingBindings();
-        }
-    }
-
     @NonNull
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -58,5 +40,23 @@ public class IngredientAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
     public void submitList(List<Ingredient> ingredients) {
         ingredientList = ingredients;
         notifyDataSetChanged();
+    }
+
+    class IngredientItemViewHolder extends RecyclerView.ViewHolder {
+
+        private IngredientItemBinding binding;
+
+        // Required constructor matching super
+        IngredientItemViewHolder(@NonNull IngredientItemBinding binding) {
+            super(binding.getRoot());
+            this.binding = binding;
+        }
+
+        void bindTo(Ingredient ingredient) {
+            binding.setIngredient(ingredient);
+
+            // Binding must be executed immediately.
+            binding.executePendingBindings();
+        }
     }
 }

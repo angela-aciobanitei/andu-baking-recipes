@@ -42,7 +42,7 @@ public class RecipeLocalDataSource {
         return database.recipeDao().getRecipeDetails(recipeId);
     }
 
-    public RecipeDetails getRecipeDetailsForWidget(Integer recipeId) {
+    public RecipeDetails getRecipeDetailsSync(Integer recipeId) {
         return database.recipeDao().getRecipeDetailsSync(recipeId);
     }
 

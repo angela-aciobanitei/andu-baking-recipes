@@ -7,7 +7,7 @@ import androidx.room.Room;
 import com.ang.acb.bakeit.data.local.AppDatabase;
 import com.ang.acb.bakeit.data.local.RecipeDao;
 import com.ang.acb.bakeit.data.remote.ApiService;
-import com.ang.acb.bakeit.data.remote.LiveDataCallAdapterFactory;
+import com.ang.acb.bakeit.utils.LiveDataCallAdapterFactory;
 
 import javax.inject.Singleton;
 

@@ -34,7 +34,6 @@ public class NavigationController {
                 .replace(recipeDetailsContainerId,
                         RecipeDetailsFragment.newInstance(recipeId, isTwoPane))
                 .commit();
-        Timber.d("Recipe [id=%s]: navigate to RecipeDetailsFragment.", recipeId);
     }
 
     public void navigateToStepDetails(Integer recipeId, int stepPosition, boolean isTwoPane) {
@@ -53,6 +52,5 @@ public class NavigationController {
                             StepDetailsFragment.newInstance(recipeId, stepPosition, false))
                     .commit();
         }
-        Timber.d("Recipe [id=%s]: navigate to StepDetailsFragment.", recipeId);
     }
 }

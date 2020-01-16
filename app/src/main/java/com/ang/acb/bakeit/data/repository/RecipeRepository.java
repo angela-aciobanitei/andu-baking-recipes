@@ -112,7 +112,7 @@ public class RecipeRepository {
     }
 
     public RecipeDetails getRecipeDetailsForWidget(Integer recipeId) {
-        return localDataSource.getRecipeDetailsForWidget(recipeId);
+        return localDataSource.getRecipeDetailsSync(recipeId);
     }
 
     public LiveData<List<Step>> getRecipeSteps(Integer recipeId) {

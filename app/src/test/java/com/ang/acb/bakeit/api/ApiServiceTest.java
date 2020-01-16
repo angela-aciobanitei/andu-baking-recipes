@@ -4,7 +4,7 @@ import androidx.arch.core.executor.testing.InstantTaskExecutorRule;
 
 import com.ang.acb.bakeit.data.model.Recipe;
 import com.ang.acb.bakeit.data.remote.ApiService;
-import com.ang.acb.bakeit.data.remote.LiveDataCallAdapterFactory;
+import com.ang.acb.bakeit.utils.LiveDataCallAdapterFactory;
 import com.ang.acb.bakeit.util.LiveDataTestUtil;
 
 import org.junit.After;

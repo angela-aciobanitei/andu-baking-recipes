@@ -5,15 +5,12 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
-
         <variable
             name="resource"
             type="com.ang.acb.bakeit.data.model.Resource" />
-
         <variable
             name="callback"
             type="com.ang.acb.bakeit.ui.common.RetryCallback" />
-
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout

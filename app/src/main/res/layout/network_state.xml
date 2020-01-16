@@ -5,16 +5,12 @@
 
     <data>
 
-        <import type="com.ang.acb.bakeit.data.model.Resource.Status" />
         <import type="com.ang.acb.bakeit.data.model.Resource" />
+        <import type="com.ang.acb.bakeit.data.model.Resource.Status" />
+        <import type="com.ang.acb.bakeit.ui.common.RetryCallback"/>
 
-        <variable
-            name="resource"
-            type="com.ang.acb.bakeit.data.model.Resource" />
-
-        <variable
-            name="callback"
-            type="com.ang.acb.bakeit.ui.common.RetryCallback" />
+        <variable name="resource" type="Resource" />
+        <variable name="callback" type="RetryCallback" />
     </data>
 
     <LinearLayout
@@ -22,15 +18,14 @@
         android:layout_height="match_parent"
         android:orientation="vertical"
         android:gravity="center"
-        android:padding="16dp">
-        <!--app:toggleVisibility="@{resource.data == null}">-->
+        android:padding="@dimen/padding_normal">
 
         <ProgressBar
             android:id="@+id/progress_bar"
             style="?android:attr/progressBarStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_margin="8dp"
+            android:layout_margin="@dimen/margin_small"
             android:layout_gravity="center"
             app:toggleVisibility="@{resource.status == Status.LOADING}" />
 
@@ -39,7 +34,7 @@
             style="@style/Widget.MaterialComponents.Button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_margin="8dp"
+            android:layout_margin="@dimen/margin_small"
             android:layout_gravity="center"
             android:text="@string/action_retry"
             android:onClick="@{() -> callback.retry()}"
@@ -49,7 +44,7 @@
             android:id="@+id/error_msg"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_margin="8dp"
+            android:layout_margin="@dimen/margin_small"
             android:layout_gravity="center_horizontal"
             android:text="@{resource.message ?? @string/unknown_error}"
             android:textStyle="bold"

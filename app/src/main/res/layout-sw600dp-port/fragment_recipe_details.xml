@@ -15,56 +15,74 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <LinearLayout
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
             android:descendantFocusability="blocksDescendants"
             tools:showIn="@layout/fragment_recipe_details">
 
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/guideline"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                app:layout_constraintGuide_percent="0.5"/>
+
             <TextView
                 android:id="@+id/label_ingredients"
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/margin_normal"
                 android:layout_marginStart="@dimen/margin_normal"
                 android:layout_marginEnd="@dimen/margin_normal"
                 android:textAppearance="@style/TextAppearance.AppCompat.Title"
                 android:text="@string/ingredients"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toStartOf="@id/guideline"
                 app:toggleVisibility="@{recipeDetails.ingredients != null}"/>
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rv_ingredients"
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_margin="@dimen/margin_normal"
                 android:nestedScrollingEnabled="false"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toStartOf="@id/guideline"
+                app:layout_constraintTop_toBottomOf="@id/label_ingredients"
                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                 app:ingredientItems="@{recipeDetails.ingredients}"
                 app:toggleVisibility="@{recipeDetails.ingredients != null}"/>
 
             <TextView
                 android:id="@+id/label_steps"
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/margin_normal"
                 android:layout_marginStart="@dimen/margin_normal"
                 android:layout_marginEnd="@dimen/margin_normal"
                 android:textAppearance="@style/TextAppearance.AppCompat.Title"
                 android:text="@string/steps"
+                app:layout_constraintStart_toEndOf="@id/guideline"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
                 app:toggleVisibility="@{recipeDetails.steps != null}"/>
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rv_steps"
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_margin="@dimen/margin_normal"
                 android:nestedScrollingEnabled="false"
+                app:layout_constraintStart_toEndOf="@id/guideline"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/label_steps"
                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                 app:stepItems="@{recipeDetails.steps}"
                 app:toggleVisibility="@{recipeDetails.steps != null}"/>
 
-        </LinearLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.core.widget.NestedScrollView>
 
 </layout>

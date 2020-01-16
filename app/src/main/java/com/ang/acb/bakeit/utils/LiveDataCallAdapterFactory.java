@@ -1,4 +1,4 @@
-package com.ang.acb.bakeit.data.remote;
+package com.ang.acb.bakeit.utils;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.ParameterizedType;
@@ -7,7 +7,7 @@ import java.lang.reflect.Type;
 import androidx.lifecycle.LiveData;
 
 import com.ang.acb.bakeit.data.remote.ApiResponse;
-import com.ang.acb.bakeit.data.remote.LiveDataCallAdapter;
+import com.ang.acb.bakeit.utils.LiveDataCallAdapter;
 
 import retrofit2.CallAdapter;
 import retrofit2.Retrofit;

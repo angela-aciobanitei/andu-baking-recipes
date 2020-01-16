@@ -1,28 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <data>
-
         <variable
             name="ingredient"
             type="com.ang.acb.bakeit.data.model.Ingredient"/>
     </data>
 
     <FrameLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_margin="4dp">
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
 
         <TextView
-            android:layout_height="match_parent"
-            android:layout_width="wrap_content"
-            android:textAppearance="@style/TextAppearance.MaterialComponents.Subtitle2"
-            android:text="@{@string/ingredient_item(ingredient.quantity, ingredient.measure, ingredient.ingredient )}"
-            android:drawableStart="@drawable/ic_loyalty_black_24dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:drawableStart="@drawable/ic_check_circle_black_24dp"
             android:drawablePadding="8dp"
+            android:padding="@dimen/padding_mini"
+            android:text="@{@string/ingredient_item(ingredient.quantity, ingredient.measure, ingredient.ingredient )}"
+            android:textAppearance="@style/TextAppearance.MaterialComponents.Subtitle1"
             tools:text="5 cups sugar" />
+
     </FrameLayout>
 
 </layout>
