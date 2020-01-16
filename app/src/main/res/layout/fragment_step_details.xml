@@ -27,7 +27,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:toggleVisibility="@{step.getVideoURL() != null || !step.getVideoURL().isEmpty()}"/>
+            app:toggleVisibility="@{step.getVideoURL() != null &amp;&amp; !step.getVideoURL().isEmpty()}"/>
 
         <ImageView
             android:id="@+id/placeholder_image"
@@ -47,7 +47,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:barrierDirection="bottom"
-            app:constraint_referenced_ids="placeholder_image, exoplayer_view" />
+            app:constraint_referenced_ids="placeholder_image,exoplayer_view" />
 
         <TextView
             android:id="@+id/video_short_description"

@@ -1,22 +1,14 @@
 package com.ang.acb.bakeit.ui;
 
-import android.content.Intent;
-
 import androidx.annotation.NonNull;
-import androidx.arch.core.executor.testing.InstantTaskExecutorRule;
 import androidx.lifecycle.MutableLiveData;
 import androidx.test.espresso.intent.Intents;
-import androidx.test.espresso.intent.rule.IntentsTestRule;
-import androidx.test.platform.app.InstrumentationRegistry;
-import androidx.test.espresso.IdlingRegistry;
-import androidx.test.espresso.IdlingResource;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 import androidx.test.rule.ActivityTestRule;
 
 import com.ang.acb.bakeit.R;
 import com.ang.acb.bakeit.data.model.Recipe;
 import com.ang.acb.bakeit.data.model.Resource;
-import com.ang.acb.bakeit.ui.common.NavigationController;
 import com.ang.acb.bakeit.ui.recipedetails.DetailsActivity;
 import com.ang.acb.bakeit.ui.recipelist.MainActivity;
 import com.ang.acb.bakeit.ui.recipelist.RecipeListViewModel;
@@ -24,10 +16,7 @@ import com.ang.acb.bakeit.util.EspressoTestUtil;
 import com.ang.acb.bakeit.util.RecyclerViewMatcher;
 import com.ang.acb.bakeit.util.TaskExecutorWithIdlingResourceRule;
 import com.ang.acb.bakeit.util.TestUtil;
-import com.ang.acb.bakeit.util.ViewModelUtil;
-import com.ang.acb.bakeit.utils.RecipeIdlingResource;
 
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;

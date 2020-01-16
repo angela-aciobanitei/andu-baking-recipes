@@ -1,5 +1,4 @@
-package com.ang.acb.bakeit.ui.viewmodel;
-
+package com.ang.acb.bakeit.di;
 
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
@@ -14,17 +13,17 @@ import javax.inject.Singleton;
 
 /**
  *
- * A factory class for creating ViewModels. Note: Dagger 2 allows multibindings and
+ * A factory class for creating ViewModels. Dagger 2 allows multibindings and
  * with it the possibility to create a "map" of objects with a specific key:
  *      the key: for example the class type of ViewModel MyViewModel::class
  *      the value: the instance of ViewModel MyViewModel(repository, …)
  *
- * See: https://github.com/googlesamples/android-architecture-components/tree/GithubBrowserSample
+ * See: https://github.com/android/android-architecture-components/tree/GithubBrowserSample
  * See: https://blog.kotlin-academy.com/understanding-dagger-2-multibindings-viewmodel-8418eb372848
  */
 
 @Singleton
-public class RecipeViewModelFactory implements ViewModelProvider.Factory {
+public class ViewModelFactory implements ViewModelProvider.Factory {
 
     // Maps a Class that extends ViewModel as key, and a Provider of ViewModel (a
     // Dagger 2-specific class that let us provide — and so instantiate — a
@@ -32,7 +31,7 @@ public class RecipeViewModelFactory implements ViewModelProvider.Factory {
     private final Map<Class<? extends ViewModel>, Provider<ViewModel>> creators;
 
     @Inject
-    public RecipeViewModelFactory(Map<Class<? extends ViewModel>, Provider<ViewModel>> creators) {
+    public ViewModelFactory(Map<Class<? extends ViewModel>, Provider<ViewModel>> creators) {
         this.creators = creators;
     }
 

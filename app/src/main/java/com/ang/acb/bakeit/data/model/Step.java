@@ -62,7 +62,8 @@ public class Step {
     }
 
     @Ignore
-    public Step(Integer id, String shortDescription, String description, String videoURL, String thumbnailURL) {
+    public Step(Integer id, String shortDescription, String description,
+                String videoURL, String thumbnailURL) {
         this.id = id;
         this.shortDescription = shortDescription;
         this.description = description;

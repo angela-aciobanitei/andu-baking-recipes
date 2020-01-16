@@ -10,40 +10,26 @@
             type="com.ang.acb.bakeit.data.model.Step"/>
     </data>
 
-    <androidx.cardview.widget.CardView
+    <FrameLayout
         android:id="@+id/step_item_card_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="8dp"
+        android:layout_margin="4dp"
         android:clickable="true"
         android:focusable="true"
-        android:foreground="?android:attr/selectableItemBackground"
-        app:cardCornerRadius="4dp"
-        app:cardElevation="4dp">
+        android:foreground="?android:attr/selectableItemBackground">
 
-        <androidx.constraintlayout.widget.ConstraintLayout
+        <TextView
+            android:id="@+id/step_item_short_description"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="16dp">
+            android:text="@{step.getShortDescription()}"
+            android:textAppearance="@style/TextAppearance.MaterialComponents.Subtitle2"
+            android:drawableStart="@drawable/ic_local_offer_black_24dp"
+            android:drawablePadding="8dp"
+            tools:text="Start prep" />
 
-            <TextView
-                android:id="@+id/step_item_short_description"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:paddingStart="8dp"
-                android:paddingEnd="8dp"
-                android:text="@{step.getShortDescription()}"
-                android:textAppearance="@style/TextAppearance.MaterialComponents.Subtitle2"
-                android:drawableStart="@drawable/ic_loyalty_black_24dp"
-                android:drawablePadding="8dp"
-                android:layout_gravity="center"
-                android:gravity="center"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                tools:text="Start prep" />
 
-        </androidx.constraintlayout.widget.ConstraintLayout>
-
-    </androidx.cardview.widget.CardView>
+    </FrameLayout>
 
 </layout>

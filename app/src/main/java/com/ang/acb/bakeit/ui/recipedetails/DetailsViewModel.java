@@ -17,7 +17,11 @@ import java.util.Objects;
 
 import javax.inject.Inject;
 
-
+/**
+ * Stores and manages UI-related data in a lifecycle conscious way.
+ *
+ * See: https://medium.com/androiddevelopers/viewmodels-and-livedata-patterns-antipatterns-21efaef74a54
+ */
 public class DetailsViewModel extends ViewModel {
 
     private RecipeRepository repository;
@@ -34,9 +38,6 @@ public class DetailsViewModel extends ViewModel {
     }
 
     public void init(Integer recipeId) {
-        recipeDetailsLiveData = Transformations.switchMap(
-                recipeIdLiveData, repository::getRecipeDetails);
-
         recipeIdLiveData.setValue(recipeId);
     }
 

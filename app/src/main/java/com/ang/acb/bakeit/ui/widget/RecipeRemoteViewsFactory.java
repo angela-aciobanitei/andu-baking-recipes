@@ -6,16 +6,16 @@ import android.widget.AdapterView;
 import android.widget.RemoteViews;
 import android.widget.RemoteViewsService;
 
-import androidx.room.Room;
-
 import com.ang.acb.bakeit.R;
-import com.ang.acb.bakeit.data.local.AppDatabase;
+import com.ang.acb.bakeit.data.local.RecipeDao;
 import com.ang.acb.bakeit.data.model.Ingredient;
 import com.ang.acb.bakeit.data.model.RecipeDetails;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
+
+import javax.inject.Inject;
 
 /**
  * A custom class that implements the RemoteViewsFactory interface and provides
@@ -25,28 +25,35 @@ import java.util.Locale;
  */
 public class RecipeRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactory {
 
+    @Inject
+    RecipeDao recipeDao;
     private Context context;
-    private AppDatabase database;
     private List<String> ingredients;
 
-    RecipeRemoteViewsFactory(Context context) {
+    @Inject
+    RecipeRemoteViewsFactory(Context context, RecipeDao recipeDao) {
         this.context = context;
-        // FIXME: Use repo
-        database = Room.databaseBuilder(context, AppDatabase.class, "recipes.db")
-                .fallbackToDestructiveMigration()
-                .build();;
+        this.recipeDao = recipeDao;
     }
 
     @Override
     public void onCreate() {}
 
+
+    /**
+     * Called when notifyDataSetChanged() is triggered on the remote adapter.
+     * This allows a RemoteViewsFactory to respond to data changes by updating
+     * any internal references. Note: expensive tasks can be safely performed
+     * synchronously within this method. In the interim, the old data will be
+     * displayed within the widget.
+     */
     @Override
     public void onDataSetChanged() {
         int recipeId = PreferencesUtils.getWidgetRecipeId(context);
 
         if (recipeId != -1) {
             ingredients = new ArrayList<>();
-            RecipeDetails recipeDetails = database.recipeDao().getRecipeDetailsForWidget(recipeId);
+            RecipeDetails recipeDetails = recipeDao.getRecipeDetailsSync(recipeId);
             if (recipeDetails != null) {
                 for (Ingredient ingredient : recipeDetails.ingredients) {
                     ingredients.add(String.format(
@@ -91,9 +98,7 @@ public class RecipeRemoteViewsFactory implements RemoteViewsService.RemoteViewsF
         // individual items can differentiate their on-click behavior using
         // RemoteViews#setOnClickFillInIntent(int, Intent).
         // See: https://developer.android.com/guide/topics/appwidgets#setting-the-fill-in-intent
-        remoteViews.setOnClickFillInIntent(
-                R.id.widget_ingredient_item,
-                new Intent());
+        remoteViews.setOnClickFillInIntent(R.id.widget_ingredient_item, new Intent());
 
         return remoteViews;
     }

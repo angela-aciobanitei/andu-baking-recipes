@@ -54,17 +54,6 @@ public class ApiResponse<T> {
         }
     }
 
-    /**
-     * Note: All HTTP response status codes are separated into five classes (or categories).
-     * The first digit of the status code defines the class of response. The last two digits
-     * do not have any class or categorization role. There are five values for the first digit:
-     *
-     * 1xx (Informational): The request was received, continuing process.
-     * 2xx (Successful): The request was successfully received, understood and accepted.
-     * 3xx (Redirection): Further action needs to be taken in order to complete the request.
-     * 4xx (Client Error): The request contains bad syntax or cannot be fulfilled.
-     * 5xx (Server Error): The server failed to fulfill an apparently valid request.
-     */
     public boolean isSuccessful() {
         return code >= 200 && code < 300;
     }

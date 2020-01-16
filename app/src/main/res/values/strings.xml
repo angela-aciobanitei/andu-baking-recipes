@@ -9,7 +9,7 @@
     <string name="next_step">NEXT STEP</string>
     <string name="previous_step">PREVIOUS STEP</string>
     <string name="add_to_back_stack_key">Recipe</string>
-
+    <string name="ingredient_item">%s %s %s</string>
     <string name="widget_text">Create widget and add it to the Home Screen</string>
     <string name="pref_widget_key">pref_widget_key</string>
     <string name="pref_title_key">pref_title_key</string>

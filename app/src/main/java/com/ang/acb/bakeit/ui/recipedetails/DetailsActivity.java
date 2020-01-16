@@ -8,11 +8,8 @@ import android.view.MenuItem;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.ViewModelProvider;
-import androidx.lifecycle.ViewModelProviders;
 
 import com.ang.acb.bakeit.R;
-import com.ang.acb.bakeit.ui.common.NavigationController;
 import com.ang.acb.bakeit.ui.widget.PreferencesUtils;
 import com.ang.acb.bakeit.ui.widget.RecipeWidgetProvider;
 
@@ -61,7 +58,9 @@ public class DetailsActivity extends AppCompatActivity
 
         if (savedInstanceState == null) {
             navigationController.navigateToRecipeDetails(recipeId, isTwoPane());
-            if (isTwoPane()) navigationController.navigateToStepDetails(recipeId, 0, isTwoPane());
+            if (isTwoPane()) {
+                navigationController.navigateToStepDetails(recipeId, 0, isTwoPane());
+            }
         }
     }
 

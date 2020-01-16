@@ -10,39 +10,19 @@
             type="com.ang.acb.bakeit.data.model.Ingredient"/>
     </data>
 
-    <LinearLayout
+    <FrameLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:layout_margin="4dp">
 
         <TextView
-            android:id="@+id/ingredient_item_quantity"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_width="wrap_content"
             android:textAppearance="@style/TextAppearance.MaterialComponents.Subtitle2"
-            android:text="@{String.valueOf(ingredient.getQuantity())}"
-            android:drawableStart="@drawable/ic_check_black_24dp"
+            android:text="@{@string/ingredient_item(ingredient.quantity, ingredient.measure, ingredient.ingredient )}"
+            android:drawableStart="@drawable/ic_loyalty_black_24dp"
             android:drawablePadding="8dp"
-            tools:text="5" />
-
-        <TextView
-            android:id="@+id/ingredient_item_measure"
-            android:layout_height="wrap_content"
-            android:layout_width="wrap_content"
-            android:layout_marginStart="4dp"
-            android:textAppearance="@style/TextAppearance.MaterialComponents.Subtitle2"
-            android:text="@{ingredient.getMeasure()}"
-            tools:text="cups"/>
-
-        <TextView
-            android:id="@+id/ingredient_item_name"
-            android:layout_height="wrap_content"
-            android:layout_width="wrap_content"
-            android:layout_marginStart="4dp"
-            android:textAppearance="@style/TextAppearance.MaterialComponents.Subtitle2"
-            android:text="@{ingredient.getIngredient()}"
-            tools:text="sugar"/>
-
-    </LinearLayout>
+            tools:text="5 cups sugar" />
+    </FrameLayout>
 
 </layout>

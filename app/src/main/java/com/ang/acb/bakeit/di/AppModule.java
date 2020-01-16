@@ -47,20 +47,26 @@ class AppModule {
 
     @Provides
     @Singleton
-    OkHttpClient provideOkHttpClient() {
+    HttpLoggingInterceptor provideLoggingInterceptor() {
         // Retrofit 2 completely relies on OkHttp for any network operation.
         // Since logging isn’t integrated by default anymore in Retrofit 2,
         // we need to add a logging interceptor for OkHttp.
-        HttpLoggingInterceptor logging = new HttpLoggingInterceptor();
+        HttpLoggingInterceptor loggingInterceptor = new HttpLoggingInterceptor();
 
         // Set the desired log level. Warning: using the HEADERS or BODY levels
         // have the potential to leak sensitive information such as "Authorization"
         // or "Cookie" headers and the contents of request and response bodies.
-        logging.setLevel(HttpLoggingInterceptor.Level.BASIC);
+        loggingInterceptor.level(HttpLoggingInterceptor.Level.BASIC);
 
+        return loggingInterceptor;
+    }
+
+    @Provides
+    @Singleton
+    OkHttpClient provideOkHttpClient(HttpLoggingInterceptor loggingInterceptor) {
         // Add the logging interceptor to our OkHttp client.
         return new OkHttpClient.Builder()
-                .addInterceptor(logging)
+                .addInterceptor(loggingInterceptor)
                 .build();
     }
 

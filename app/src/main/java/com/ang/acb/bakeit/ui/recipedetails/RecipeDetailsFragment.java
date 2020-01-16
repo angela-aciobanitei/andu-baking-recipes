@@ -15,11 +15,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.ang.acb.bakeit.R;
 import com.ang.acb.bakeit.data.model.RecipeDetails;
 
 import com.ang.acb.bakeit.databinding.FragmentRecipeDetailsBinding;
-import com.ang.acb.bakeit.ui.common.NavigationController;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -62,7 +60,7 @@ public class RecipeDetailsFragment extends Fragment {
     }
 
     @Override
-    public void onAttach(Context context) {
+    public void onAttach(@NotNull Context context) {
         // Note: when using Dagger for injecting Fragment objects, inject as early as possible.
         // For this reason, call AndroidInjection.inject() in onAttach(). This also prevents
         // inconsistencies if the Fragment is reattached.
@@ -74,6 +72,10 @@ public class RecipeDetailsFragment extends Fragment {
     public View onCreateView(@NotNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         binding = FragmentRecipeDetailsBinding.inflate(inflater, container, false);
+
+        // Report that this fragment would like to populate the options menu.
+        setHasOptionsMenu(true);
+
         return binding.getRoot();
     }
 
@@ -105,9 +107,6 @@ public class RecipeDetailsFragment extends Fragment {
                 getContext(), RecyclerView.VERTICAL, false));
         rvIngredients.setHasFixedSize(true);
         rvIngredients.setAdapter(new IngredientAdapter());
-
-        // Disable nested scrolling for this view.
-        ViewCompat.setNestedScrollingEnabled(rvIngredients, false);
         Timber.d("Recipe [id=%s]: setup ingredients adapter.", recipeId);
     }
 
@@ -121,8 +120,6 @@ public class RecipeDetailsFragment extends Fragment {
             navigationController.navigateToStepDetails(recipeId, position, isTwoPane);
         }));
 
-        // Disable nested scrolling for this view.
-        ViewCompat.setNestedScrollingEnabled(rvSteps, false);
         Timber.d("Recipe [id=%s]: setup steps adapter.", recipeId);
     }
 

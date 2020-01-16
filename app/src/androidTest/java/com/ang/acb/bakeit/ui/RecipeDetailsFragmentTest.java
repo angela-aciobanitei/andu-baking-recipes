@@ -7,7 +7,7 @@ import androidx.test.rule.ActivityTestRule;
 
 import com.ang.acb.bakeit.R;
 import com.ang.acb.bakeit.data.model.RecipeDetails;
-import com.ang.acb.bakeit.ui.common.NavigationController;
+import com.ang.acb.bakeit.ui.recipedetails.NavigationController;
 import com.ang.acb.bakeit.ui.recipedetails.DetailsActivity;
 import com.ang.acb.bakeit.ui.recipedetails.DetailsViewModel;
 import com.ang.acb.bakeit.ui.recipedetails.RecipeDetailsFragment;

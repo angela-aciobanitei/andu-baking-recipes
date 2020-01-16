@@ -5,7 +5,6 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.ang.acb.bakeit.ui.recipedetails.DetailsViewModel;
 import com.ang.acb.bakeit.ui.recipelist.RecipeListViewModel;
-import com.ang.acb.bakeit.ui.viewmodel.RecipeViewModelFactory;
 
 import dagger.Binds;
 import dagger.Module;
@@ -25,5 +24,5 @@ abstract class ViewModelModule {
     abstract ViewModel bindRecipeDetailsViewModel(DetailsViewModel detailsViewModel);
 
     @Binds
-    abstract ViewModelProvider.Factory bindViewModelFactory(RecipeViewModelFactory factory);
+    abstract ViewModelProvider.Factory bindViewModelFactory(ViewModelFactory factory);
 }

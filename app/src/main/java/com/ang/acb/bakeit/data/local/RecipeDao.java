@@ -79,7 +79,7 @@ public abstract class RecipeDao {
 
     @Transaction
     @Query("SELECT * FROM recipes WHERE id= :recipeId")
-    public abstract RecipeDetails getRecipeDetailsForWidget(Integer recipeId);
+    public abstract RecipeDetails getRecipeDetailsSync(Integer recipeId);
 
     @Transaction
     @Query("SELECT * FROM recipes")

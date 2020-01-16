@@ -53,8 +53,7 @@ public abstract class NetworkBoundResource<ResultType, RequestType> {
                 // removeSource(LiveData<S> toRemote) to stop
                 // listening the database LiveData.
                 result.removeSource(dbSource);
-                // Decide whether to fetch potentially updated
-                // data from the network.
+                // Decide whether to fetch potentially updated data from the network.
                 if (shouldFetch(changedData)) {
                     // Fetch data from network, persist it into DB
                     // and then send it back to the UI.
@@ -64,7 +63,6 @@ public abstract class NetworkBoundResource<ResultType, RequestType> {
                     result.addSource(dbSource, new Observer<ResultType>() {
                         @Override
                         public void onChanged(ResultType newData) {
-                            // Persist the new data into the DB.
                             setValue(Resource.success(newData));
                         }
                     });
@@ -90,17 +88,15 @@ public abstract class NetworkBoundResource<ResultType, RequestType> {
      * Fetch the data from network and persist it into DB and then send it back to the UI.
      */
     private void fetchFromNetwork(final LiveData<ResultType> dbSource) {
-        // Create the API call to load data from themoviedb.org.
-        // Note the use of ApiResponse, the generic class we created earlier,
-        // which consists of an HTTP status code, some data and an error.
+        // Create the API call. Note the use of ApiResponse, the generic class we've
+        // created earlier, which consists of an HTTP status code, some data and an error.
         final LiveData<ApiResponse<RequestType>> apiResponse = createCall();
 
         // Re-attach the database LiveData as a new source,
         // it will dispatch its latest value quickly.
-        result.addSource(dbSource, newData ->
-                setValue(Resource.loading(newData)));
+        result.addSource(dbSource, newData -> setValue(Resource.loading(newData)));
 
-        // Start listening to the API response LiveData.
+        // Attach the API response as a new source.
         result.addSource(apiResponse, response -> {
             // The source value was changed, so we can stop listening
             // to both the API response LiveData and database LiveData.

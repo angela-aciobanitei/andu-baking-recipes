@@ -46,7 +46,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:barrierDirection="bottom"
-            app:constraint_referenced_ids="placeholder_image, exoplayer_view" />
+            app:constraint_referenced_ids="placeholder_image,exoplayer_view" />
 
         <TextView
             android:id="@+id/video_short_description"

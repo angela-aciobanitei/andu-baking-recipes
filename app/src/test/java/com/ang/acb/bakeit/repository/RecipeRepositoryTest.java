@@ -142,6 +142,4 @@ public class RecipeRepositoryTest {
         updatedDbData.setValue(recipeDetailsList);
         verify(observer).onChanged(Resource.success(recipeDetailsList));
     }
-
-
 }
