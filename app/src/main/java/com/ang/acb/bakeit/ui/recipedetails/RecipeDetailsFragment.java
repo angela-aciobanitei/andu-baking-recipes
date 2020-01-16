@@ -2,7 +2,6 @@ package com.ang.acb.bakeit.ui.recipedetails;
 
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.ViewModelProviders;
 
@@ -12,7 +11,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.ang.acb.bakeit.data.model.RecipeDetails;
 
 import com.ang.acb.bakeit.databinding.FragmentRecipeDetailsBinding;
 
@@ -25,11 +23,10 @@ import javax.inject.Inject;
 import dagger.android.support.AndroidSupportInjection;
 import timber.log.Timber;
 
+import static com.ang.acb.bakeit.ui.recipedetails.DetailsActivity.EXTRA_IS_TWO_PANE;
 import static com.ang.acb.bakeit.ui.recipelist.MainActivity.EXTRA_RECIPE_ID;
 
 public class RecipeDetailsFragment extends Fragment {
-
-    private static final String EXTRA_IS_TWO_PANE = "EXTRA_IS_TWO_PANE";
 
     private FragmentRecipeDetailsBinding binding;
     private RecipeDetailsViewModel viewModel;
@@ -42,7 +39,7 @@ public class RecipeDetailsFragment extends Fragment {
     @Inject
     public NavigationController navigationController;
 
-    // Required empty public constructor
+    // Required empty public constructor.
     public RecipeDetailsFragment() {}
 
     public static RecipeDetailsFragment newInstance(Integer recipeId, boolean isTwoPane) {
@@ -58,21 +55,22 @@ public class RecipeDetailsFragment extends Fragment {
 
     @Override
     public void onAttach(@NotNull Context context) {
-        // Note: when using Dagger for injecting Fragment objects, inject as early as possible.
-        // For this reason, call AndroidInjection.inject() in onAttach(). This also prevents
-        // inconsistencies if the Fragment is reattached.
+        // When using Dagger with Fragments, inject as early as possible.
+        // This prevents inconsistencies if the Fragment is reattached.
         AndroidSupportInjection.inject(this);
         super.onAttach(context);
+    }
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
     }
 
     @Override
     public View onCreateView(@NotNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         binding = FragmentRecipeDetailsBinding.inflate(inflater, container, false);
-
-        // Report that this fragment would like to populate the options menu.
-        setHasOptionsMenu(true);
-
         return binding.getRoot();
     }
 

@@ -29,6 +29,9 @@ import static com.ang.acb.bakeit.ui.recipelist.MainActivity.INVALID_RECIPE_ID;
 public class DetailsActivity extends AppCompatActivity
                              implements HasSupportFragmentInjector {
 
+    public static final String EXTRA_IS_TWO_PANE = "EXTRA_IS_TWO_PANE";
+    public static final String EXTRA_STEP_POSITION = "EXTRA_STEP_POSITION";
+
     private Integer recipeId;
     private String recipeName;
 

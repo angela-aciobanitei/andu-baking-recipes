@@ -60,12 +60,7 @@ public abstract class NetworkBoundResource<ResultType, RequestType> {
                     fetchFromNetwork(dbSource);
                 } else {
                     // Re-attach the database LiveData as a new source.
-                    result.addSource(dbSource, new Observer<ResultType>() {
-                        @Override
-                        public void onChanged(ResultType newData) {
-                            setValue(Resource.success(newData));
-                        }
-                    });
+                    result.addSource(dbSource, newData -> setValue(Resource.success(newData)));
                 }
             }
         });

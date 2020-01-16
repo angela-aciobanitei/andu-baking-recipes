@@ -14,7 +14,6 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.ViewModelProviders;
 
@@ -38,28 +37,28 @@ import java.util.Objects;
 import javax.inject.Inject;
 
 import dagger.android.support.AndroidSupportInjection;
-import timber.log.Timber;
 
+import static com.ang.acb.bakeit.ui.recipedetails.DetailsActivity.EXTRA_IS_TWO_PANE;
+import static com.ang.acb.bakeit.ui.recipedetails.DetailsActivity.EXTRA_STEP_POSITION;
 import static com.ang.acb.bakeit.ui.recipelist.MainActivity.EXTRA_RECIPE_ID;
 
 public class StepDetailsFragment extends Fragment  {
 
     private static final String CURRENT_STEP_INDEX_KEY = "CURRENT_STEP_INDEX_KEY";
     private static final String CURRENT_PLAYBACK_POSITION_KEY = "CURRENT_PLAYBACK_POSITION_KEY";
+    private static final String CURRENT_WINDOW_KEY ="CURRENT_WINDOW_KEY";
     private static final String SHOULD_PLAY_WHEN_READY_KEY = "SHOULD_PLAY_WHEN_READY_KEY";
-    private static final String EXTRA_IS_TWO_PANE = "EXTRA_IS_TWO_PANE";
-    private static final String EXTRA_STEP_POSITION = "EXTRA_STEP_POSITION";
 
     private FragmentStepDetailsBinding binding;
     private StepDetailsViewModel viewModel;
     private Integer recipeId;
     private int currentStepIndex;
-    private int stepPosition;
     private boolean isTwoPane;
 
     private SimpleExoPlayer simpleExoPlayer;
     private boolean shouldPlayWhenReady;
     private long currentPlaybackPosition;
+    private int currentWindowIndex;
 
     @Inject
     ViewModelProvider.Factory viewModelFactory;
@@ -71,7 +70,6 @@ public class StepDetailsFragment extends Fragment  {
     public StepDetailsFragment() {}
 
     public static StepDetailsFragment newInstance(Integer recipeId, int stepPosition, boolean isTwoPane) {
-        Timber.d("StepDetailsFragment created.");
         StepDetailsFragment fragment = new StepDetailsFragment();
         Bundle args = new Bundle();
         args.putInt(EXTRA_RECIPE_ID, recipeId);
@@ -84,9 +82,8 @@ public class StepDetailsFragment extends Fragment  {
 
     @Override
     public void onAttach(@NotNull Context context) {
-        // Note: when using Dagger for injecting Fragment objects, inject as early as possible.
-        // For this reason, call AndroidInjection.inject() in onAttach(). This also prevents
-        // inconsistencies if the Fragment is reattached.
+        // When using Dagger with Fragments, inject as early as possible.
+        // This prevents inconsistencies if the Fragment is reattached.
         AndroidSupportInjection.inject(this);
         super.onAttach(context);
     }
@@ -108,9 +105,11 @@ public class StepDetailsFragment extends Fragment  {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        enableFullscreenMode();
-        initViewModel(savedInstanceState);
-        observeSteps();
+        if(isFullscreenMode()) hideSystemUi();
+        getArgExtras();
+        initViewModel();
+        restoreInstanceState(savedInstanceState);
+        observeCurrentStep();
     }
 
     @Override
@@ -118,6 +117,7 @@ public class StepDetailsFragment extends Fragment  {
         super.onSaveInstanceState(outState);
         outState.putInt(CURRENT_STEP_INDEX_KEY, currentStepIndex);
         outState.putLong(CURRENT_PLAYBACK_POSITION_KEY, currentPlaybackPosition);
+        outState.putInt(CURRENT_WINDOW_KEY, currentWindowIndex);
         outState.putBoolean(SHOULD_PLAY_WHEN_READY_KEY, shouldPlayWhenReady);
     }
 
@@ -125,6 +125,9 @@ public class StepDetailsFragment extends Fragment  {
         if (savedInstanceState != null) {
             if (savedInstanceState.containsKey(CURRENT_STEP_INDEX_KEY)) {
                 currentStepIndex = savedInstanceState.getInt(CURRENT_STEP_INDEX_KEY);
+            }
+            if (savedInstanceState.containsKey(CURRENT_WINDOW_KEY)) {
+                currentWindowIndex = savedInstanceState.getInt(CURRENT_WINDOW_KEY);
             }
             if (savedInstanceState.containsKey(CURRENT_PLAYBACK_POSITION_KEY)) {
                 currentPlaybackPosition = savedInstanceState.getLong(CURRENT_PLAYBACK_POSITION_KEY);
@@ -135,78 +138,73 @@ public class StepDetailsFragment extends Fragment  {
         }
     }
 
-    private void enableFullscreenMode() {
-        if (isFullscreenMode()) {
-            // Hide system UI
-            // See: https://developer.android.com/training/system-ui/immersive#EnableFullscreen
-            Objects.requireNonNull(getActivity())
-                    .getWindow().getDecorView().setSystemUiVisibility(
-                    // Enables regular immersive mode.
-                    View.SYSTEM_UI_FLAG_IMMERSIVE |
-                    // Set the content to appear under the system bars so that the
-                    // content doesn't resize when the system bars hide and show.
-                    View.SYSTEM_UI_FLAG_LAYOUT_STABLE |
-                    View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION |
-                    View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN |
-                    // Hide the nav bar and status bar
-                    View.SYSTEM_UI_FLAG_HIDE_NAVIGATION |
-                    View.SYSTEM_UI_FLAG_FULLSCREEN);
-        }
-    }
-
-    private boolean isFullscreenMode() {
-        Configuration configuration = getResources().getConfiguration();
-        return configuration.smallestScreenWidthDp < 600 &&
-                configuration.orientation == Configuration.ORIENTATION_LANDSCAPE;
-    }
-
-    private void initViewModel(Bundle savedInstanceState) {
-        viewModel = ViewModelProviders.of(this, viewModelFactory)
-                .get(StepDetailsViewModel.class);
-
+    private void getArgExtras() {
         Bundle args = getArguments();
         if (args != null) {
             recipeId = args.getInt(EXTRA_RECIPE_ID);
-            stepPosition = args.getInt(EXTRA_STEP_POSITION);
+            currentStepIndex = args.getInt(EXTRA_STEP_POSITION);
             isTwoPane = args.getBoolean(EXTRA_IS_TWO_PANE);
         }
-
-        viewModel.init(recipeId);
-        currentStepIndex = stepPosition;
-        restoreInstanceState(savedInstanceState);
-        viewModel.setStepIndexLiveData(currentStepIndex);
     }
 
-    private void observeSteps(){
-        viewModel.getCurrentStep().observe(
-                getViewLifecycleOwner(),
-                new Observer<Step>() {
-                    @Override
-                    public void onChanged(Step step) {
-                        binding.setStepCount(viewModel.getStepCount());
-                        binding.setStep(step);
-                        handleStepUrl(step);
-                        handleStepButtons();
-                    }
-                }
-        );
+    private void initViewModel() {
+        viewModel = ViewModelProviders.of(this, viewModelFactory)
+                .get(StepDetailsViewModel.class);
+        viewModel.init(recipeId, currentStepIndex);
+    }
+
+    private void observeCurrentStep(){
+        viewModel.getCurrentStep().observe(getViewLifecycleOwner(), stepResource -> {
+            // Make Step data available to data binding.
+            binding.setStep(stepResource.data);
+            binding.setStepCount(viewModel.getStepsSize());
+            if (stepResource.data != null) {
+                handleStepUrl(stepResource.data);
+            }
+            handleStepButtons();
+        });
     }
 
     private void handleStepUrl(Step step){
         // If step has a video, initialize player, else display an image.
         String videoUrl = step.getVideoURL();
-        if (!videoUrl.isEmpty()) {
+        if (!TextUtils.isEmpty(videoUrl)) {
             initializePlayer(Uri.parse(videoUrl));
         } else {
             String thumbnailUrl = step.getThumbnailURL();
             if (!TextUtils.isEmpty(thumbnailUrl)) {
                 GlideApp.with(this)
                         .load(thumbnailUrl)
-                        .placeholder(R.drawable.bakeit)
+                        // Display a placeholder while the image is loading.
+                        .placeholder(R.drawable.loading_animation)
+                        // Provide an error placeholder for non-existing URLs.
+                        .error(R.color.colorImagePlaceholder)
+                        // Provide a fallback image resource for null URLs.
+                        .fallback(R.drawable.baking)
                         .into(binding.placeholderImage);
             } else {
-                binding.placeholderImage.setImageResource(R.drawable.bakeit);
+                // Provide a fallback for an empty thumbnail URL.
+                binding.placeholderImage.setImageResource(R.drawable.baking);
             }
+        }
+    }
+
+    private void handleStepButtons(){
+        if (!isTwoPane && !isFullscreenMode()) {
+            binding.previousStepButton.setOnClickListener(view -> {
+                resetPlayer();
+                viewModel.onPrevious();
+                currentStepIndex--;
+            });
+
+            binding.nextStepButton.setOnClickListener(view -> {
+                resetPlayer();
+                viewModel.onNext();
+                currentStepIndex++;
+            });
+
+            // Necessary because Espresso cannot read data binding callbacks.
+            binding.executePendingBindings();
         }
     }
 
@@ -239,11 +237,8 @@ public class StepDetailsFragment extends Fragment  {
 
     private void releasePlayer() {
         if (simpleExoPlayer != null) {
-            // Returns the playback position in the current content window
-            // or ad, in milliseconds.
             currentPlaybackPosition = simpleExoPlayer.getCurrentPosition();
-            // Returns whether playback will proceed when ready (i.e. when
-            // Player.getPlaybackState() == Player.STATE_READY.)
+            currentWindowIndex = simpleExoPlayer.getCurrentWindowIndex();
             shouldPlayWhenReady = simpleExoPlayer.getPlayWhenReady();
 
             simpleExoPlayer.stop();
@@ -252,10 +247,16 @@ public class StepDetailsFragment extends Fragment  {
         }
     }
 
+    private void resetPlayer() {
+        shouldPlayWhenReady = true;
+        currentPlaybackPosition = 0;
+        currentWindowIndex = 0;
+        if (simpleExoPlayer != null) simpleExoPlayer.stop();
+    }
+
     @Override
     public void onPause() {
         super.onPause();
-        // See: https://www.raywenderlich.com/5573-media-playback-on-android-with-exoplayer-getting-started
         // Release the player in onPause() if on Android Marshmallow and below.
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.N) {
             releasePlayer();
@@ -272,26 +273,26 @@ public class StepDetailsFragment extends Fragment  {
         }
     }
 
-    private void resetPlayer() {
-        shouldPlayWhenReady = true;
-        currentPlaybackPosition = 0;
-        if (simpleExoPlayer != null) simpleExoPlayer.stop();
+    private boolean isFullscreenMode() {
+        Configuration configuration = getResources().getConfiguration();
+        return configuration.smallestScreenWidthDp < 600 &&
+                configuration.orientation == Configuration.ORIENTATION_LANDSCAPE;
     }
 
-    private void handleStepButtons(){
-        if (!isTwoPane && !isFullscreenMode()) {
-            // Handle click events
-            binding.nextStepButton.setOnClickListener(view -> {
-                resetPlayer();
-                viewModel.nextStepIndex();
-            });
-            binding.previousStepButton.setOnClickListener(view -> {
-                resetPlayer();
-                viewModel.previousStepIndex();
-            });
-            // Necessary because Espresso cannot read data binding callbacks.
-            binding.executePendingBindings();
-        }
+    private void hideSystemUi() {
+        // See: https://developer.android.com/training/system-ui/immersive#EnableFullscreen
+        Objects.requireNonNull(getActivity()).getWindow().getDecorView().setSystemUiVisibility(
+                // Enables regular immersive mode.
+                View.SYSTEM_UI_FLAG_IMMERSIVE |
+                // Set the content to appear under the system bars so that the
+                // content doesn't resize when the system bars hide and show.
+                View.SYSTEM_UI_FLAG_LAYOUT_STABLE |
+                View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION |
+                View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN |
+                // Hide the nav bar and status bar.
+                View.SYSTEM_UI_FLAG_HIDE_NAVIGATION |
+                View.SYSTEM_UI_FLAG_FULLSCREEN);
+
     }
 
     @Override

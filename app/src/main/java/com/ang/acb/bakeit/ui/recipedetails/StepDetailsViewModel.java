@@ -6,7 +6,7 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Transformations;
 import androidx.lifecycle.ViewModel;
 
-import com.ang.acb.bakeit.data.model.RecipeDetails;
+import com.ang.acb.bakeit.data.model.Resource;
 import com.ang.acb.bakeit.data.model.Step;
 import com.ang.acb.bakeit.data.repository.RecipeRepository;
 
@@ -23,107 +23,91 @@ import javax.inject.Inject;
 public class StepDetailsViewModel extends ViewModel {
 
     private RecipeRepository repository;
-    private LiveData<RecipeDetails> recipeDetailsLiveData;
 
-    private LiveData<List<Step>> stepsLiveData;
-    private MediatorLiveData<Step> currentStepLiveData;
-    private MutableLiveData<Integer> stepIndexLiveData;
-    private MutableLiveData<Integer> recipeIdLiveData = new MutableLiveData<>();
+    private MutableLiveData<Integer> liveRecipeId = new MutableLiveData<>();
+    private MutableLiveData<Integer> liveStepPosition = new MutableLiveData<>();
+    private LiveData<List<Step>> liveSteps;
+    private int stepsSize;
+
 
     @Inject
     public StepDetailsViewModel(RecipeRepository repository) {
         this.repository = repository;
     }
 
-    public void init(Integer recipeId) {
-        recipeIdLiveData.setValue(recipeId);
+    public void init(Integer recipeId, Integer stepIndex) {
+        liveRecipeId.setValue(recipeId);
+        liveStepPosition.setValue(stepIndex);
     }
 
-    public LiveData<RecipeDetails> getRecipeDetailsLiveData() {
-        // Prevent NullPointerException
-        if (recipeDetailsLiveData == null) {
-            recipeDetailsLiveData = Transformations.switchMap(
-                    recipeIdLiveData, repository::getRecipeDetails);
+
+    public LiveData<List<Step>> getLiveSteps() {
+        if(liveSteps == null) {
+            liveSteps = Transformations.switchMap(liveRecipeId, repository::getRecipeSteps);
         }
-        return recipeDetailsLiveData;
+        return liveSteps;
     }
 
-    public LiveData<List<Step>> getStepsLiveData() {
-        // Prevent NullPointerException
-        if(stepsLiveData == null) {
-            stepsLiveData = Transformations.switchMap(
-                    recipeIdLiveData, repository::getRecipeSteps);
-        }
-        return stepsLiveData;
+    public MutableLiveData<Integer> getLiveStepPosition() {
+        return liveStepPosition;
     }
 
-    public int getStepCount(){
-        return Objects.requireNonNull(getStepsLiveData().getValue()).size();
+    // See: https://medium.com/androiddevelopers/livedata-beyond-the-viewmodel-reactive-patterns-using-transformations-and-mediatorlivedata-fda520ba00b7
+    public MediatorLiveData<Resource<Step>> getCurrentStep() {
+
+        LiveData<Integer> positionResult = getLiveStepPosition();
+        LiveData<List<Step>> stepsResult = getLiveSteps();
+        MediatorLiveData<Resource<Step>> result = new MediatorLiveData<>();
+
+        result.addSource(positionResult, newData ->
+                result.setValue(combineLatestData(positionResult, stepsResult)));
+
+        result.addSource(stepsResult, newData ->
+                result.setValue(combineLatestData(positionResult, stepsResult)));
+
+        return result;
     }
 
-    public LiveData<Integer> getStepIndex() {
-        if (stepIndexLiveData == null) {
-            stepIndexLiveData = new MutableLiveData<>();
-            stepIndexLiveData.setValue(0);
-        }
-        return stepIndexLiveData;
-    }
+    private Resource<Step> combineLatestData(LiveData<Integer> positionResult,
+                                             LiveData<List<Step>> stepsResult ) {
+        Integer position = positionResult.getValue();
+        List<Step> steps = stepsResult.getValue();
 
-    public void setStepIndexLiveData(int value) {
-        if (stepIndexLiveData == null) {
-            stepIndexLiveData = new MutableLiveData<>();
-        }
-        stepIndexLiveData.setValue(value);
-    }
-
-    public void nextStepIndex() {
-        if (hasNext()) {
-            stepIndexLiveData.setValue(Objects.requireNonNull(getStepIndex().getValue()) + 1);
-        }
-    }
-
-    public void previousStepIndex() {
-        if (hasPrevious()) {
-            stepIndexLiveData.setValue(Objects.requireNonNull(getStepIndex().getValue()) - 1);
+        if (position != null && steps != null) {
+            stepsSize = steps.size();
+            return Resource.success(steps.get(position));
+        } else if(position == null || steps == null) {
+            return Resource.loading(null);
+        } else {
+            return Resource.error("Error", null);
         }
     }
 
-    public boolean hasNext() {
-        return Objects.requireNonNull(getStepIndex().getValue()) + 1 < getStepCount();
+    public int getStepsSize(){
+        return stepsSize;
     }
 
     public boolean hasPrevious() {
-        return Objects.requireNonNull(getStepIndex().getValue()) > 0;
+        return Objects.requireNonNull(liveStepPosition.getValue()) > 0;
     }
 
-    public LiveData<Step> getCurrentStep() {
-        if (currentStepLiveData == null) {
-            setCurrentStep();
-        }
-        return currentStepLiveData;
+    public boolean hasNext() {
+        return Objects.requireNonNull(liveStepPosition.getValue()) + 1 < getStepsSize();
     }
 
-    private void setCurrentStep() {
-        if (currentStepLiveData == null) {
-            currentStepLiveData = new MediatorLiveData<>();
+    public void onPrevious() {
+        if (hasPrevious()) {
+            liveStepPosition.setValue(Objects.requireNonNull(liveStepPosition.getValue()) - 1);
         }
+    }
 
-        LiveData<List<Step>> stepsLiveData = getStepsLiveData();
-        currentStepLiveData.addSource(stepsLiveData, steps -> {
-            if (steps != null && getStepIndex().getValue() != null) {
-               currentStepLiveData.setValue(steps.get(getStepIndex().getValue()));
-            }
-        });
-
-        LiveData<Integer> stepIndexLiveData = getStepIndex();
-        currentStepLiveData.addSource(stepIndexLiveData, stepIndex -> {
-            if (stepIndex != null && stepsLiveData.getValue()!= null) {
-                currentStepLiveData.setValue(stepsLiveData.getValue().get(stepIndex));
-            }
-        });
+    public void onNext() {
+        if (hasNext()) {
+            liveStepPosition.setValue(Objects.requireNonNull(liveStepPosition.getValue()) + 1);
+        }
     }
 
     public void retry(Integer recipeId) {
-        recipeIdLiveData.setValue(recipeId);
+        liveRecipeId.setValue(recipeId);
     }
 }
