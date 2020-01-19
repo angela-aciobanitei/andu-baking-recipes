@@ -23,12 +23,11 @@ import dagger.android.DispatchingAndroidInjector;
 import dagger.android.support.HasSupportFragmentInjector;
 import timber.log.Timber;
 
-import static com.ang.acb.bakeit.ui.recipelist.MainActivity.EXTRA_RECIPE_ID;
-import static com.ang.acb.bakeit.ui.recipelist.MainActivity.EXTRA_RECIPE_NAME;
-import static com.ang.acb.bakeit.ui.recipelist.MainActivity.INVALID_RECIPE_ID;
+import static com.ang.acb.bakeit.ui.recipelist.RecipeListFragment.EXTRA_RECIPE_ID;
+import static com.ang.acb.bakeit.ui.recipelist.RecipeListFragment.EXTRA_RECIPE_NAME;
+import static com.ang.acb.bakeit.ui.recipelist.RecipeListFragment.INVALID_RECIPE_ID;
 
-public class DetailsActivity extends AppCompatActivity
-                             implements HasSupportFragmentInjector {
+public class DetailsActivity extends AppCompatActivity implements HasSupportFragmentInjector {
 
     public static final String EXTRA_IS_TWO_PANE = "EXTRA_IS_TWO_PANE";
     public static final String EXTRA_STEP_POSITION = "EXTRA_STEP_POSITION";

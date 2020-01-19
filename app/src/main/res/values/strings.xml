@@ -16,4 +16,7 @@
     <string name="create_widget">Create recipe widget</string>
     <string name="empty_widget">Empty widget.</string>
     <string name="detail_error_message">Recipe details not available</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

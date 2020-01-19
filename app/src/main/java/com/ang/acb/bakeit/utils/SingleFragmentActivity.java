@@ -1,4 +1,4 @@
-package com.ang.acb.bakeit.util;
+package com.ang.acb.bakeit.utils;
 
 import android.os.Bundle;
 import android.view.ViewGroup;
@@ -13,7 +13,7 @@ import com.ang.acb.bakeit.R;
 /**
  * Used for testing fragments inside a fake activity.
  */
-public class FragmentActivity extends AppCompatActivity {
+public class SingleFragmentActivity extends AppCompatActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -36,3 +36,4 @@ public class FragmentActivity extends AppCompatActivity {
                 .replace(R.id.container, fragment).commit();
     }
 }
+

@@ -4,13 +4,13 @@ android {
     compileSdkVersion 29
     defaultConfig {
         applicationId "com.ang.acb.bakeit"
-        minSdkVersion 23
+        minSdkVersion 24
         targetSdkVersion 29
         versionCode 1
         versionName "1.0"
         vectorDrawables.useSupportLibrary = true
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
-        // testInstrumentationRunner "com.ang.acb.bakeit.util.BakingTestRunner"
+        //testInstrumentationRunner "com.ang.acb.bakeit.util.BakingTestRunner"
         // Export schemas
         javaCompileOptions {
             annotationProcessorOptions {
@@ -39,6 +39,7 @@ android {
     sourceSets {
         androidTest.java.srcDirs += "src/test-common/java"
         test.java.srcDirs += "src/test-common/java"
+        debug.java.srcDirs += "src/testing/java"
     }
 }
 

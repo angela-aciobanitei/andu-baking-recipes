@@ -32,6 +32,8 @@
                 android:value="com.ang.acb.bakeit.ui.recipelist.MainActivity" />
         </activity>
 
+        <activity android:name=".utils.SingleFragmentActivity"/>
+
         <!-- Declaring an AppWidgetProvider in the Manifest.
          See: https://developer.android.com/guide/topics/appwidgets#Manifest-->
         <receiver
