@@ -35,9 +35,6 @@ public class RecipeListViewModel extends ViewModel {
         return liveRecipes;
     }
 
-    // FIXME Retry any failed requests.
-    // See: https://stackoverflow.com/questions/54087466/refreshing-livedata-with-retrofit-request-response
-    // See: https://stackoverflow.com/questions/55913293/is-this-the-right-way-to-have-a-button-that-retries-an-api-call-on-an-android-ap
     public void retry() {
         Timber.d("Retry.");
     }

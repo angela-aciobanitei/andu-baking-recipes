@@ -252,9 +252,7 @@ public class NetworkBoundResourceTest {
     }
 
     static class Foo {
-
         int value;
-
         Foo(int value) {
             this.value = value;
         }

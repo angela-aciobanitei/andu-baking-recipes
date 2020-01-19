@@ -19,6 +19,7 @@ import org.jetbrains.annotations.NotNull;
  * Utility methods for espresso tests.
  */
 public class EspressoTestUtil {
+
     /**
      * Disables progress bar animations for the views of the given activity rule
      * @param activityTestRule The activity rule whose views will be checked

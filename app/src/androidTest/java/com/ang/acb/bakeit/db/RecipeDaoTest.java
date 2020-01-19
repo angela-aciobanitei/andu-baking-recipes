@@ -84,7 +84,8 @@ public class RecipeDaoTest {
         ));
 
         database.recipeDao().insertAllRecipes(Collections.singletonList(recipe));
-        RecipeDetails recipeDetails = LiveDataTestUtil.getValue(database.recipeDao().getRecipeDetails(1));
+        RecipeDetails recipeDetails = LiveDataTestUtil.getValue(database.recipeDao()
+                .getRecipeDetails(1));
 
         assertThat(recipeDetails, notNullValue());
         assertThat(recipeDetails.recipe.getName(), is("Nutella Pie"));
@@ -156,7 +157,8 @@ public class RecipeDaoTest {
         ));
 
         database.recipeDao().insertAllRecipes(Arrays.asList(recipe1, recipe2));
-        List<RecipeDetails> loaded = LiveDataTestUtil.getValue(database.recipeDao().getRecipeDetailsList());
+        List<RecipeDetails> loaded = LiveDataTestUtil.getValue(database.recipeDao()
+                .getRecipeDetailsList());
         assertThat(loaded, notNullValue());
 
         RecipeDetails first = loaded.get(0);

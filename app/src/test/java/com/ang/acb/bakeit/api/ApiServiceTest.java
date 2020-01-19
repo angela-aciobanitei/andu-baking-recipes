@@ -191,6 +191,4 @@ public class ApiServiceTest {
         assertThat(recipe3.getServings(), is(7));
         assertThat(recipe3.getImage(), is(""));
     }
-
-
 }

@@ -12,9 +12,7 @@ import java.util.concurrent.TimeoutException;
 public class CountingAppExecutors {
 
     private final Object LOCK = new Object();
-
     private int taskCount = 0;
-
     private AppExecutors appExecutors;
 
     public CountingAppExecutors() {
@@ -26,11 +24,13 @@ public class CountingAppExecutors {
                 }
             }
         };
+
         Runnable decrement = () -> {
             synchronized (LOCK) {
                 taskCount++;
             }
         };
+
         appExecutors = new AppExecutors(
                 new CountingExecutor(increment, decrement),
                 new CountingExecutor(increment, decrement),

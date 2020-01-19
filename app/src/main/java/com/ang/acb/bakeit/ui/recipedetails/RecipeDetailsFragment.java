@@ -22,7 +22,7 @@ import dagger.android.support.AndroidSupportInjection;
 import timber.log.Timber;
 
 import static com.ang.acb.bakeit.ui.recipedetails.DetailsActivity.EXTRA_IS_TWO_PANE;
-import static com.ang.acb.bakeit.ui.recipelist.RecipeListFragment.EXTRA_RECIPE_ID;
+import static com.ang.acb.bakeit.ui.recipelist.MainActivity.EXTRA_RECIPE_ID;
 
 public class RecipeDetailsFragment extends Fragment {
 
