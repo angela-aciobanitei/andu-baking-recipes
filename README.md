@@ -1,4 +1,7 @@
 # Baking App
+
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/0d6eab1bb62144908463f03a4dcdffb4)](https://app.codacy.com/manual/angela-aciobanitei/andu-baking-recipes?utm_source=github.com&utm_medium=referral&utm_content=angela-aciobanitei/andu-baking-recipes&utm_campaign=Badge_Grade_Settings)
+
 An app that displays recipes from a network resource. When user selects a recipe, its ingredients and video-guided steps are shown.
 
 ## What Will I Learn?
