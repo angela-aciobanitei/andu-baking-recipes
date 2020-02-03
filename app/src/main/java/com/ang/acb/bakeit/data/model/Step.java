@@ -3,9 +3,7 @@ package com.ang.acb.bakeit.data.model;
 import androidx.annotation.NonNull;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
-import androidx.room.ForeignKey;
 import androidx.room.Ignore;
-import androidx.room.Index;
 import androidx.room.PrimaryKey;
 
 import com.google.gson.annotations.Expose;
@@ -13,7 +11,6 @@ import com.google.gson.annotations.SerializedName;
 
 import org.jetbrains.annotations.NotNull;
 
-import static androidx.room.ForeignKey.CASCADE;
 
 /**
  * Immutable model class for a Step.

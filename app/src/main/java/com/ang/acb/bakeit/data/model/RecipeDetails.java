@@ -8,23 +8,13 @@ import java.util.List;
 /**
  * A simple POJO containing the complete recipe's details, including ingredients and steps.
  *
- * See: https://developer.android.com/reference/android/arch/persistence/room/Relation
- * See: https://developer.android.com/reference/android/arch/persistence/room/Embedded
  * See: https://android.jlelse.eu/android-architecture-components-room-relationships-bf473510c14a
  */
 public class RecipeDetails {
 
-    // The @Embedded annotation can be used on a field of an Entity or POJO to
-    // signal that nested fields (i.e. fields of the annotated field's class)
-    // can be referenced directly in the SQL queries. If the container is an
-    // Entity, these sub fields will be columns in the Entity's database table.
     @Embedded
     public Recipe recipe;
 
-    // The @Relation annotation can be used in a Pojo to automatically fetch
-    // relation entities. When the Pojo is returned from a query, all of its
-    // relations are also fetched by Room. An @Relation annotated field cannot
-    // be a constructor parameter, it must be public or have a public setter.
     @Relation(parentColumn = "id", entityColumn = "recipe_id", entity = Ingredient.class)
     public List<Ingredient> ingredients;
 

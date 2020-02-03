@@ -3,13 +3,9 @@ package com.ang.acb.bakeit.ui.recipedetails;
 import androidx.fragment.app.FragmentManager;
 
 import com.ang.acb.bakeit.R;
-import com.ang.acb.bakeit.ui.recipedetails.DetailsActivity;
-import com.ang.acb.bakeit.ui.recipedetails.RecipeDetailsFragment;
-import com.ang.acb.bakeit.ui.recipedetails.StepDetailsFragment;
 
 import javax.inject.Inject;
 
-import timber.log.Timber;
 
 /**
  * A utility class that handles navigation in DetailsActivity.

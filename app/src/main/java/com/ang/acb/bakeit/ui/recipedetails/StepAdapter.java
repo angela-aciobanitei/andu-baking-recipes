@@ -11,7 +11,6 @@ import com.ang.acb.bakeit.databinding.StepItemBinding;
 
 import java.util.List;
 
-import javax.inject.Inject;
 
 public class StepAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 

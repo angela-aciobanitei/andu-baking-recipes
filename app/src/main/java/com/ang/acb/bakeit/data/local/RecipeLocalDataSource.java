@@ -5,7 +5,7 @@ import androidx.lifecycle.LiveData;
 import com.ang.acb.bakeit.data.model.Ingredient;
 import com.ang.acb.bakeit.data.model.RecipeDetails;
 import com.ang.acb.bakeit.data.model.Step;
-import com.ang.acb.bakeit.data.model.Recipe;;
+import com.ang.acb.bakeit.data.model.Recipe;
 
 import java.util.List;
 

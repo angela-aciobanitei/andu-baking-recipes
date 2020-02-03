@@ -50,9 +50,9 @@ public class RecipeRepositoryTest {
     private RecipeRepository repository;
 
     @Before
-    public void setup() {
-        localDataSource = Mockito.mock(RecipeLocalDataSource.class);
-        remoteDataSource = Mockito.mock(RecipeRemoteDataSource.class);
+    public void setUp() {
+        localDataSource = mock(RecipeLocalDataSource.class);
+        remoteDataSource = mock(RecipeRemoteDataSource.class);
         repository = new RecipeRepository(
                 localDataSource,
                 remoteDataSource,

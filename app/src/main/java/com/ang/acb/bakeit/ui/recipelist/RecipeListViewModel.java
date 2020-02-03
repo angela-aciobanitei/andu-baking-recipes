@@ -3,7 +3,6 @@ package com.ang.acb.bakeit.ui.recipelist;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModel;
 
-import com.ang.acb.bakeit.data.model.Recipe;
 import com.ang.acb.bakeit.data.model.RecipeDetails;
 import com.ang.acb.bakeit.data.model.Resource;
 import com.ang.acb.bakeit.data.repository.RecipeRepository;

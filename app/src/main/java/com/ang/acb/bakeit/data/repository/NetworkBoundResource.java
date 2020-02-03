@@ -25,11 +25,7 @@ import com.ang.acb.bakeit.utils.AppExecutors;
  */
 public abstract class NetworkBoundResource<ResultType, RequestType> {
 
-    // The final result LiveData. Note: why use MediatorLiveData? Consider the following
-    // scenario: we have 2 instances of LiveData, let's name them liveData1 and liveData2,
-    // and we want to merge their emissions in one object: liveDataMerger. Then, liveData1
-    // and liveData2 will become sources for the MediatorLiveData liveDataMerger and every
-    // time onChanged is called for either of them, we set a new value in liveDataMerger.
+    // The final result LiveData.
     private final MediatorLiveData<Resource<ResultType>> result = new MediatorLiveData<>();
     private AppExecutors appExecutors;
 
@@ -69,12 +65,8 @@ public abstract class NetworkBoundResource<ResultType, RequestType> {
     @MainThread
     private void setValue(Resource<ResultType> newValue) {
         if (result.getValue() != newValue) {
-            // Note: Use the LiveData method void setValue (T value)
-            // to set the value of a LiveData object. If there are
-            // active observers, the value will be dispatched to them.
-            // This method must be called from the main thread.
-            // If you need set a value from a background thread,
-            // you can use postValue(Object).
+            // Note: the setValue() method must be called from the main thread.
+            // If you need set a value from a background thread, use postValue(Object).
             result.setValue(newValue);
         }
     }
